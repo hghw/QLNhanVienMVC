@@ -69,3 +69,36 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 10px;
+}
+#addSearch {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 10px;
+    background-color: #efefef;
+}
+#search {
+    display: flex;
+    flex-direction: row;
+    line-height: 40px;
+}
+    #search p {
+        padding: 0 5px;
+        position: absolute;
+        background-color: #cfcfcf;
+        border-radius: 8px 0 0 8px;
+        z-index: 1;
+    }
+    #search input {
+        position: relative;
+        border: 1px solid #cfcfcf;
+        outline: 0;
+        border-radius: 50px 30px 30px 50px;
+        padding: 5px 5px 5px 80px;
+    }
