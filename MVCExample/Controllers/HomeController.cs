@@ -27,7 +27,6 @@ namespace MVCSamples.Controllers
             //var test = HttpContext.Session.GetObjectFromJson<List<string>>("Test");
             return View();
         }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
