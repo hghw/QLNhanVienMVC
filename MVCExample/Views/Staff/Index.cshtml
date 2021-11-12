@@ -26,48 +26,19 @@
             <th>Thao tác</th>
 
         </tr>
-        <tr>
-            <td width="15%"></td>
-            <td width="25%"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td width="15%"><a href="">Sửa - Xóa</a></td>
-        </tr>
-        <tr>
-            <td width="15%"></td>
-            <td width="25%"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td width="15%"><a href="">Sửa - Xóa</a></td>
-        </tr>
-        <tr>
-            <td width="15%"></td>
-            <td width="25%"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td width="15%"><a href="">Sửa - Xóa</a></td>
-        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td width="15%">@item.maNhanVien</td>
+                <td width="25%">@item.hoTen</td>
+                <td>@item.ngaySinh</td>
+                <td>@item.sdt</td>
+                <td>@item.chucVu</td>
+                <td width="15%"><a href="">Sửa - Xóa</a></td>
+            </tr>
+        }
 
-        <tr>
-            <td width="15%"></td>
-            <td width="25%"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td width="15%"><a href="">Sửa - Xóa</a></td>
-        </tr>
-
-        <tr>
-            <td width="15%"></td>
-            <td width="25%"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td width="15%"><a href="">Sửa - Xóa</a></td>
-        </tr>
+     
 
 
     </table>
