@@ -21,8 +21,15 @@ namespace MVCExample.Controllers
             _logger = logger;
         }
         
-        public IActionResult Index(List<NhanVien> listNhanVien)
+        public IActionResult Index(NhanVien model)
         {
+                nv.maNhanVien = model.maNhanVien;
+                nv.hoTen = model.hoTen;
+                nv.ngaySinh = model.ngaySinh;
+                nv.sdt = model.sdt;
+                nv.chucVu = model.chucVu;
+                listNhanVien.Add(nv);
+
             return View(listNhanVien);
         }
         [HttpGet]
@@ -43,6 +50,7 @@ namespace MVCExample.Controllers
                 nv.chucVu = model.chucVu;
                 message = nv.maNhanVien + nv.hoTen + nv.ngaySinh + nv.sdt + nv.chucVu;
                 listNhanVien.Add(nv);
+                // var test = HttpContext.Session.GetObjectFromJson<List<NhanVien>>("Test");
             }
             else
             {
