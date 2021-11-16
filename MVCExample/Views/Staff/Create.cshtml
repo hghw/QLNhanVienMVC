@@ -1,28 +1,54 @@
-﻿@model IEnumerable<MVCExample.Models.NhanVien>
+﻿@model MVCExample.Models.Staff
 
 @{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
+<h1>Create</h1>
 
-    <form action="/Staff/index" method="post">
-        <table>
-            <tr>
-                <th>Mã NV</th>
-                <th>Họ và tên</th>
-                <th>Ngày sinh</th>
-                <th>SĐT</th>
-                <th>Chức vụ</th>
+<h4>Staff</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="maNhanVien" class="control-label"></label>
+                <input asp-for="maNhanVien" class="form-control" />
+                <span asp-validation-for="maNhanVien" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="hoTen" class="control-label"></label>
+                <input asp-for="hoTen" class="form-control" />
+                <span asp-validation-for="hoTen" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ngaySinh" class="control-label"></label>
+                <input asp-for="ngaySinh" class="form-control" />
+                <span asp-validation-for="ngaySinh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sdt" class="control-label"></label>
+                <input asp-for="sdt" class="form-control" />
+                <span asp-validation-for="sdt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="chucVu" class="control-label"></label>
+                <input asp-for="chucVu" class="form-control" />
+                <span asp-validation-for="chucVu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
 
-            </tr>
-            <tr>
-                <td width="15%"><input type="text" name="maNhanVien" /> </td>
-                <td width="25%"><input type="text" name="hoTen" /></td>
-                <td width="15%"><input type="text" name="ngaySinh" /></td>
-                <td width="15%"><input type="text" name="sdt" /></td>
-                <td width="15%"><input type="text" name="chucVu" /></td>
-            </tr>
-        </table>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
-
-        <input type="submit" name="submit" />
-    </form>
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

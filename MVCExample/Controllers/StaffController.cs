@@ -12,24 +12,23 @@ namespace MVCExample.Controllers
 {
     public class StaffController : Controller
     {
-        List<NhanVien> listNhanVien = new List<NhanVien>();
-        NhanVien nv = new NhanVien();
+        List<Staff> listNhanVien = new List<Staff>();
+        Staff nv = new Staff();
         private readonly ILogger<StaffController> _logger;
 
         public StaffController(ILogger<StaffController> logger)
         {
             _logger = logger;
         }
-        
-        public IActionResult Index(NhanVien model)
-        {
-                nv.maNhanVien = model.maNhanVien;
-                nv.hoTen = model.hoTen;
-                nv.ngaySinh = model.ngaySinh;
-                nv.sdt = model.sdt;
-                nv.chucVu = model.chucVu;
-                listNhanVien.Add(nv);
 
+        public IActionResult Index(Staff model)
+        {
+            // nv.maNhanVien = model.maNhanVien;
+            // nv.hoTen = model.hoTen;
+            // nv.ngaySinh = model.ngaySinh;
+            // nv.sdt = model.sdt;
+            // nv.chucVu = model.chucVu;
+            listNhanVien.Add(model);
             return View(listNhanVien);
         }
         [HttpGet]
@@ -38,25 +37,11 @@ namespace MVCExample.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(NhanVien model)
+        public IActionResult Create(Staff model)
         {
-            string message = "";
-            if (ModelState.IsValid)
-            {
-                nv.maNhanVien = model.maNhanVien;
-                nv.hoTen = model.hoTen;
-                nv.ngaySinh = model.ngaySinh;
-                nv.sdt = model.sdt;
-                nv.chucVu = model.chucVu;
-                message = nv.maNhanVien + nv.hoTen + nv.ngaySinh + nv.sdt + nv.chucVu;
-                listNhanVien.Add(nv);
-                // var test = HttpContext.Session.GetObjectFromJson<List<NhanVien>>("Test");
-            }
-            else
-            {
-                message = "Failed to create the product. Please try again";
-            }
-            return Content(message);
+            listNhanVien.Add(model);
+            return RedirectToAction("Index");
+            // return View(model);
         }
         public IActionResult Edit()
         {
