@@ -1,8 +1,0 @@
-﻿CREATE TABLE [dbo].[TbQLNV]
-(
-	[maNhanVien] NVARCHAR(50) NOT NULL PRIMARY KEY, 
-    [hoTen] NVARCHAR(50) NOT NULL, 
-    [ngaySinh] DATE NOT NULL, 
-    [sdt] NVARCHAR(50) NOT NULL, 
-    [chucVu] NVARCHAR(50) NOT NULL
-)
