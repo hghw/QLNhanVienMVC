@@ -27,7 +27,7 @@ namespace MVCExample.Controllers
         {
             List<Staff> listNhanVien = new List<Staff>() {
                 new Staff {
-                    maNhanVien = "p01",
+                    maNhanVien = "01",
                     hoTen = "Name 1",
                     ngaySinh = "Name 1",
                     sdt = "Name 1",
@@ -35,14 +35,14 @@ namespace MVCExample.Controllers
 
                 },
                 new Staff {
-                   maNhanVien = "p01",
+                   maNhanVien = "02",
                     hoTen = "Name 1",
                     ngaySinh = "Name 1",
                     sdt = "Name 1",
-                    chucVu = "Name 1",
+                    chucVu = "Name 1"
                 },
                 new Staff {
-                    maNhanVien = "p01",
+                    maNhanVien = "03",
                     hoTen = "Name 1",
                     ngaySinh = "Name 1",
                     sdt = "Name 1",
@@ -51,14 +51,14 @@ namespace MVCExample.Controllers
             };
 
             HttpContext.Session.SetObjectAsJson("list", listNhanVien);
-                       
-                  // listNhanVien.Add(model);
+
+            // listNhanVien.Add(model);
             return View(listNhanVien);
         }
         [HttpGet]
         public IActionResult Create()
         {
-            
+
             return View();
         }
         [HttpPost]
@@ -66,15 +66,15 @@ namespace MVCExample.Controllers
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
             /*var sessionStaff = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");*/
-            listNhanVien.Add(model);
+            list.Add(model);
+            HttpContext.Session.SetObjectAsJson("list", list);
 
 
-            // return RedirectToAction("Index", listNhanVien);
             return View("Index", list);
         }
         public IActionResult Edit(int? id)
         {
-            if(id != null)
+            if (id != null)
             {
                 return RedirectToAction("Index", listNhanVien);
             }
