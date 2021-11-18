@@ -1,10 +1,5 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -65,7 +60,6 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
-  position: relative;
 }
 .footer {
   position: absolute;
@@ -81,54 +75,11 @@ td {
   border-collapse: collapse;
   padding: 10px;
 }
-#table-NhanVien {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, 20%);
-}
-#title-NhanVien {
-  padding: 10px;
-}
+
 table,
 th,
 td {
   border: 1px solid black;
   border-collapse: collapse;
   padding: 10px;
-}
-#addNhanVien a {
-  text-decoration: none;
-  color: rgb(0, 116, 248);
-}
-#addSearch {
-  display: flex;
-  justify-content: space-around;
-  flex-direction: row;
-  height: 40px;
-  line-height: 40px;
-  margin-bottom: 10px;
-  background-color: #efefef;
-}
-#search {
-  width: 50%;
-  position: relative;
-  line-height: 40px;
-}
-#search p {
-  position: absolute;
-  background-color: #cfcfcf;
-  padding: 0 5px;
-  border-radius: 8px 0 0 8px;
-}
-#search input {
-  width: 100%;
-  line-height: 40px;
-  padding: 0px 0px 0px 85px;
-  outline: 0;
-  border: 0;
-  border-radius: 8px;
-  display: block;
-  background-color: #e1e1e1;
-  font-size: 16px;
 }
