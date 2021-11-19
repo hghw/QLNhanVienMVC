@@ -11,34 +11,8 @@ using System.Linq;
 
 namespace MVCExample.Controllers
 {
-
     public class StaffController : Controller
     {
-
-        List<Staff> listNhanVien = new List<Staff>() {
-                new Staff {
-                    maNhanVien = "01",
-                    hoTen = "Name 1",
-                    ngaySinh = "Name 1",
-                    sdt = "Name 1",
-                    chucVu = "Name 1"
-
-                },
-                new Staff {
-                   maNhanVien = "02",
-                    hoTen = "Name 1",
-                    ngaySinh = "Name 1",
-                    sdt = "Name 1",
-                    chucVu = "Name 1"
-                },
-                new Staff {
-                    maNhanVien = "03",
-                    hoTen = "Name 1",
-                    ngaySinh = "Name 1",
-                    sdt = "Name 1",
-                    chucVu = "Name 1"
-                }
-            };
 
         private readonly ILogger<StaffController> _logger;
 
@@ -51,10 +25,6 @@ namespace MVCExample.Controllers
         {
             /*Get create*/
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-           
-            HttpContext.Session.SetObjectAsJson("list", list);
-
-            HttpContext.Session.SetObjectAsJson("list", listNhanVien);
             return View("Index", list);
         }
         [HttpGet]
@@ -68,23 +38,28 @@ namespace MVCExample.Controllers
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
             list.Add(model);
             HttpContext.Session.SetObjectAsJson("list", list);
-
             return View("Index", list);
         }
-        public IActionResult Edit(string? id)
+        public IActionResult Edit(string id)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-
-            var std = list.Where(s => s.maNhanVien == id).FirstOrDefault();
-            return View(std);
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (id == list[i].maNhanVien)
+                {
+                    return View(list[i]);
+                }
+            }
+            // var std = list.Where(s => s.maNhanVien == id).FirstOrDefault();
+            return View("Index", list);
         }
         [HttpPost]
         public IActionResult Edit(Staff std)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-            var nv = list.Where(s => s.maNhanVien == std.maNhanVien).FirstOrDefault();
-            list.Remove(nv);
-            list.Add(std);
+            // var nv = list.Where(s => s.maNhanVien == std.maNhanVien).FirstOrDefault();
+            // list.Remove(nv);
+            // list.Add(std);
             return RedirectToAction("Index");
         }
         public IActionResult Update()

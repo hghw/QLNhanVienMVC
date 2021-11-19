@@ -5,13 +5,38 @@ using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MVCSamples.Models;
+using MVCSamples.Extensions;
+using MVCExample.Models;
 
 namespace MVCSamples.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        List<Staff> listNhanVien = new List<Staff>() {
+                new Staff {
+                    maNhanVien = "01",
+                    hoTen = "Name 1",
+                    ngaySinh = "Name 1",
+                    sdt = "Name 1",
+                    chucVu = "Name 1"
 
+                },
+                new Staff {
+                   maNhanVien = "02",
+                    hoTen = "Name 1",
+                    ngaySinh = "Name 1",
+                    sdt = "Name 1",
+                    chucVu = "Name 1"
+                },
+                new Staff {
+                    maNhanVien = "03",
+                    hoTen = "Name 1",
+                    ngaySinh = "Name 1",
+                    sdt = "Name 1",
+                    chucVu = "Name 1"
+                }
+            };
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -19,6 +44,7 @@ namespace MVCSamples.Controllers
 
         public IActionResult Index()
         {
+            HttpContext.Session.SetObjectAsJson("list", listNhanVien);
             return View();
         }
 
