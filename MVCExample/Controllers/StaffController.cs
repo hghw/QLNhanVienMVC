@@ -7,25 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MVCSamples.Extensions;
+using System.Linq;
 
 namespace MVCExample.Controllers
 {
 
     public class StaffController : Controller
     {
-        List<Staff> listNhanVien = new List<Staff>();
-        Staff staff = new Staff();
 
-        private readonly ILogger<StaffController> _logger;
-
-        public StaffController(ILogger<StaffController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
-        {
-            List<Staff> listNhanVien = new List<Staff>() {
+        List<Staff> listNhanVien = new List<Staff>() {
                 new Staff {
                     maNhanVien = "01",
                     hoTen = "Name 1",
@@ -50,35 +40,52 @@ namespace MVCExample.Controllers
                 }
             };
 
-            HttpContext.Session.SetObjectAsJson("list", listNhanVien);
+        private readonly ILogger<StaffController> _logger;
 
-            // listNhanVien.Add(model);
-            return View(listNhanVien);
+        public StaffController(ILogger<StaffController> logger)
+        {
+            _logger = logger;
+        }
+
+        public IActionResult Index()
+        {
+            /*Get create*/
+            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+           
+            HttpContext.Session.SetObjectAsJson("list", list);
+
+            HttpContext.Session.SetObjectAsJson("list", listNhanVien);
+            return View("Index", list);
         }
         [HttpGet]
         public IActionResult Create()
         {
-
             return View();
         }
         [HttpPost]
         public IActionResult Create(Staff model)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-            /*var sessionStaff = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");*/
             list.Add(model);
             HttpContext.Session.SetObjectAsJson("list", list);
 
-
             return View("Index", list);
         }
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(string? id)
         {
-            if (id != null)
-            {
-                return RedirectToAction("Index", listNhanVien);
-            }
-            return View();
+            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+
+            var std = list.Where(s => s.maNhanVien == id).FirstOrDefault();
+            return View(std);
+        }
+        [HttpPost]
+        public IActionResult Edit(Staff std)
+        {
+            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+            var nv = list.Where(s => s.maNhanVien == std.maNhanVien).FirstOrDefault();
+            list.Remove(nv);
+            list.Add(std);
+            return RedirectToAction("Index");
         }
         public IActionResult Update()
         {
