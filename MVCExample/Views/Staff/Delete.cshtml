@@ -44,9 +44,21 @@
         </dd>
     </dl>
 
-    <form asp-action="Delete">
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+    <form method="post" onclick="myConfirm()" style="margin: 20px 0;">
+        <input type="submit" value="Xóa" class="btn btn-danger" style="padding: 6px 39px;" />
     </form>
+    <a asp-action="Index" class="btn btn-info">Back to List</a>
 </div>
 
+<script type='text/javascript'>
+    function myConfirm() {
+        var result = confirm("Do you Want to Delete?");
+        if (result == true) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+</script>

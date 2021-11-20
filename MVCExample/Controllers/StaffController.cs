@@ -115,7 +115,7 @@ namespace MVCExample.Controllers
                     return View("Index", list);
                 }
             }
-            return View("Delete");
+            return View("Index", list);
         }
         public IActionResult Report()
         {
