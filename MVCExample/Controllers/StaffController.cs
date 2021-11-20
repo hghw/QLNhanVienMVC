@@ -43,6 +43,7 @@ namespace MVCExample.Controllers
         public IActionResult Edit(string id)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+            HttpContext.Session.SetString("id", id); //luu id sua
             for (int i = 0; i < list.Count; i++)
             {
                 if (id == list[i].maNhanVien)
@@ -54,13 +55,28 @@ namespace MVCExample.Controllers
             return View("Index", list);
         }
         [HttpPost]
-        public IActionResult Edit(Staff std)
+        public IActionResult Edit(Staff staff)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
             // var nv = list.Where(s => s.maNhanVien == std.maNhanVien).FirstOrDefault();
-            // list.Remove(nv);
-            // list.Add(std);
-            return RedirectToAction("Index");
+            string id = HttpContext.Session.GetString("id"); //get id sua
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (id == list[i].maNhanVien)
+                {
+                    list[i].maNhanVien = staff.maNhanVien;
+                    list[i].hoTen = staff.hoTen;
+                    list[i].ngaySinh = staff.ngaySinh;
+                    list[i].sdt = staff.sdt;
+                    list[i].chucVu = staff.chucVu;
+                }
+            }
+            
+            HttpContext.Session.SetObjectAsJson("list", list);
+
+
+
+            return View("Index", list);
         }
         public IActionResult Update()
         {
@@ -68,11 +84,20 @@ namespace MVCExample.Controllers
             Console.WriteLine("Đang xây dựng");
             return View();
         }
-        public IActionResult Delete()
+        public IActionResult Delete(string id)
         {
-            //var test = HttpContext.Session.GetObjectFromJson<List<string>>("Test");
-            Console.WriteLine("Đang xây dựng");
-            return View();
+            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (id == list[i].maNhanVien)
+                {
+                    list.RemoveAt(i);
+                    HttpContext.Session.SetObjectAsJson("list", list);
+
+                    return View("Delete");
+                }
+            }
+            return View("Index", list);
         }
         public IActionResult Report()
         {
