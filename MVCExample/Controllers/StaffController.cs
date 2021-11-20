@@ -71,7 +71,7 @@ namespace MVCExample.Controllers
                     list[i].chucVu = staff.chucVu;
                 }
             }
-            
+
             HttpContext.Session.SetObjectAsJson("list", list);
 
 
@@ -84,9 +84,27 @@ namespace MVCExample.Controllers
             Console.WriteLine("Đang xây dựng");
             return View();
         }
+        [HttpGet]
         public IActionResult Delete(string id)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+            HttpContext.Session.SetString("id", id); //luu id sua
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (id == list[i].maNhanVien)
+                {
+                    return PartialView("Delete", list[i]);
+                }
+            }
+            return View("Delete");
+        }
+        [HttpPost]
+        public IActionResult Delete(Staff staff)
+        {
+            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+            string id = HttpContext.Session.GetString("id"); //get id sua
+
             for (int i = 0; i < list.Count; i++)
             {
                 if (id == list[i].maNhanVien)
@@ -94,10 +112,10 @@ namespace MVCExample.Controllers
                     list.RemoveAt(i);
                     HttpContext.Session.SetObjectAsJson("list", list);
 
-                    return View("Delete");
+                    return View("Index", list);
                 }
             }
-            return View("Index", list);
+            return View("Delete");
         }
         public IActionResult Report()
         {
