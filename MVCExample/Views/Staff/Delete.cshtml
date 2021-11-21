@@ -11,7 +11,8 @@
 <div>
     <h4>Staff</h4>
     <hr />
-    <dl class="row">
+    <dl class="row" style="display: flex;
+    justify-content: flex-start">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.maNhanVien)
         </dt>
@@ -44,21 +45,25 @@
         </dd>
     </dl>
 
-    <form method="post" onclick="myConfirm()" style="margin: 20px 0;">
-        <input type="submit" value="Xóa" class="btn btn-danger" style="padding: 6px 39px;" />
+    <form method="post" asp-action="Delete" style="float: left; padding: 0 50px;
+">
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirm-delete">Xóa</button>
+        <div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Xóa nhân viên</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc chắn muốn xóa không?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Xóa</button>
+                        <a href="../Index" class="btn btn-danger">Hủy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
     <a asp-action="Index" class="btn btn-info">Back to List</a>
 </div>
-
-<script type='text/javascript'>
-    function myConfirm() {
-        var result = confirm("Do you Want to Delete?");
-        if (result == true) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-</script>

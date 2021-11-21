@@ -117,6 +117,10 @@ namespace MVCExample.Controllers
             }
             return View("Index", list);
         }
+        public IActionResult Search()
+        {
+            return View();
+        }
         public IActionResult Report()
         {
             //var test = HttpContext.Session.GetObjectFromJson<List<string>>("Test");
