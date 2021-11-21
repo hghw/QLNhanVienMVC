@@ -10,10 +10,10 @@
     <p class="add">
         <a asp-action="Create">Thêm nhân viên</a>
     </p>
-    <div class="search">
+    <form asp-action="Index" class="search">
         <span>Tìm kiếm</span>
-        <input type="text" placeholder="Nhập từ khóa tìm kiếm...">
-    </div>
+        @Html.TextBox("keyword")
+    </form>
 
 </div>
 <table class="table">
@@ -58,7 +58,6 @@
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id=item.maNhanVien }) |
-                    @Html.ActionLink("Details", "Details", new { id=item.maNhanVien }) |
                     @Html.ActionLink("Delete", "Delete", new { id=item.maNhanVien })
                 </td>
             </tr>

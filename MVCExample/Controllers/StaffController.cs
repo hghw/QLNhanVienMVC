@@ -21,12 +21,21 @@ namespace MVCExample.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string keyword)
         {
             /*Get create*/
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+
+            //search
+            if (!String.IsNullOrEmpty(keyword))
+            {
+                var searchs = list.Where(s => s.maNhanVien.Contains(keyword));
+                return View("Index", searchs);
+            }
+            //end search
             return View("Index", list);
         }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -78,12 +87,6 @@ namespace MVCExample.Controllers
 
             return View("Index", list);
         }
-        public IActionResult Update()
-        {
-            //var test = HttpContext.Session.GetObjectFromJson<List<string>>("Test");
-            Console.WriteLine("Đang xây dựng");
-            return View();
-        }
         [HttpGet]
         public IActionResult Delete(string id)
         {
@@ -117,16 +120,18 @@ namespace MVCExample.Controllers
             }
             return View("Index", list);
         }
-        public IActionResult Search()
-        {
-            return View();
-        }
-        public IActionResult Report()
-        {
-            //var test = HttpContext.Session.GetObjectFromJson<List<string>>("Test");
-            Console.WriteLine("Đang xây dựng");
-            return View();
-        }
+        // public IActionResult Search(string keyword)
+        // {
+
+        //     List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+
+        //     if (!String.IsNullOrEmpty(keyword))
+        //     {
+        //         var searchs = list.Where(s => s.maNhanVien.Contains(keyword));
+        //         return View("Index", searchs);
+        //     }
+        //     return View();
+        // }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 
