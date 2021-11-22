@@ -42,11 +42,11 @@ namespace MVCExample.Controllers
             return View("Index", list);
         }
 
- /*       [HttpGet]
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
-        }*/
+        }
         [HttpPost]
         public IActionResult Create(Staff model)
         {
