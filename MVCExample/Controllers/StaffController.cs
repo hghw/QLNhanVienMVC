@@ -29,18 +29,24 @@ namespace MVCExample.Controllers
             //search
             if (!String.IsNullOrEmpty(keyword))
             {
-                var searchs = list.Where(s => s.maNhanVien.Contains(keyword));
+                var searchs = list.Where(s => s.hoTen.ToLower().Contains(keyword) 
+                || s.hoTen.Contains(keyword)
+                || s.hoTen.ToUpper().Contains(keyword)
+                || s.diaChi.Contains(keyword)
+                || s.diaChi.ToUpper().Contains(keyword)
+                || s.diaChi.ToLower().Contains(keyword)
+                );
                 return View("Index", searchs);
             }
             //end search
             return View("Index", list);
         }
 
-        [HttpGet]
+ /*       [HttpGet]
         public IActionResult Create()
         {
             return View();
-        }
+        }*/
         [HttpPost]
         public IActionResult Create(Staff model)
         {
@@ -77,6 +83,8 @@ namespace MVCExample.Controllers
                     list[i].hoTen = staff.hoTen;
                     list[i].ngaySinh = staff.ngaySinh;
                     list[i].sdt = staff.sdt;
+                    list[i].diaChi = staff.diaChi;
+
                     list[i].chucVu = staff.chucVu;
                 }
             }
@@ -97,7 +105,7 @@ namespace MVCExample.Controllers
             {
                 if (id == list[i].maNhanVien)
                 {
-                    return PartialView("Delete", list[i]);
+                    return View("Delete", list[i]);
                 }
             }
             return View("Delete");
