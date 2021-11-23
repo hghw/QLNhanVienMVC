@@ -4,7 +4,6 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <h1>Index</h1>
 <div class="add-search">
     <p class="add">
@@ -43,30 +42,30 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.maNhanVien)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.hoTen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ngaySinh, new { htmlAttributes = new { @class = "form-control form-input" }})
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.sdt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.diaChi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.chucVu)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.maNhanVien }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.maNhanVien })
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.maNhanVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.hoTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ngaySinh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.sdt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.diaChi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.chucVu)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.maNhanVien }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.maNhanVien })
+                </td>
+            </tr>
         }
     </tbody>
 </table>

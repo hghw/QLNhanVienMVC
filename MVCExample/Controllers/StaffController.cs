@@ -20,7 +20,6 @@ namespace MVCExample.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index(string keyword)
         {
             /*Get create*/
@@ -29,7 +28,7 @@ namespace MVCExample.Controllers
             //search
             if (!String.IsNullOrEmpty(keyword))
             {
-                var searchs = list.Where(s => s.hoTen.ToLower().Contains(keyword) 
+                var searchs = list.Where(s => s.hoTen.ToLower().Contains(keyword)
                 || s.hoTen.Contains(keyword)
                 || s.hoTen.ToUpper().Contains(keyword)
                 || s.diaChi.Contains(keyword)
@@ -51,6 +50,16 @@ namespace MVCExample.Controllers
         public IActionResult Create(Staff model)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+            Staff staff = new Staff();
+            model.maNhanVien = staff.getMaNhanVien(list);
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (model.maNhanVien == list[i].maNhanVien)
+                {
+                    model.maNhanVien = staff.getMaNhanVienAdd1(list);
+                }
+
+            }
             list.Add(model);
             HttpContext.Session.SetObjectAsJson("list", list);
             return View("Index", list);
@@ -79,12 +88,11 @@ namespace MVCExample.Controllers
             {
                 if (id == list[i].maNhanVien)
                 {
-                    list[i].maNhanVien = staff.maNhanVien;
+                    // list[i].maNhanVien = staff.maNhanVien;
                     list[i].hoTen = staff.hoTen;
                     list[i].ngaySinh = staff.ngaySinh;
                     list[i].sdt = staff.sdt;
                     list[i].diaChi = staff.diaChi;
-
                     list[i].chucVu = staff.chucVu;
                 }
             }

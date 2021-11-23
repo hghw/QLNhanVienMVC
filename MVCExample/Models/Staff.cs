@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using MVCSamples.Extensions;
+
 
 namespace MVCExample.Models
 {
@@ -38,14 +41,23 @@ namespace MVCExample.Models
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Chiều dài không chính xác")]
         [Display(Name = "Chức vụ")]
         public string chucVu { set; get; }
-        /*public string getMaNhanVien(List<Staff> listNhanVien)
+
+        public string getMaNhanVien(List<Staff> listNhanVien)
         {
             float maCount = (float)(listNhanVien.Count + 1) / 1000;
             string maNhanVien = Convert.ToString(maCount);
-            maNhanVien = maNhanVien.Replace(".", "");
+            maNhanVien = maNhanVien.Replace(",", "");
             maNhanVien = "NV-" + maNhanVien;
             return maNhanVien;
-        }*/
+        }
+        public string getMaNhanVienAdd1(List<Staff> listNhanVien)
+        {
+            float maCount = (float)(listNhanVien.Count + 2) / 1000;
+            string maNhanVien = Convert.ToString(maCount);
+            maNhanVien = maNhanVien.Replace(",", "");
+            maNhanVien = "NV-" + maNhanVien;
+            return maNhanVien;
+        }
     }
 
 }
