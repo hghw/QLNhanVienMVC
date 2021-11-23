@@ -58,6 +58,10 @@ namespace MVCExample.Controllers
                 {
                     model.maNhanVien = staff.getMaNhanVienAdd1(list);
                 }
+                // if (model.hoTen == list[i].hoTen || model.ngaySinh == list[i].ngaySinh)
+                // {
+                    
+                // }
 
             }
             list.Add(model);
