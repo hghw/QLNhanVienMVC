@@ -108,22 +108,22 @@ namespace MVCExample.Controllers
 
             return View("Index", list);
         }
-        public JsonResult Delete(string id)
-        {
-            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+        // [HttpPost]
+        // public JsonResult Delete(string id)
+        // {
+        //     List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
 
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (id == list[i].maNhanVien)
-                {
-                    list.RemoveAt(i);
-                    HttpContext.Session.SetObjectAsJson("list", list);
-                    return Json(list.RemoveAt(i), JsonRequestBehavior.AllowGet);
+        //     for (int i = 0; i < list.Count; i++)
+        //     {
+        //         if (id == list[i].maNhanVien)
+        //         {
+        //             list.RemoveAt(i);
+        //             HttpContext.Session.SetObjectAsJson("list", list);
 
-                }
-            }
-            return Json(list.RemoveAt(i), JsonRequestBehavior.AllowGet);
-        }
+        //         }
+        //     }
+        //      return Json(true, JsonRequestBehavior.AllowGet);
+        // }
         /*
         [HttpGet]
         public IActionResult Delete(string id)
