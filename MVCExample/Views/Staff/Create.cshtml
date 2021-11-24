@@ -20,7 +20,7 @@
                 </div> *@
             <div class="form-group">
                 <label asp-for="hoTen" class="control-label"></label>
-                <input asp-for="hoTen" class="form-control" />
+                <input asp-for="hoTen" class="form-control" onkeyup="formathoTen(this.value)"/>
                 <span asp-validation-for="hoTen" class="text-danger"></span>
             </div>
             <div class="form-group">

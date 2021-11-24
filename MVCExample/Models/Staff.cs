@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using MVCSamples.Extensions;
+
 
 
 namespace MVCExample.Models
@@ -46,7 +43,7 @@ namespace MVCExample.Models
         {
             float maCount = (float)(listNhanVien.Count + 1) / 1000;
             string maNhanVien = Convert.ToString(maCount);
-            maNhanVien = maNhanVien.Replace(",", "");
+            maNhanVien = maNhanVien.Replace(".", "");
             maNhanVien = "NV-" + maNhanVien;
             return maNhanVien;
         }
@@ -54,7 +51,7 @@ namespace MVCExample.Models
         {
             float maCount = (float)(listNhanVien.Count + 2) / 1000;
             string maNhanVien = Convert.ToString(maCount);
-            maNhanVien = maNhanVien.Replace(",", "");
+            maNhanVien = maNhanVien.Replace(".", "");
             maNhanVien = "NV-" + maNhanVien;
             return maNhanVien;
         }

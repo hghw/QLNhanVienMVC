@@ -9,6 +9,7 @@ using System.Diagnostics;
 using MVCSamples.Extensions;
 using System.Linq;
 
+
 namespace MVCExample.Controllers
 {
     public class StaffController : Controller
@@ -58,10 +59,10 @@ namespace MVCExample.Controllers
                 {
                     model.maNhanVien = staff.getMaNhanVienAdd1(list);
                 }
-                // if (model.hoTen == list[i].hoTen || model.ngaySinh == list[i].ngaySinh)
-                // {
-                    
-                // }
+               /* if (model.hoTen == list[i].hoTen || model.ngaySinh == list[i].ngaySinh)
+                 {
+                    return Json()
+                 }*/
 
             }
             list.Add(model);
@@ -107,6 +108,23 @@ namespace MVCExample.Controllers
 
             return View("Index", list);
         }
+        public JsonResult Delete(string id)
+        {
+            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (id == list[i].maNhanVien)
+                {
+                    list.RemoveAt(i);
+                    HttpContext.Session.SetObjectAsJson("list", list);
+                    return Json(list.RemoveAt(i), JsonRequestBehavior.AllowGet);
+
+                }
+            }
+            return Json(list.RemoveAt(i), JsonRequestBehavior.AllowGet);
+        }
+        /*
         [HttpGet]
         public IActionResult Delete(string id)
         {
@@ -139,7 +157,7 @@ namespace MVCExample.Controllers
                 }
             }
             return View("Index", list);
-        }
+        }*/
         // public IActionResult Search(string keyword)
         // {
 
