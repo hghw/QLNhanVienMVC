@@ -30,7 +30,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="itemModel">
                 <td>
                     @Html.DisplayFor(modelItem => item.maNhanVien)
                 </td>
@@ -53,7 +53,8 @@
                     @Html.ActionLink("Edit", "Edit", new { id = item.maNhanVien }) |
                     @*<a data-toggle="modal" data-target="#DeleteFade">Xóa</a>*@
                     @*                    <a onclick="showPopup('@Url.Action("AddOrEdit", "Staff", null,Context.Request.Scheme)', 'new create')" class="btn btn-success text-white" ><i class="fas fa-random"></i>abc</a>
-                    *@                    <form asp-action="Delete" asp-route-id="@item.maNhanVien" onsubmit="return jQueryDelete(this)" class="d-inline">
+                    *@                    
+                    <form asp-action="Delete" asp-route-id="@item.maNhanVien" onsubmit="return jQueryDelete(this)" class="d-inline">
                         <input type="submit" name="name" value="Xóa" class="btn btn-danger" />
                     </form>
 

@@ -58,10 +58,10 @@ namespace MVCExample.Controllers
                 {
                     model.maNhanVien = staff.getMaNhanVienAdd1(list);
                 }
-               /* if (model.hoTen == list[i].hoTen || model.ngaySinh == list[i].ngaySinh)
-                 {
-                    return Json()
-                 }*/
+                /* if (model.hoTen == list[i].hoTen || model.ngaySinh == list[i].ngaySinh)
+                  {
+                     return Json()
+                  }*/
 
             }
             list.Add(model);
@@ -107,23 +107,7 @@ namespace MVCExample.Controllers
 
             return View("Index", list);
         }
-        // [HttpPost]
-        // public JsonResult Delete(string id)
-        // {
-        //     List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
 
-        //     for (int i = 0; i < list.Count; i++)
-        //     {
-        //         if (id == list[i].maNhanVien)
-        //         {
-        //             list.RemoveAt(i);
-        //             HttpContext.Session.SetObjectAsJson("list", list);
-
-        //         }
-        //     }
-        //      return Json(true, JsonRequestBehavior.AllowGet);
-        // }
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(string id)
@@ -137,11 +121,9 @@ namespace MVCExample.Controllers
                     list.RemoveAt(i);
                     HttpContext.Session.SetObjectAsJson("list", list);
 
-
-                    return View("ViewAll", list);
                 }
             }
-            
+
             return View("Delete");
         }
         /*

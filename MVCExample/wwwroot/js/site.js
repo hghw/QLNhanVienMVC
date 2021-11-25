@@ -25,7 +25,8 @@ jQueryDelete = form => {
                 contentType: false,
                 processData: false,
                 success: function (res) {
-                    $("#view-all").html(res.html);
+                    
+                    $(".itemModel").parent().remove();;
                 },
                 error: function (err) {
                     console.log(err);
