@@ -1,0 +1,64 @@
+﻿@model IEnumerable<MVCExample.Models.Staff>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.maNhanVien)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.hoTen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ngaySinh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.sdt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.diaChi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.chucVu)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.maNhanVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.hoTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ngaySinh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.sdt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.diaChi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.chucVu)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.maNhanVien }) |
+                    @*<a data-toggle="modal" data-target="#DeleteFade">Xóa</a>*@
+                    @*                    <a onclick="showPopup('@Url.Action("AddOrEdit", "Staff", null,Context.Request.Scheme)', 'new create')" class="btn btn-success text-white" ><i class="fas fa-random"></i>abc</a>
+                    *@                    <form asp-action="Delete" asp-route-id="@item.maNhanVien" onsubmit="return jQueryDelete(this)" class="d-inline">
+                        <input type="submit" name="name" value="Xóa" class="btn btn-danger" />
+                    </form>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

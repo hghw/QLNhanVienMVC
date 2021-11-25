@@ -20,7 +20,7 @@ namespace MVCExample.Models
 
         [Required(ErrorMessage = "Phải có ngày sinh")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         [Display(Name = "Ngày sinh")]
         public Nullable<System.DateTime> ngaySinh { get; set; }
 

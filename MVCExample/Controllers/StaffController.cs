@@ -9,7 +9,6 @@ using System.Diagnostics;
 using MVCSamples.Extensions;
 using System.Linq;
 
-
 namespace MVCExample.Controllers
 {
     public class StaffController : Controller
@@ -124,22 +123,28 @@ namespace MVCExample.Controllers
         //     }
         //      return Json(true, JsonRequestBehavior.AllowGet);
         // }
-        /*
-        [HttpGet]
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(string id)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-            HttpContext.Session.SetString("id", id); //luu id sua
 
             for (int i = 0; i < list.Count; i++)
             {
                 if (id == list[i].maNhanVien)
                 {
-                    return View("Delete", list[i]);
+                    list.RemoveAt(i);
+                    HttpContext.Session.SetObjectAsJson("list", list);
+
+
+                    return View("ViewAll", list);
                 }
             }
+            
             return View("Delete");
         }
+        /*
         [HttpPost]
         public IActionResult Delete(Staff staff)
         {
@@ -150,8 +155,6 @@ namespace MVCExample.Controllers
             {
                 if (id == list[i].maNhanVien)
                 {
-                    list.RemoveAt(i);
-                    HttpContext.Session.SetObjectAsJson("list", list);
 
                     return View("Index", list);
                 }

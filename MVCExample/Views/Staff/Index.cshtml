@@ -4,11 +4,6 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script src="~/Scripts/jquery-1.9.1.js"></script>
-<script src="~/Scripts/bootstrap.js"></script>
-<link href="~/Content/bootstrap.css" rel="stylesheet" />
-<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-<script src="~/Scripts/employee.js"></script>
 
 <h1>Index</h1>
 <div class="add-search">
@@ -21,73 +16,9 @@
     </form>
 
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.maNhanVien)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.hoTen)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ngaySinh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.sdt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.diaChi)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.chucVu)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.maNhanVien)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.hoTen)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ngaySinh)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.sdt)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.diaChi)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.chucVu)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.maNhanVien }) |
-                    <a data-toggle="modal" data-target="#DeleteFade">Xóa</a>
-
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-@*Button delete*@
-<div class="modal fade" id="DeleteFade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Bạn có chắc chắn muốn xóa?</h4>
-            </div>
-            <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="btnAdd" onclick="return Delele();">Xóa</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
+<div id="view-all">
+    @await Html.PartialAsync("_ViewAll", Model)
 </div>
+
+
+
