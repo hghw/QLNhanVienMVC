@@ -3,8 +3,8 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-<table class="table">
-    <thead>
+<table class="table table-hover" id="tableViewAll">
+    <thead class="table-success">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.maNhanVien)
@@ -30,7 +30,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="itemModel">
+            <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.maNhanVien)
                 </td>
@@ -49,15 +49,11 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.chucVu)
                 </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.maNhanVien }) |
-                    @*<a data-toggle="modal" data-target="#DeleteFade">Xóa</a>*@
-                    @*                    <a onclick="showPopup('@Url.Action("AddOrEdit", "Staff", null,Context.Request.Scheme)', 'new create')" class="btn btn-success text-white" ><i class="fas fa-random"></i>abc</a>
-                    *@                    
-                    <form asp-action="Delete" asp-route-id="@item.maNhanVien" onsubmit="return jQueryDelete(this)" class="d-inline">
-                        <input type="submit" name="name" value="Xóa" class="btn btn-danger" />
+                <td class="d-flex" style="justify-content: space-around;">
+                    <buton class="btn btn-warning ">@Html.ActionLink("Edit", "Edit", new { id = item.maNhanVien })</buton>
+                    <form onclick="return jQueryDelete(this)" asp-action="Delete" asp-route-id="@item.maNhanVien" >
+                        <input type="submit" id="submitDeleteForm" value="Xóa" class="btn btn-danger " />
                     </form>
-
                 </td>
             </tr>
         }

@@ -89,7 +89,7 @@ body {
   color: #000;
   text-decoration: none;
 }
-.search span {
+.search #spSearch {
   position: absolute;
   z-index: 2;
   line-height: 38px;
@@ -98,7 +98,7 @@ body {
   background-color: burlywood;
   color: #000;
 }
-.search input {
+.search #inSearch input {
   position: relative;
   width: 300px;
   outline: 0;

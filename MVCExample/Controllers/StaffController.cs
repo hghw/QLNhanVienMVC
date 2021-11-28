@@ -25,18 +25,7 @@ namespace MVCExample.Controllers
             /*Get create*/
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
 
-            //search
-            if (!String.IsNullOrEmpty(keyword))
-            {
-                var searchs = list.Where(s => s.hoTen.ToLower().Contains(keyword)
-                || s.hoTen.Contains(keyword)
-                || s.hoTen.ToUpper().Contains(keyword)
-                || s.diaChi.Contains(keyword)
-                || s.diaChi.ToUpper().Contains(keyword)
-                || s.diaChi.ToLower().Contains(keyword)
-                );
-                return View("Index", searchs);
-            }
+
             //end search
             return View("Index", list);
         }
@@ -58,16 +47,21 @@ namespace MVCExample.Controllers
                 {
                     model.maNhanVien = staff.getMaNhanVienAdd1(list);
                 }
-                /* if (model.hoTen == list[i].hoTen || model.ngaySinh == list[i].ngaySinh)
-                  {
-                     return Json()
-                  }*/
+                // kiem tra hoten ngay sinh trung khi add
+                if (model.hoTen == list[i].hoTen && model.ngaySinh == list[i].ngaySinh)
+                {
+                    SetAlert("Trùng họ tên và ngày tháng năm sinh", "warning");
+
+                    return View("Create");
+                }
 
             }
             list.Add(model);
             HttpContext.Session.SetObjectAsJson("list", list);
+            SetAlert("Thêm thành công!", "success");
             return View("Index", list);
         }
+        [HttpGet]
         public IActionResult Edit(string id)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
@@ -83,15 +77,22 @@ namespace MVCExample.Controllers
             return View("Index", list);
         }
         [HttpPost]
-        public IActionResult Edit(Staff staff)
+        public IActionResult Update(Staff staff)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
             // var nv = list.Where(s => s.maNhanVien == std.maNhanVien).FirstOrDefault();
             string id = HttpContext.Session.GetString("id"); //get id sua
             for (int i = 0; i < list.Count; i++)
             {
+                // kiem tra hoten ngay sinh trung khi add
+                if (staff.hoTen == list[i].hoTen && staff.ngaySinh == list[i].ngaySinh)
+                {
+                    SetAlert("Trùng họ tên và ngày tháng năm sinh", "warning");
+                    return View("Edit");
+                }
                 if (id == list[i].maNhanVien)
                 {
+
                     // list[i].maNhanVien = staff.maNhanVien;
                     list[i].hoTen = staff.hoTen;
                     list[i].ngaySinh = staff.ngaySinh;
@@ -99,16 +100,15 @@ namespace MVCExample.Controllers
                     list[i].diaChi = staff.diaChi;
                     list[i].chucVu = staff.chucVu;
                 }
+
+
             }
 
             HttpContext.Session.SetObjectAsJson("list", list);
-
-
-
             return View("Index", list);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(string id)
         {
@@ -120,41 +120,50 @@ namespace MVCExample.Controllers
                 {
                     list.RemoveAt(i);
                     HttpContext.Session.SetObjectAsJson("list", list);
-
-                }
-            }
-
-            return View("Delete");
-        }
-        /*
-        [HttpPost]
-        public IActionResult Delete(Staff staff)
-        {
-            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-            string id = HttpContext.Session.GetString("id"); //get id sua
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (id == list[i].maNhanVien)
-                {
-
-                    return View("Index", list);
                 }
             }
             return View("Index", list);
-        }*/
-        // public IActionResult Search(string keyword)
-        // {
 
-        //     List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+        }
+        public IActionResult Search(string keyword)
+        {
 
-        //     if (!String.IsNullOrEmpty(keyword))
-        //     {
-        //         var searchs = list.Where(s => s.maNhanVien.Contains(keyword));
-        //         return View("Index", searchs);
-        //     }
-        //     return View();
-        // }
+            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
+            //search
+            if (!String.IsNullOrEmpty(keyword))
+            {
+                var searchs = list.Where(s => s.hoTen.ToLower().Contains(keyword)
+                || s.hoTen.Contains(keyword)
+                || s.hoTen.ToUpper().Contains(keyword)
+                || s.diaChi.Contains(keyword)
+                || s.diaChi.ToUpper().Contains(keyword)
+                || s.diaChi.ToLower().Contains(keyword)
+                );
+                return View("Index", searchs);
+            }
+            // if (!String.IsNullOrEmpty(keyword))
+            // {
+            //     var searchs = list.Where(s => s.maNhanVien.Contains(keyword));
+            //     return View("Index", searchs);
+            // }
+            return View("Index", list);
+        }
+        public void SetAlert(string messenge, string type)
+        {
+            TempData["AlertMessenge"] = messenge;
+            if (type == "success")
+            {
+                TempData["AlertType"] = "alert-success";
+            }
+            else if (type == "warning")
+            {
+                TempData["AlertType"] = "alert-warning";
+            }
+            else if (type == "erro")
+            {
+                TempData["AlertType"] = "alert-danger";
+            }
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 

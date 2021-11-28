@@ -16,25 +16,50 @@ showPopup = (url, title) => {
 }
 
 jQueryDelete = form => {
-    if (confirm("Bạn có chắc chắn muốn xóa?")) {
-        try {
+    var conf = confirm("Bạn có chắc chắn muốn xóa?");
+    if (conf == true) {
+        $(document).on("click", "#submitDeleteForm", function(){
+            let submit = $(this)
+            // an huy van xoa tren html
+            submit.parent().parent().parent().remove()
+        })
             $.ajax({
                 type: 'POST',
                 url: form.action,
                 data: new FormData(form),
                 contentType: false,
                 processData: false,
-                success: function (res) {
+                success: function () {
                     
-                    $(".itemModel").parent().remove();;
                 },
                 error: function (err) {
                     console.log(err);
                 }
+                
             })
-        } catch (e) {
-            console.log(e);
+
         }
-    }
     return false;
 }
+
+
+
+JquerySearch = form => {
+    $.ajax({
+        type: 'POST',
+        url: form.action,
+        data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function(){
+
+                },
+                error: function(){
+                    console.log(err);
+                } 
+    })
+}
+
+$('AlertBox').remove('hide'); //xoa class hide de hien thi thong bao
+$('AlertBox').delay(1000); // animation cua thong bao
+$('AlertBox').slideUp(500); // animation cua thong bao

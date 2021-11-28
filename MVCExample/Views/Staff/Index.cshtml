@@ -10,15 +10,14 @@
     <p class="add">
         <a asp-action="Create">Thêm nhân viên</a>
     </p>
-    <form asp-action="Index" class="search">
-        <span>Tìm kiếm</span>
-        @Html.TextBox("keyword")
-    </form>
+    <form asp-action="Search" class="search d-flex" onsubmit="return JquerySearch(this)">
+        <div class="input-group mb-3">
+            @Html.TextBox("keyword")
+            <button class="btn btn-success" type="submit">Go</button>
+        </div>
+      </form>
 
 </div>
 <div id="view-all">
     @await Html.PartialAsync("_ViewAll", Model)
 </div>
-
-
-

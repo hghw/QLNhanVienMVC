@@ -48,6 +48,14 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+
+            @* view hien thi kiem tra ho ten ngay sinh trung nhau,... *@
+            @if(TempData["AlertMessenge"] !=null){
+                <div id="AlertBox" class="alert @TempData["AlertType"] hide">
+                   @TempData["AlertMessenge"]
+                </div>
+            }
+
             @RenderBody()
         </main>
     </div>

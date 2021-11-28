@@ -8,34 +8,34 @@ namespace MVCExample.Models
 {
     public class Staff
     {
-        [Required(ErrorMessage = "Phải có mã nhân viên")]
-        [StringLength(10, MinimumLength = 3, ErrorMessage = "Chiều dài không chính xác")]
+        [Required(ErrorMessage = "Nhập mã nhân viên")]
+        [StringLength(10, MinimumLength = 1, ErrorMessage = "Chiều dài không chính xác")]
         [Display(Name = "Mã Nhân Viên")]
         public string maNhanVien { set; get; }
 
-        [Required(ErrorMessage = "Phải có tên")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Chiều dài không chính xác")]
+        [Required(ErrorMessage = "Nhập tên")]
+        [StringLength(20, MinimumLength = 1, ErrorMessage = "Chiều dài không chính xác")]
         [Display(Name = "Họ tên")]
         public string hoTen { set; get; }
 
-        [Required(ErrorMessage = "Phải có ngày sinh")]
+        [Required(ErrorMessage = "Nhập ngày sinh")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        [Display(Name = "Ngày sinh")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [Display(Name = "Ngày/Tháng/Năm")]
         public Nullable<System.DateTime> ngaySinh { get; set; }
 
-        [Required(ErrorMessage = "Phải có sđt")]
-        [StringLength(10, MinimumLength = 3, ErrorMessage = "Chiều dài không chính xác")]
+        [Required(ErrorMessage = "Nhập sđt")]
+        [StringLength(10, MinimumLength = 1, ErrorMessage = "Chiều dài không chính xác")]
         [Display(Name = "Số điện thoại")]
         public string sdt { set; get; }
 
-        [Required(ErrorMessage = "Phải có địa chỉ")]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Chiều dài không chính xác")]
+        [Required(ErrorMessage = "Nhập địa chỉ")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Chiều dài không chính xác")]
         [Display(Name = "Địa chỉ")]
         public string diaChi { set; get; }
 
-        [Required(ErrorMessage = "Phải có chức vụ")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Chiều dài không chính xác")]
+        [Required(ErrorMessage = "Nhập chức vụ")]
+        [StringLength(20, MinimumLength = 1, ErrorMessage = "Chiều dài không chính xác")]
         [Display(Name = "Chức vụ")]
         public string chucVu { set; get; }
 
