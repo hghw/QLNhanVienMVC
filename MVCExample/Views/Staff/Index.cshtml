@@ -10,14 +10,25 @@
     <p class="add">
         <a asp-action="Create">Thêm nhân viên</a>
     </p>
-    <form asp-action="Search" class="search d-flex" onsubmit="return JquerySearch(this)">
-        <div class="input-group mb-3">
-            @Html.TextBox("keyword")
-            <button class="btn btn-success" type="submit">Go</button>
+    <div onkeydown  ="return JquerySearchForm(this)" class="search d-flex">
+
+            @* @Html.TextBox("keyword")*@
+            
+        <div class="input-group rounded">
+            <input type="search" id="inSearch123" class="form-control rounded" placeholder="Nhập từ khóa..." aria-label="Search"
+                   aria-describedby="search-addon" />
+            <button type="button" class="input-group-text border-0" id="search-addon btSearchForm">
+                Search
+            </button>
         </div>
-      </form>
+    </div>
 
 </div>
 <div id="view-all">
     @await Html.PartialAsync("_ViewAll", Model)
 </div>
+
+<script type="text/javascript">
+    
+    
+</script>

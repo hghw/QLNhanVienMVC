@@ -139,7 +139,7 @@ namespace MVCExample.Controllers
                 || s.diaChi.ToUpper().Contains(keyword)
                 || s.diaChi.ToLower().Contains(keyword)
                 );
-                return View("Index", searchs);
+                return View("Search", searchs);
             }
             // if (!String.IsNullOrEmpty(keyword))
             // {

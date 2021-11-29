@@ -3,7 +3,7 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-<table class="table table-hover" >
+<table class="table table-hover" id="tableViewAll">
     <thead class="table-success">
         <tr>
             <th>
@@ -27,7 +27,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody id="tableViewAll">
+    <tbody>
         @foreach (var item in Model)
         {
             <tr>
@@ -51,7 +51,7 @@
                 </td>
                 <td class="d-flex" style="justify-content: space-around;">
                     <buton class="btn btn-warning ">@Html.ActionLink("Edit", "Edit", new { id = item.maNhanVien })</buton>
-                    <form onclick="return jQueryDelete(this)" asp-action="Delete" asp-route-id="@item.maNhanVien" >
+                    <form onclick="return jQueryDelete(this)" asp-action="Delete" asp-route-id="@item.maNhanVien">
                         <input type="submit" id="submitDeleteForm" value="Xóa" class="btn btn-danger " />
                     </form>
                 </td>

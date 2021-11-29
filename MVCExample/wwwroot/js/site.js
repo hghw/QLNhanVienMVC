@@ -42,16 +42,42 @@ jQueryDelete = form => {
     return false;
 }
 
+function JquerySearchForm() {
+    $(document).ready(function () {
+        $("#inSearch123").on("change", function () {
+            var value = $(this).val().toLowerCase()
+            $("#tableViewAll tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            })
+        })
 
+        $("#btSearchForm").on("click", function () {
+            var value = $(this).val().toLowerCase()
+            $("#tableViewAll tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            })
+        })
+
+    })
+}
 
 JquerySearch = form => {
+    
+    /*$(document).on("click", "#susbmitSearchBT", function () {
+        let tableRM = $("#tableViewAll")
+        tableRM.load("Staff/Search.cshtml", function () {
+            alert("Load was performed.")
+        });
+    })*/
     $.ajax({
         type: 'POST',
         url: form.action,
         data: new FormData(form),
                 contentType: false,
                 processData: false,
-                success: function(){
+        success: function () {
+            
+
 
                 },
                 error: function(){
@@ -63,3 +89,5 @@ JquerySearch = form => {
 $('AlertBox').remove('hide'); //xoa class hide de hien thi thong bao
 $('AlertBox').delay(1000); // animation cua thong bao
 $('AlertBox').slideUp(500); // animation cua thong bao
+
+
