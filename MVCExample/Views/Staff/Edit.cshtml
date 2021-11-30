@@ -5,46 +5,52 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1 class="text-center">Sửa</h1>
 
-<h4>Staff</h4>
+<h4 class="text-center">Nhân Viên</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row" style="justify-content: space-around;">
+    <div class="col-md-6">
         <form asp-action="Update">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @* <div class="form-group">
                 <label asp-for="maNhanVien" class="control-label"></label>
                 <input asp-for="maNhanVien" class="form-control" />
                 <span asp-validation-for="maNhanVien" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <label asp-for="hoTen" class="control-label"></label>
-                <input asp-for="hoTen" class="form-control" />
-                <span asp-validation-for="hoTen" class="text-danger"></span>
+                </div> *@
+            <div class="row">
+                <div class="form-group col-md-6" style="float: left;">
+                    <label asp-for="hoTen" class="control-label"></label>
+                    <input asp-for="hoTen" id="hoTen" class="form-control" />
+                    <span asp-validation-for="hoTen" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6" style="float: right;">
+                    <label asp-for="ngaySinh" class="control-label"></label>
+                    <input asp-for="ngaySinh" id="ngaySinh" class="form-control" />
+                    <span asp-validation-for="ngaySinh" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6" style="float: left;">
+                    <label asp-for="sdt" class="control-label"></label>
+                    <input asp-for="sdt" id="sdt" class="form-control" />
+                    <span asp-validation-for="sdt" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6" style="float: right;">
+                    <label asp-for="diaChi" class="control-label"></label>
+                    <input asp-for="diaChi" id="diaChi" class="form-control" />
+                    <span asp-validation-for="diaChi" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="chucVu" class="control-label"></label>
+                    <input asp-for="chucVu" id="chucVu" class="form-control" />
+                    <span asp-validation-for="chucVu" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="ngaySinh" class="control-label"></label>
-                <input asp-for="ngaySinh" class="form-control" />
-                <span asp-validation-for="ngaySinh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="sdt" class="control-label"></label>
-                <input asp-for="sdt" class="form-control" />
-                <span asp-validation-for="sdt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="diaChi" class="control-label"></label>
-                <input asp-for="diaChi" class="form-control" />
-                <span asp-validation-for="diaChi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="chucVu" class="control-label"></label>
-                <input asp-for="chucVu" class="form-control" />
-                <span asp-validation-for="chucVu" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Lưu" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-danger d-inline" data-dismiss="modal">Hủy bỏ</a>
             </div>
         </form>
@@ -55,5 +61,5 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -17,12 +17,14 @@ showPopup = (url, title) => {
 
 jQueryDelete = form => {
     var conf = confirm("Bạn có chắc chắn muốn xóa?");
-    if (conf == true) {
+    if(conf == false){
+        return false
+    }
+    
         $(document).on("click", "#submitDeleteForm", function(){
-            let submit = $(this)
-            // an huy van xoa tren html
-            submit.parent().parent().parent().remove()
-        })
+            let submit =   $(this)
+            
+        
             $.ajax({
                 type: 'POST',
                 url: form.action,
@@ -30,16 +32,18 @@ jQueryDelete = form => {
                 contentType: false,
                 processData: false,
                 success: function () {
-                    
+                    submit.parent().parent().parent().empty()
                 },
                 error: function (err) {
                     console.log(err);
                 }
                 
             })
-
-        }
-    return false;
+            
+        })
+    
+    
+return false
 }
 
 function JquerySearchForm() {
@@ -91,3 +95,23 @@ $('AlertBox').delay(1000); // animation cua thong bao
 $('AlertBox').slideUp(500); // animation cua thong bao
 
 
+$.confirm({
+    title: 'Confirm!',
+    content: 'Simple confirm!',
+    buttons: {
+        confirm: function () {
+            $.alert('Confirmed!');
+        },
+        cancel: function () {
+            $.alert('Canceled!');
+        },
+        somethingElse: {
+            text: 'Something else',
+            btnClass: 'btn-blue',
+            keys: ['enter', 'shift'],
+            action: function(){
+                $.alert('Something else?');
+            }
+        }
+    }
+});
