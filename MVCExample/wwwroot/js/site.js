@@ -15,36 +15,34 @@ showPopup = (url, title) => {
     })
 }
 
-jQueryDelete = form => {
-    var conf = confirm("Bạn có chắc chắn muốn xóa?");
-    if(conf == false){
-        return false
-    }
-    
-        $(document).on("click", "#submitDeleteForm", function(){
-            let submit =   $(this)
-            
-        
-            $.ajax({
-                type: 'POST',
-                url: form.action,
-                data: new FormData(form),
-                contentType: false,
-                processData: false,
-                success: function () {
-                    submit.parent().parent().parent().empty()
-                },
-                error: function (err) {
-                    console.log(err);
-                }
+// jQueryDelete = form => {
+//         $(document).on("click", "#submitDeleteForm", function(){
+//             let submit = $("#submitDeleteForm")
+//             $.ajax({
+//                 type: 'POST',
+//                 url: form.action,
+//                 data: new FormData(form),
+//                 contentType: false,
+//                 processData: false,
+//                 success: function () {
+//                     submit.parent().parent().parent().empty()
+//                 },
+//                 error: function (err) {
+//                     console.log(err);
+//                 }
                 
-            })
+//             })
             
-        })
-    
-    
-return false
-}
+//         })
+// }
+
+    $(document).on("click", "#submitDeleteForm123", function(){
+        let submit = $(this)
+        submit.parent().parent().remove()
+    })
+
+
+
 
 function JquerySearchForm() {
     $(document).ready(function () {
@@ -95,23 +93,3 @@ $('AlertBox').delay(1000); // animation cua thong bao
 $('AlertBox').slideUp(500); // animation cua thong bao
 
 
-$.confirm({
-    title: 'Confirm!',
-    content: 'Simple confirm!',
-    buttons: {
-        confirm: function () {
-            $.alert('Confirmed!');
-        },
-        cancel: function () {
-            $.alert('Canceled!');
-        },
-        somethingElse: {
-            text: 'Something else',
-            btnClass: 'btn-blue',
-            keys: ['enter', 'shift'],
-            action: function(){
-                $.alert('Something else?');
-            }
-        }
-    }
-});

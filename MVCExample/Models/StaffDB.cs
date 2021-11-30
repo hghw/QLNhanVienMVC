@@ -11,7 +11,7 @@ namespace MVCExample.Models
                 new Staff {
                     maNhanVien = "NV-0001",
                     hoTen = "Hoang ABC",
-                    ngaySinh = Convert.ToDateTime("09/01/2000"),
+                    ngaySinh = new DateTime(2000,01,09),
                     sdt = "0314646552",
                     diaChi = "Ha Noi",
                     chucVu = "Giam Doc"
@@ -20,7 +20,7 @@ namespace MVCExample.Models
                 new Staff {
                    maNhanVien = "NV-0002",
                     hoTen = "Huy Duong",
-                    ngaySinh = Convert.ToDateTime("12/01/2001"),
+                    ngaySinh = new DateTime(1998,12,29),
                     sdt = "4540651",
                     diaChi = "Thai Nguyen",
                     chucVu = "Nhan Vien"
@@ -28,7 +28,7 @@ namespace MVCExample.Models
                 new Staff {
                     maNhanVien = "NV-0003",
                     hoTen = "Hoang Duong",
-                    ngaySinh = Convert.ToDateTime("18/12/2008"),
+                    ngaySinh = new DateTime(2010,06,15),
                     sdt = "01616565",
                     diaChi = "Lang Son",
                     chucVu = "Truong phong"
@@ -36,7 +36,7 @@ namespace MVCExample.Models
                 new Staff {
                     maNhanVien = "NV-0004",
                     hoTen = "Duong Van B",
-                    ngaySinh = Convert.ToDateTime("10/04/1998"),
+                    ngaySinh = new DateTime(2005,11,09),
                     sdt = "0894948498",
                     diaChi = "Ha Nam",
                     chucVu = "Nhan Vien"
@@ -44,7 +44,7 @@ namespace MVCExample.Models
                 new Staff {
                     maNhanVien = "NV-0005",
                     hoTen = "Nguyen Van A",
-                    ngaySinh = Convert.ToDateTime("23/05/1999"),
+                    ngaySinh = new DateTime(1995,05,05),
                     sdt = "056153221",
                     diaChi = "Bac Giang",
                     chucVu = "Nhan Vien"
