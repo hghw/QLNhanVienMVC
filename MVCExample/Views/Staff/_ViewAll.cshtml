@@ -30,60 +30,50 @@
     <tbody id="tableViewAll">
         @foreach (var item in Model)
         {
-                <tr>
-                    <td>
+            <tr>
+                <td>
                     @Html.DisplayFor(modelItem => item.maNhanVien)
-                    </td>
-                    <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.hoTen)
-                    </td>
-                    <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.ngaySinh)
-                    </td>
-                    <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.sdt)
-                    </td>
-                    <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.diaChi)
-                    </td>
-                    <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.chucVu)
-                    </td>
-                    <td class="d-flex" style="justify-content: space-around;">
-                        <a asp-action="Edit" asp-route-id="@item.maNhanVien" class="btn btn-warning">
-                            Edit
-                        </a>
+                </td>
+                <td class="d-flex" style="justify-content: space-around;">
+                    <a asp-action="Edit" asp-route-id="@item.maNhanVien" class="btn btn-warning">
+                        Edit
+                    </a>
                     @* form xoa *@
-                    @*  *@
+                    @* *@
+                     <button type="submit" id="buttonabc1233" class="btn btn-danger">Xóa</button>
 
-                             <form  onclick="return jQueryDelete(this)" asp-action="Delete" method="post" asp-route-id="@item.maNhanVien" >
-                                <button id="deletebtioon123" type="button" class="btn btn-danger " data-toggle="modal"
-                                 data-target="#confirm-delete">Xóa</button>
-                                <div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h2 class="modal-title">Xóa nhân viên</h2>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Bạn có chắc chắn muốn xóa không?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                    <button type="submit"  id="submitDeleteForm123" class="btn btn-success" data-dismiss="modal">Xóa</button>
-                                                    <button type="button" id="cancel-delete-button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                             </form>
-                            
-                        
-
-                        
-                    </td>
-                </tr>
+    
+                </td>
+            </tr>
         }
     </tbody>
 </table>
+<script type="text/javascript">
+
+    $(document).on("click", "#buttonabc1233", function () {
+        var abc = confirm("Bạn có muốn xóa?")
+        if (abc == true) {
+            var submit = $(this)
+            submit.parent().parent().remove()
+        }
+        return false
+    })
 
 
+
+</script>

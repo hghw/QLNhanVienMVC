@@ -17,11 +17,8 @@ showPopup = (url, title) => {
 
 jQueryDelete = form =>
 {
-         var submit = $("#deletebtioon123")
-    $(document).on("click", "#submitDeleteForm123", function () {
+    
 
-
-                submit.parent().parent().parent().remove()
         $.ajax({
                  type: 'POST',
                  url: form.action,
@@ -29,7 +26,6 @@ jQueryDelete = form =>
                  contentType: false,
                  processData: false,
                  success: function () {
-                     submit.parent().parent().parent().empty()
                  },
                  error: function (err) {
                      console.log(err);
@@ -37,7 +33,7 @@ jQueryDelete = form =>
                 
             
         })
-     })
+     
  }
 
 
