@@ -15,33 +15,30 @@ showPopup = (url, title) => {
     })
 }
 
-// jQueryDelete = form => {
-//         $(document).on("click", "#submitDeleteForm", function(){
-//             let submit = $("#submitDeleteForm")
-//             $.ajax({
-//                 type: 'POST',
-//                 url: form.action,
-//                 data: new FormData(form),
-//                 contentType: false,
-//                 processData: false,
-//                 success: function () {
-//                     submit.parent().parent().parent().empty()
-//                 },
-//                 error: function (err) {
-//                     console.log(err);
-//                 }
+jQueryDelete = form =>
+{
+         var submit = $("#deletebtioon123")
+    $(document).on("click", "#submitDeleteForm123", function () {
+
+
+                submit.parent().parent().parent().remove()
+        $.ajax({
+                 type: 'POST',
+                 url: form.action,
+                 data: new FormData(form),
+                 contentType: false,
+                 processData: false,
+                 success: function () {
+                     submit.parent().parent().parent().empty()
+                 },
+                 error: function (err) {
+                     console.log(err);
+                 }
                 
-//             })
             
-//         })
-// }
-
-    $(document).on("click", "#submitDeleteForm123", function(){
-        let submit = $(this)
-        submit.parent().parent().remove()
-    })
-
-
+        })
+     })
+ }
 
 
 function JquerySearchForm() {
