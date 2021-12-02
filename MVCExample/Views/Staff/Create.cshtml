@@ -2,15 +2,13 @@
 
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    @* Layout = "~/Views/Shared/_Layout.cshtml"; *@
+    Layout = null;
+
 }
 
-<h1 class="text-center">Thêm</h1>
-
-<h4 class="text-center">Nhân Viên</h4>
-<hr />
 <div class="row" style="justify-content: space-around;">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @*
@@ -21,7 +19,7 @@
                 </div>
             *@
             <div class="row">
-                 <div class="form-group col-md-6" style="float: left;">
+                <div class="form-group col-md-6" style="float: left;">
                     <label asp-for="hoTen" class="control-label"></label>
                     <input asp-for="hoTen" id="hoTen" class="form-control" />
                     <span asp-validation-for="hoTen" class="text-danger"></span>

@@ -24,7 +24,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.chucVu)
             </th>
-            <th></th>
+            <th>
+            </th>
         </tr>
     </thead>
     <tbody id="tableViewAll">
@@ -50,21 +51,17 @@
                     @Html.DisplayFor(modelItem => item.chucVu)
                 </td>
                 <td class="d-flex" style="justify-content: space-around;">
-                    <a asp-action="Edit" asp-route-id="@item.maNhanVien" class="btn btn-warning">
+                    @* <a asp-action="Edit" asp-route-id="@item.maNhanVien" class="btn btn-warning">
                         Edit
-                    </a>
+                    </a> *@
+                    <a onclick="showPopUp('@Url.Action("Update","Staff")','Sửa nhân viên')"
+                        class="btn btn-warning">Sửa</a>
                     @* form xoa *@
-                    @* *@
 
                     <form onclick="return jQueryDelete(this)" asp-action="Delete" method="post"
                     asp-route-id="@item.maNhanVien">
                         <button id="DeletePopup" type="button" class="btn btn-danger ">Xóa</button>
-
                     </form>
-
-
-
-
                 </td>
             </tr>
         }
@@ -73,7 +70,7 @@
 <script type="text/javascript">
 
 </script>
-
+@* form for delete *@
 <div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -87,6 +84,20 @@
                 <button type="submit" id="submitDeleteForm" class="btn btn-success" data-dismiss="modal">Xóa</button>
                 <button type="button" id="cancel-delete-button" class="btn btn-secondary"
                     data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* form for add *@
+<div class="modal" id="form-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" text-center></h2>
+            </div>
+            <div class="modal-body">
+                
             </div>
         </div>
     </div>

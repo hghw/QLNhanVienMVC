@@ -2,26 +2,46 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your Javascript code.
-showPopup = (url, title) => {
+showPopUp = (url, title) => {
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: url,
         success: function (res) {
             $("#form-modal .modal-body ").html(res);
             $("#form-modal .modal-title ").html(title);
             $("#form-modal ").modal('show');
-
         }
     })
 }
+//ADD POPUP
+jQueryAdd = form =>
+{
+    $(document).on("click", "#AddPopup", function () {
+        $("#confirm-add").modal("show")
+        let submitAdd = $(this)
+        $(document).on("click","submitAddForm",function(){
+            $("#maNhanVien").val()
+            $("#hoTen").val()
+            $("#ngaySinh").val()
+            $("#sdt").val()
+            $("#diaChi").val()
+            $("#chucVu").val()
+            submitAdd.parent().parent().parent().remove()
+        })
+        
+    })
 
+}
+
+
+//DELETE POPUP
 jQueryDelete = form =>
 {
     $(document).on("click", "#DeletePopup", function () {
         $("#confirm-delete").modal("show")
-        let biennayclick = $(this)
+        let submitDelete = $(this)
         $(document).on("click", "#submitDeleteForm",function(){
-            biennayclick.parent().parent().parent().remove()
+            submitDelete.parent().parent().parent().remove()
             $.ajax({
                 type: 'POST',
                 url: form.action,
