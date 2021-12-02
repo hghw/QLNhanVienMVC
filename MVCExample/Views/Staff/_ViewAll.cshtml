@@ -54,34 +54,15 @@
                         Edit
                     </a>
                     @* form xoa *@
-                    @*  *@
+                    @* *@
+                <form asp-action="Delete" asp-route-id="@item.maNhanVien" method="post" onclick="return jQueryDelete(this)">
+                     <button type="submit" id="buttonabc1233" class="btn btn-danger">Xóa</button>
 
-                             <form  onclick="return jQueryDelete(this)" asp-action="Delete" method="post" asp-route-id="@item.maNhanVien" >
-                                <button id="deletebtioon123" type="button" class="btn btn-danger " data-toggle="modal"
-                                 data-target="#confirm-delete">Xóa</button>
-                                <div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h2 class="modal-title">Xóa nhân viên</h2>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Bạn có chắc chắn muốn xóa không?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                    <button type="submit"  id="submitDeleteForm123" class="btn btn-success" data-dismiss="modal">Xóa</button>
-                                                    <button type="button" id="cancel-delete-button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                             </form>
-                            
-                        
+                </form>
 
-                        
-                    </td>
-                </tr>
+    
+                </td>
+            </tr>
         }
     </tbody>
 </table>
