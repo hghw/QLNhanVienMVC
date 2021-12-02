@@ -17,7 +17,7 @@ showPopup = (url, title) => {
 
 jQueryDelete = form =>
 {
-    
+   
 
         $.ajax({
                  type: 'POST',
@@ -34,8 +34,16 @@ jQueryDelete = form =>
             
         })
      
- }
+}
 
+$(document).on("click", "#buttonabc1233", function () {
+    var abc = confirm("Bạn có muốn xóa?")
+    if (abc == true) {
+        var submit = $(this)
+        submit.parent().parent().parent().remove()
+    }
+    return false
+})
 
 function JquerySearchForm() {
     $(document).ready(function () {
