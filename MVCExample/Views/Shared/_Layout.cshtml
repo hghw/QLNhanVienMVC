@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MVCSamples</title>
+    <title>@ViewData["Title"] - MVC Nhân Viên</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -25,16 +25,16 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+                        @* <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
-                                Trang
-                                chủ
+                            Trang
+                            chủ
                             </a>
-                        </li>
-                        <li class="nav-item">
+                            </li>
+                            <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Privacy">Privacy</a>
-                        </li>
+                            asp-action="Privacy">Privacy</a>
+                            </li> *@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Staff" asp-action="Index">
                                 Nhân
@@ -50,9 +50,10 @@
         <main role="main" class="pb-3">
 
             @* view hien thi kiem tra ho ten ngay sinh trung nhau,... *@
-            @if(TempData["AlertMessenge"] !=null){
+            @if (TempData["AlertMessenge"] != null)
+            {
                 <div id="AlertBox" class="alert @TempData["AlertType"] hide">
-                   @TempData["AlertMessenge"]
+                    @TempData["AlertMessenge"]
                 </div>
             }
 
@@ -65,25 +66,6 @@
             &copy; 2021 - MVCSamples - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-
-    @*form-popup*@
-    <div class="modal fade" id="form-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Bạn có chắc chắn muốn xóa?</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="btnAdd" onclick="return Delele();">Xóa</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     @await RenderSectionAsync("Scripts", required: false);

@@ -17,33 +17,30 @@ showPopup = (url, title) => {
 
 jQueryDelete = form =>
 {
-   
-
-        $.ajax({
-                 type: 'POST',
-                 url: form.action,
-                 data: new FormData(form),
-                 contentType: false,
-                 processData: false,
-                 success: function () {
-                 },
-                 error: function (err) {
-                     console.log(err);
-                 }
-                
-            
+    $(document).on("click", "#DeletePopup", function () {
+        $("#confirm-delete").modal("show")
+        let biennayclick = $(this)
+        $(document).on("click", "#submitDeleteForm",function(){
+            biennayclick.parent().parent().parent().remove()
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function () {
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+       })
         })
+    })
+
+        
      
 }
 
-$(document).on("click", "#buttonabc1233", function () {
-    var abc = confirm("Bạn có muốn xóa?")
-    if (abc == true) {
-        var submit = $(this)
-        submit.parent().parent().parent().remove()
-    }
-    return false
-})
 
 function JquerySearchForm() {
     $(document).ready(function () {
