@@ -58,7 +58,6 @@ namespace MVCExample.Controllers
             }
             list.Add(model);
             HttpContext.Session.SetObjectAsJson("list", list);
-            SetAlert("Thêm thành công!", "success");
             return View("Index", list);
         }
         [HttpGet]

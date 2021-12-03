@@ -54,7 +54,7 @@
                     @* <a asp-action="Edit" asp-route-id="@item.maNhanVien" class="btn btn-warning">
                         Edit
                     </a> *@
-                    <a onclick="showPopUp('@Url.Action("Update","Staff")','Sửa nhân viên')"
+                    <a onclick="showPopUp('@Url.Action("Edit","Staff",new {id = item.maNhanVien })','Sửa nhân viên')"
                         class="btn btn-warning">Sửa</a>
                     @* form xoa *@
 
@@ -89,7 +89,7 @@
     </div>
 </div>
 
-@* form for add *@
+@* form  *@
 <div class="modal" id="form-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

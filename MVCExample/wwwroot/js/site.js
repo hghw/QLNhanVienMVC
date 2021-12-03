@@ -10,29 +10,24 @@ showPopUp = (url, title) => {
             $("#form-modal .modal-body ").html(res);
             $("#form-modal .modal-title ").html(title);
             $("#form-modal ").modal('show');
+            $(document).on("click", "#submitDeleteForm", function () {
+                ("#loaderbody").removeClass('d-none');
+            })
         }
     })
 }
-//ADD POPUP
-jQueryAdd = form =>
-{
-    $(document).on("click", "#AddPopup", function () {
-        $("#confirm-add").modal("show")
-        let submitAdd = $(this)
-        $(document).on("click","submitAddForm",function(){
-            $("#maNhanVien").val()
-            $("#hoTen").val()
-            $("#ngaySinh").val()
-            $("#sdt").val()
-            $("#diaChi").val()
-            $("#chucVu").val()
-            submitAdd.parent().parent().parent().remove()
-        })
-        
-    })
 
-}
+$(function () {
+    $("#loaderbody").addClass('d-none');
 
+    $(document).bind('ajaxStart', function () {
+        $("#loaderbody").removeClass('d-none');
+    }).bind('ajaxStop', function () {
+        $("#loaderbody").addClass('d-none');
+       
+
+    });
+});
 
 //DELETE POPUP
 jQueryDelete = form =>
@@ -49,6 +44,8 @@ jQueryDelete = form =>
                 contentType: false,
                 processData: false,
                 success: function () {
+                    $.notify('Xóa thành công', { globalPosition: "top center", className: "success" });
+
                 },
                 error: function (err) {
                     console.log(err);
