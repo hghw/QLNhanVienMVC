@@ -9,7 +9,7 @@
 
 <div class="row" style="justify-content: space-around;">
     <div class="col-md-12">
-        <form asp-action="Create">
+        <form asp-action="Create" id="formCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @*
                 <div class="form-group">
@@ -50,18 +50,13 @@
                 </div>
             </div>
             <div class="form-group text-right">
-                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <input type="submit" id="submitFormSuc" value="Lưu" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-danger d-inline" data-dismiss="modal">Hủy bỏ</a>
             </div>
         </form>
     </div>
 </div>
 
-@* <script type="text/javascript">
-    $("#hoTen").change(function () {
-    alert("thay doi roi");
-    })
-    </script> *@
 
 @section Scripts {
 @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -24,8 +24,6 @@ $(function () {
         $("#loaderbody").removeClass('d-none');
     }).bind('ajaxStop', function () {
         $("#loaderbody").addClass('d-none');
-       
-
     });
 });
 
@@ -44,20 +42,25 @@ jQueryDelete = form =>
                 contentType: false,
                 processData: false,
                 success: function () {
-                    $.notify('Xóa thành công', { globalPosition: "top center", className: "success" });
-
                 },
                 error: function (err) {
                     console.log(err);
                 }
-       })
+            })
         })
     })
 
         
      
 }
-
+//delete tahnh cong
+$(document).on("click", "#submitDeleteForm",function(){
+    $.notify('Xóa thành công', {autoHideDelay: 3000,globalPosition: "top center", className: "success"} );
+})
+//Them moi thanh cong
+$(document).on("click", "#submitFormSuc",function(){
+    $.notify('Thành công', {autoHideDelay: 3000,globalPosition: "top center", className: "success"} );
+})
 
 function JquerySearchForm() {
     $(document).ready(function () {
@@ -103,8 +106,16 @@ JquerySearch = form => {
     })
 }
 
-$('AlertBox').remove('hide'); //xoa class hide de hien thi thong bao
-$('AlertBox').delay(1000); // animation cua thong bao
-$('AlertBox').slideUp(500); // animation cua thong bao
 
 
+//Validate Create
+// $(document).on("submit", "#formCreate", function(){
+//     var hoTen = $("#hoTen").val()
+//     var ngaySinh = $("#ngaySinh").val()
+//     var sdt = $("#sdt").val()
+//     var diaChi = $("#diaChi").val()
+//     var chucVu = $("#chucVu").val()
+//     if(hoTen == "" || ngaySinh == "" || sdt == "" || diaChi == "" || chucVu == "" ){
+//         $.notify('Không được để trống', { globalPosition: "top center", className: "warning" });
+//     }
+// })

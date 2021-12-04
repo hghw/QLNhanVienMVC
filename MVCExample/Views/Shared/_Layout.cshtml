@@ -11,6 +11,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/notify.min.js" asp-append-version="true"></script>
+	<script src="https://kit.fontawesome.com/c70e066676.js" crossorigin="anonymous"></script>
 
 
 </head>
@@ -24,7 +25,7 @@
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC Nhân Viên</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -57,7 +58,7 @@
             @* view hien thi kiem tra ho ten ngay sinh trung nhau,... *@
             @if (TempData["AlertMessenge"] != null)
             {
-                <div id="AlertBox" class="alert @TempData["AlertType"] hide">
+                <div id="AlertBox" class="alert @TempData["AlertType"] d-none">
                     @TempData["AlertMessenge"]
                 </div>
             }
@@ -76,4 +77,8 @@
     @await RenderSectionAsync("Scripts", required: false);
 
 </body>
+
 </html>
+<script>
+    $("#AlertBox").removeClass('d-none').delay(3000).slideUp(500); //xoa class hide de hien thi thong bao
+</script>

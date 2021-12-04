@@ -55,12 +55,12 @@
                         Edit
                     </a> *@
                     <a onclick="showPopUp('@Url.Action("Edit","Staff",new {id = item.maNhanVien })','Sửa nhân viên')"
-                        class="btn btn-warning">Sửa</a>
+                        class="btn btn-warning"><i class="far fa-edit"></i> Sửa</a>
                     @* form xoa *@
 
                     <form onclick="return jQueryDelete(this)" asp-action="Delete" method="post"
                     asp-route-id="@item.maNhanVien">
-                        <button id="DeletePopup" type="button" class="btn btn-danger ">Xóa</button>
+                        <button id="DeletePopup" type="button" class="btn btn-danger "><i class="fas fa-trash"></i></button>
                     </form>
                 </td>
             </tr>

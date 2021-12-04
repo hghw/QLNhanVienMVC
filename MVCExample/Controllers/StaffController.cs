@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using MVCSamples.Extensions;
 using System.Linq;
+using static MVCExample.Helper;
 
 namespace MVCExample.Controllers
 {
@@ -31,6 +32,7 @@ namespace MVCExample.Controllers
         }
 
         [HttpGet]
+        [NoDirectAccess]
         public IActionResult Create()
         {
             return View();
@@ -51,8 +53,12 @@ namespace MVCExample.Controllers
                 if (model.hoTen == list[i].hoTen && model.ngaySinh == list[i].ngaySinh)
                 {
                     SetAlert("Trùng họ tên và ngày tháng năm sinh", "warning");
-
-                    return View("Create");
+                    return View("Index", list);
+                }
+                if (model.hoTen == null || model.sdt == null || model.diaChi == null || model.chucVu == null)
+                {
+                    SetAlert("Chưa nhập các trường thông tin", "warning");
+                    return View("Index", list);
                 }
 
             }
@@ -61,6 +67,8 @@ namespace MVCExample.Controllers
             return View("Index", list);
         }
         [HttpGet]
+        [NoDirectAccess]
+
         public IActionResult Edit(string id)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
@@ -76,6 +84,7 @@ namespace MVCExample.Controllers
             return View("Index", list);
         }
         [HttpPost]
+        [NoDirectAccess]
         public IActionResult Update(Staff staff)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
@@ -87,11 +96,10 @@ namespace MVCExample.Controllers
                 if (staff.hoTen == list[i].hoTen && staff.ngaySinh == list[i].ngaySinh)
                 {
                     SetAlert("Trùng họ tên và ngày tháng năm sinh", "warning");
-                    return View("Edit");
+                    // return View("Index", list);
                 }
                 if (id == list[i].maNhanVien)
                 {
-
                     // list[i].maNhanVien = staff.maNhanVien;
                     list[i].hoTen = staff.hoTen;
                     list[i].ngaySinh = staff.ngaySinh;
@@ -108,7 +116,6 @@ namespace MVCExample.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public IActionResult Delete(string id)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
@@ -158,7 +165,7 @@ namespace MVCExample.Controllers
             {
                 TempData["AlertType"] = "alert-warning";
             }
-            else if (type == "erro")
+            else if (type == "error")
             {
                 TempData["AlertType"] = "alert-danger";
             }
