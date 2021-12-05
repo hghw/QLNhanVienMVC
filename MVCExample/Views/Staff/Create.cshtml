@@ -9,7 +9,7 @@
 
 <div class="row" style="justify-content: space-around;">
     <div class="col-md-12">
-        <form asp-action="Create" id="formCreate">
+        <form onclick="return FormSubmitCreate(this)" asp-action="Create" id="formCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @*
                 <div class="form-group">
@@ -51,7 +51,7 @@
             </div>
             <div class="form-group text-right">
                 <input type="submit" id="submitFormSuc" value="Lưu" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-danger d-inline" data-dismiss="modal">Hủy bỏ</a>
+                <button class="btn btn-danger d-inline" data-dismiss="modal">Hủy bỏ</button>
             </div>
         </form>
     </div>
@@ -61,3 +61,31 @@
 @section Scripts {
 @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script type="text/javascript">
+    function FormSubmitCreate(form) {
+        $(document).on("click", "#submitFormSuc", function () {
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    $("#view-all").load("#view-all #table-refresh")
+                $("#form-modal ").modal('hide');
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+
+        })
+        return false;
+    }
+
+
+
+
+</script>

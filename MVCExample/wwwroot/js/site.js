@@ -27,6 +27,35 @@ $(function () {
     });
 });
 
+function jQueryCreateForm(form) 
+{
+    $(document).on("click", "#submitFormSuc", function () {
+ 
+        
+    $.ajax({
+        type: 'POST',
+        url: form.action,
+        data: new FormData(form),
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            if (res) {
+                $("#view-all").html(res.html)
+                $("#form-modal .modal-body ").html('');
+                $("#form-modal .modal-title ").html('');
+                $("#form-modal ").modal('hide');
+            } else {
+                $("#form-modal .modal-body ").html(res.html);
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    })
+})
+// return false;
+}
+
 //DELETE POPUP
 jQueryDelete = form =>
 {
