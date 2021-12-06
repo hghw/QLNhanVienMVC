@@ -9,7 +9,7 @@
 
 <div class="row" style="justify-content: space-around;">
     <div class="col-md-12">
-        <form onclick="return FormSubmitCreate(this)" asp-action="Create" id="formCreate">
+        <form onclick="return FormSubmitCreate(this)" asp-action="Create" >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @*
                 <div class="form-group">
@@ -63,27 +63,7 @@
 }
 
 <script type="text/javascript">
-    function FormSubmitCreate(form) {
-        $(document).on("click", "#submitFormSuc", function () {
-            $.ajax({
-                type: 'POST',
-                url: form.action,
-                data: new FormData(form),
-                contentType: false,
-                processData: false,
-                success: function (res) {
-                    $("#view-all").load("#view-all #table-refresh")
-                $("#form-modal ").modal('hide');
-
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            })
-
-        })
-        return false;
-    }
+    
 
 
 

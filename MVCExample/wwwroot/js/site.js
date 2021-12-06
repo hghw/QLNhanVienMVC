@@ -1,6 +1,4 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
 // Write your Javascript code.
 showPopUp = (url, title) => {
     $.ajax({
@@ -10,9 +8,6 @@ showPopUp = (url, title) => {
             $("#form-modal .modal-body ").html(res);
             $("#form-modal .modal-title ").html(title);
             $("#form-modal ").modal('show');
-            $(document).on("click", "#submitDeleteForm", function () {
-                ("#loaderbody").removeClass('d-none');
-            })
         }
     })
 }
@@ -27,33 +22,91 @@ $(function () {
     });
 });
 
-function jQueryCreateForm(form) 
-{
+function FormSubmitCreate(form) {
     $(document).on("click", "#submitFormSuc", function () {
- 
-        
-    $.ajax({
-        type: 'POST',
-        url: form.action,
-        data: new FormData(form),
-        contentType: false,
-        processData: false,
-        success: function (res) {
-            if (res) {
-                $("#view-all").html(res.html)
-                $("#form-modal .modal-body ").html('');
-                $("#form-modal .modal-title ").html('');
-                $("#form-modal ").modal('hide');
-            } else {
-                $("#form-modal .modal-body ").html(res.html);
-            }
-        },
-        error: function (err) {
-            console.log(err);
+        var hoTen = $("#hoTen").val()
+        var ngaySinh = $("#ngaySinh").val()
+        var sdt = $("#sdt").val()
+        var diaChi = $("#diaChi").val()
+        var chucVu = $("#chucVu").val()
+        if (hoTen == "") {
+            $("#hoTen").notify("Chưa nhập họ tên", { position: "left", autoHideDelay: 2000} )
+            showPopUp(Staff / Create)
+        }
+        if (sdt == "") {
+            $("#sdt").notify("Chưa nhập sdt", { position: "left", autoHideDelay: 2000})
+            showPopUp(Staff / Create)
+        } if (diaChi == "") {
+            $("#diaChi").notify("Chưa nhập địa chỉ", { position: "right", autoHideDelay: 2000})
+            showPopUp(Staff / Create)
+        } if (chucVu == "") {
+            $("#chucVu").notify("Chưa nhập chức vụ", { position: "left", autoHideDelay: 2000})
+            showPopUp(Staff / Create)
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    $("#table-refresh").load(" #table-refresh")
+                    $("#form-modal ").modal('hide');
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
         }
     })
-})
-// return false;
+    return false;
+}
+
+/*Update NoRefresh*/
+
+function jQueryFormUpdate(form) {
+    $(document).on("click", "#submitUpdate", function () {
+        var hoTen = $("#hoTen").val()
+        var ngaySinh = $("#ngaySinh").val()
+        var sdt = $("#sdt").val()
+        var diaChi = $("#diaChi").val()
+        var chucVu = $("#chucVu").val()
+        if (hoTen == "") {
+            $("#hoTen").notify("Chưa nhập họ tên", { position: "left", autoHideDelay: 2000 })
+            showPopUp(Staff / Create)
+        }
+        if (sdt == "") {
+            $("#sdt").notify("Chưa nhập sdt", { position: "left", autoHideDelay: 2000 })
+            showPopUp(Staff / Create)
+        } if (diaChi == "") {
+            $("#diaChi").notify("Chưa nhập địa chỉ", { position: "right", autoHideDelay: 2000 })
+            showPopUp(Staff / Create)
+        } if (chucVu == "") {
+            $("#chucVu").notify("Chưa nhập chức vụ", { position: "left", autoHideDelay: 2000 })
+            showPopUp(Staff / Create)
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    $("#table-refresh").load(" #table-refresh")
+                    $("#form-modal ").modal('hide');
+                    
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        }
+
+    })
+    return false;
 }
 
 //DELETE POPUP
@@ -61,25 +114,28 @@ jQueryDelete = form =>
 {
     $(document).on("click", "#DeletePopup", function () {
         $("#confirm-delete").modal("show")
-        let submitDelete = $(this)
-        $(document).on("click", "#submitDeleteForm",function(){
-            submitDelete.parent().parent().parent().remove()
-            $.ajax({
-                type: 'POST',
-                url: form.action,
-                data: new FormData(form),
-                contentType: false,
-                processData: false,
-                success: function () {
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            })
+        
+    })
+    $(document).on("click", "#submitDeleteForm", function () {
+
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                $("#table-refresh").load(" #table-refresh")
+                $("#confirm-delete").modal("hide")
+            },
+            error: function (err) {
+                console.log(err);
+            }
         })
     })
 
-        
+return false;
+
      
 }
 //delete tahnh cong
@@ -109,42 +165,3 @@ function JquerySearchForm() {
 
     })
 }
-
-JquerySearch = form => {
-    
-    /*$(document).on("click", "#susbmitSearchBT", function () {
-        let tableRM = $("#tableViewAll")
-        tableRM.load("Staff/Search.cshtml", function () {
-            alert("Load was performed.")
-        });
-    })*/
-    $.ajax({
-        type: 'POST',
-        url: form.action,
-        data: new FormData(form),
-                contentType: false,
-                processData: false,
-        success: function () {
-            
-
-
-                },
-                error: function(){
-                    console.log(err);
-                } 
-    })
-}
-
-
-
-//Validate Create
-// $(document).on("submit", "#formCreate", function(){
-//     var hoTen = $("#hoTen").val()
-//     var ngaySinh = $("#ngaySinh").val()
-//     var sdt = $("#sdt").val()
-//     var diaChi = $("#diaChi").val()
-//     var chucVu = $("#chucVu").val()
-//     if(hoTen == "" || ngaySinh == "" || sdt == "" || diaChi == "" || chucVu == "" ){
-//         $.notify('Không được để trống', { globalPosition: "top center", className: "warning" });
-//     }
-// })

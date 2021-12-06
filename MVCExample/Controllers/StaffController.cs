@@ -55,11 +55,6 @@ namespace MVCExample.Controllers
                     SetAlert("Trùng họ tên và ngày tháng năm sinh", "warning");
                     return View("Index", list);
                 }
-                if (model.hoTen == null || model.sdt == null || model.diaChi == null || model.chucVu == null)
-                {
-                    SetAlert("Chưa nhập các trường thông tin", "warning");
-                    return View("Index", list);
-                }
 
             }
             list.Add(model);
