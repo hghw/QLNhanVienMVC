@@ -21,47 +21,28 @@ $(function () {
         $("#loaderbody").addClass('d-none');
     });
 });
+//them
 
-function FormSubmitCreate(form) {
-    $(document).on("click", "#submitFormSuc", function () {
-        var hoTen = $("#hoTen").val()
-        var ngaySinh = $("#ngaySinh").val()
-        var sdt = $("#sdt").val()
-        var diaChi = $("#diaChi").val()
-        var chucVu = $("#chucVu").val()
-        if (hoTen == "") {
-            $("#hoTen").notify("Chưa nhập họ tên", { position: "left", autoHideDelay: 2000} )
-            showPopUp(Staff / Create)
-        }
-        if (sdt == "") {
-            $("#sdt").notify("Chưa nhập sdt", { position: "left", autoHideDelay: 2000})
-            showPopUp(Staff / Create)
-        } if (diaChi == "") {
-            $("#diaChi").notify("Chưa nhập địa chỉ", { position: "right", autoHideDelay: 2000})
-            showPopUp(Staff / Create)
-        } if (chucVu == "") {
-            $("#chucVu").notify("Chưa nhập chức vụ", { position: "left", autoHideDelay: 2000})
-            showPopUp(Staff / Create)
-        }
-        else {
-            $.ajax({
-                type: 'POST',
-                url: form.action,
-                data: new FormData(form),
-                contentType: false,
-                processData: false,
-                success: function (res) {
-                    $("#table-refresh").load(" #table-refresh")
-                    $("#form-modal ").modal('hide');
-                },
-                error: function (err) {
-                    console.log(err);
+$(document).on("click", "#submitFormSuc", function () {
+    $.ajax({
+            type: 'POST',
+            url: '/Staff/create',
+            data: new FormData($("#formCreateAction")[0]),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if(res.status == "OK"){
+                    alert("abaca")
                 }
-            })
-        }
-    })
-    return false;
-}
+                $("#form-modal ").modal('hide');
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    
+})
+
 
 /*Update NoRefresh*/
 
@@ -93,11 +74,9 @@ function jQueryFormUpdate(form) {
                 data: new FormData(form),
                 contentType: false,
                 processData: false,
-                success: function (res) {
+                success: function () {
                     $("#table-refresh").load(" #table-refresh")
                     $("#form-modal ").modal('hide');
-                    
-
                 },
                 error: function (err) {
                     console.log(err);

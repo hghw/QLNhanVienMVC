@@ -4,8 +4,6 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
 <h1>Index</h1>
 <div class="add-search">
     <a onclick="showPopUp('@Url.Action("Create","Staff")','Thêm mới')" class="btn btn-success" style="color: #fff;"><i
@@ -28,8 +26,3 @@
 <div id="view-all">
     @await Html.PartialAsync("_ViewAll", Model)
 </div>
-
-<script type="text/javascript">
-
-
-</script>

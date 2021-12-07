@@ -49,17 +49,17 @@ namespace MVCExample.Controllers
                 {
                     model.maNhanVien = staff.getMaNhanVienAdd1(list);
                 }
-                // kiem tra hoten ngay sinh trung khi add
+                // kiem tra hoten ngay sinh trung khi them
                 if (model.hoTen == list[i].hoTen && model.ngaySinh == list[i].ngaySinh)
                 {
                     SetAlert("Trùng họ tên và ngày tháng năm sinh", "warning");
-                    return View("Index", list);
-                }
+                                return Json(new { data = list, status = "LOI" });
 
+                }
             }
             list.Add(model);
             HttpContext.Session.SetObjectAsJson("list", list);
-            return View("Index", list);
+            return Json(new { data = list, status = "OK" });
         }
         [HttpGet]
         [NoDirectAccess]
@@ -91,7 +91,7 @@ namespace MVCExample.Controllers
                 if (staff.hoTen == list[i].hoTen && staff.ngaySinh == list[i].ngaySinh)
                 {
                     SetAlert("Trùng họ tên và ngày tháng năm sinh", "warning");
-                    // return View("Index", list);
+                    return Json("Index", list);
                 }
                 if (id == list[i].maNhanVien)
                 {

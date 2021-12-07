@@ -11,7 +11,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/notify.min.js" asp-append-version="true"></script>
-	<script src="https://kit.fontawesome.com/c70e066676.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/c70e066676.js" crossorigin="anonymous"></script>
 
 
 </head>
@@ -63,6 +63,10 @@
                 </div>
             }
 
+            <script type="text/javascript">
+                $("#AlertBox").removeClass('d-none'); //xoa class hide de hien thi thong bao
+            </script>
+
             @RenderBody()
         </main>
     </div>
@@ -79,6 +83,3 @@
 </body>
 
 </html>
-<script>
-    $("#AlertBox").removeClass('d-none').delay(3000).slideUp(500); //xoa class hide de hien thi thong bao
-</script>
