@@ -53,8 +53,7 @@ namespace MVCExample.Controllers
                 if (model.hoTen == list[i].hoTen && model.ngaySinh == list[i].ngaySinh)
                 {
                     SetAlert("Trùng họ tên và ngày tháng năm sinh", "warning");
-                                return Json(new { data = list, status = "LOI" });
-
+                    return Json(new { status = "LOI" });
                 }
             }
             list.Add(model);
@@ -90,8 +89,8 @@ namespace MVCExample.Controllers
                 // kiem tra hoten ngay sinh trung khi add
                 if (staff.hoTen == list[i].hoTen && staff.ngaySinh == list[i].ngaySinh)
                 {
-                    SetAlert("Trùng họ tên và ngày tháng năm sinh", "warning");
-                    return Json("Index", list);
+                    return Json(new { status = "LOI" });
+
                 }
                 if (id == list[i].maNhanVien)
                 {
@@ -102,15 +101,14 @@ namespace MVCExample.Controllers
                     list[i].diaChi = staff.diaChi;
                     list[i].chucVu = staff.chucVu;
                 }
-
-
             }
 
             HttpContext.Session.SetObjectAsJson("list", list);
-            return View("Index", list);
+            return Json(new { data = list, status = "OK" });
+
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         public IActionResult Delete(string id)
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
@@ -121,9 +119,12 @@ namespace MVCExample.Controllers
                 {
                     list.RemoveAt(i);
                     HttpContext.Session.SetObjectAsJson("list", list);
+                    return Json(new { status = "OK" });
+
                 }
             }
-            return View("Index", list);
+            return Json(new { status = "OKE" });
+
 
         }
         public IActionResult Search(string keyword)

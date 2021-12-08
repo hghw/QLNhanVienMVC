@@ -24,29 +24,51 @@ $(function () {
 //them
 
 $(document).on("click", "#submitFormSuc", function () {
-    $.ajax({
+    var hoTen = $("#hoTen").val()
+    var ngaySinh = $("#ngaySinh").val()
+    var sdt = $("#sdt").val()
+    var diaChi = $("#diaChi").val()
+    var chucVu = $("#chucVu").val()
+    if (hoTen == "") {
+        $("#hoTen").notify("Chưa nhập họ tên", { position: "left", autoHideDelay: 2000 })
+        showPopUp(Staff / Create)
+    }
+    if (sdt == "") {
+        $("#sdt").notify("Chưa nhập sdt", { position: "left", autoHideDelay: 2000 })
+        showPopUp(Staff / Create)
+    } if (diaChi == "") {
+        $("#diaChi").notify("Chưa nhập địa chỉ", { position: "right", autoHideDelay: 2000 })
+        showPopUp(Staff / Create)
+    } if (chucVu == "") {
+        $("#chucVu").notify("Chưa nhập chức vụ", { position: "left", autoHideDelay: 2000 })
+        showPopUp(Staff / Create)
+    }
+    else {
+        $.ajax({
             type: 'POST',
-            url: '/Staff/create',
+            url: 'Staff/create',
             data: new FormData($("#formCreateAction")[0]),
             contentType: false,
             processData: false,
             success: function (res) {
-                if(res.status == "OK"){
-                    alert("abaca")
+                if (res.status == "OK") {
+                    $("#table-refresh").load(" #table-refresh")
+                    $.notify('Thêm thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                 }
-                $("#form-modal ").modal('hide');
+                if (res.status == "LOI") {
+                    $.notify('Nhân viên này đã tồn tại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
+                }
             },
             error: function (err) {
                 console.log(err);
             }
         })
-    
+
+    }
 })
 
 
 /*Update NoRefresh*/
-
-function jQueryFormUpdate(form) {
     $(document).on("click", "#submitUpdate", function () {
         var hoTen = $("#hoTen").val()
         var ngaySinh = $("#ngaySinh").val()
@@ -67,16 +89,22 @@ function jQueryFormUpdate(form) {
             $("#chucVu").notify("Chưa nhập chức vụ", { position: "left", autoHideDelay: 2000 })
             showPopUp(Staff / Create)
         }
-        else {
+        else
+        {
             $.ajax({
                 type: 'POST',
-                url: form.action,
-                data: new FormData(form),
+                url: 'Staff/update',
+                data: new FormData($("#formEditAction")[0]),
                 contentType: false,
                 processData: false,
-                success: function () {
-                    $("#table-refresh").load(" #table-refresh")
-                    $("#form-modal ").modal('hide');
+                    success: function (res) {
+                        if (res.status == 'OK') {
+                            $("#table-refresh").load(" #table-refresh")
+                            $.notify('Sửa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
+                        }
+                        if (res.status == "LOI") {
+                            $.notify('Nhân viên này đã tồn tại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
+                        }
                 },
                 error: function (err) {
                     console.log(err);
@@ -85,15 +113,13 @@ function jQueryFormUpdate(form) {
         }
 
     })
-    return false;
-}
+
 
 //DELETE POPUP
 jQueryDelete = form =>
 {
     $(document).on("click", "#DeletePopup", function () {
         $("#confirm-delete").modal("show")
-        
     })
     $(document).on("click", "#submitDeleteForm", function () {
 
@@ -104,8 +130,10 @@ jQueryDelete = form =>
             contentType: false,
             processData: false,
             success: function (res) {
-                $("#table-refresh").load(" #table-refresh")
-                $("#confirm-delete").modal("hide")
+                if (res.status == 'OK') {
+                    $.notify('Xóa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
+                    $("#table-refresh").load(" #table-refresh")
+                    }
             },
             error: function (err) {
                 console.log(err);
@@ -119,11 +147,6 @@ return false;
 }
 //delete tahnh cong
 $(document).on("click", "#submitDeleteForm",function(){
-    $.notify('Xóa thành công', {autoHideDelay: 3000,globalPosition: "top center", className: "success"} );
-})
-//Them moi thanh cong
-$(document).on("click", "#submitFormSuc",function(){
-    $.notify('Thành công', {autoHideDelay: 3000,globalPosition: "top center", className: "success"} );
 })
 
 function JquerySearchForm() {
