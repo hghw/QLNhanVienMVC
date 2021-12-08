@@ -116,10 +116,11 @@ $(document).on("click", "#submitFormSuc", function () {
 
 
 //DELETE POPUP
-$(document).on("click", "#submitDeleteForm", function () {
+DeleteJqueryForm = form => {
+    $(document).on("click", "#submitDeleteForm", function () {
         $.ajax({
             type: 'POST',
-            url: 'Staff/delete',
+            url: form.action,
             data: new FormData($("#formDeleteAction")[0]),
             contentType: false,
             processData: false,
@@ -128,16 +129,20 @@ $(document).on("click", "#submitDeleteForm", function () {
                     $.notify('Xóa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                     $("#table-refresh").load(" #table-refresh")
                 }
-                if (res.status == 'OKE') {
-                    $.notify('Sai', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
-                    $("#table-refresh").load(" #table-refresh")
-                }
+                // if (res.status == 'OKE') {
+                //     $.notify('Sai', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
+                //     $("#table-refresh").load(" #table-refresh")
+                // }
             },
             error: function (err) {
                 console.log(err);
             }
         })
     })
+return false;
+}
+   
+
 
 
 function JquerySearchForm() {

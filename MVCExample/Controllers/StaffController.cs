@@ -52,7 +52,6 @@ namespace MVCExample.Controllers
                 // kiem tra hoten ngay sinh trung khi them
                 if (model.hoTen == list[i].hoTen && model.ngaySinh == list[i].ngaySinh)
                 {
-                    SetAlert("Trùng họ tên và ngày tháng năm sinh", "warning");
                     return Json(new { status = "LOI" });
                 }
             }
@@ -83,14 +82,14 @@ namespace MVCExample.Controllers
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
             // var nv = list.Where(s => s.maNhanVien == std.maNhanVien).FirstOrDefault();
-            string id = HttpContext.Session.GetString("id"); //get id sua
+            // string id = HttpContext.Session.GetString("id"); //get id sua
+            string id = staff.maNhanVien;
             for (int i = 0; i < list.Count; i++)
             {
-                // kiem tra hoten ngay sinh trung khi add
+                // kiem tra hoten ngay sinh trung khi them
                 if (staff.hoTen == list[i].hoTen && staff.ngaySinh == list[i].ngaySinh)
                 {
                     return Json(new { status = "LOI" });
-
                 }
                 if (id == list[i].maNhanVien)
                 {
@@ -128,8 +127,6 @@ namespace MVCExample.Controllers
                 }
             }
             return Json(new { status = "OKE" });
-
-
         }
         public IActionResult Search(string keyword)
         {

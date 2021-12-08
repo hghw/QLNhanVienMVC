@@ -6,14 +6,16 @@
 }
 
 @* form for delete *@
-<form id="formDeleteAction">
-        <p>Bạn có chắc chắn muốn xóa không?</p>
-        <div class="text-right">
-            <input type="submit" id="submitDeleteForm" class="btn btn-success" data-dismiss="modal" value="Xóa" />
-            <button type="button" class="btn btn-secondary"
-                    data-dismiss="modal">
-                Close
-            </button>
-        </div>
-       
+<form asp-action="Delete" onclick="return DeleteJqueryForm(this)" id="formDeleteAction">
+    <p>Bạn có chắc chắn muốn xóa không?</p>
+    <div class="text-right">
+        <input type="submit" id="submitDeleteForm" class="btn btn-success" data-dismiss="modal" value="Xóa" />
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+        </button>
+    </div>
 </form>
+
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
