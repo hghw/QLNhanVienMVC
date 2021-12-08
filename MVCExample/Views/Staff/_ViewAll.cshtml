@@ -52,12 +52,11 @@
                 </td>
                 <td class="d-flex" style="justify-content: space-around;">
                     <a onclick="showPopUp('@Url.Action("Edit","Staff",new {id = item.maNhanVien })','Sửa nhân viên')"
-                        class="btn btn-warning"><i class="far fa-edit"></i> Sửa</a>
+                       class="btn btn-warning"><i class="far fa-edit"></i> Sửa</a>
                     @* form xoa *@
-
-                    <form asp-route-id="@item.maNhanVien" onclick="return jQueryDelete(this)" asp-action="Delete" method="post">
-                        <button id="DeletePopup" type="button" class="btn btn-danger "><i class="fas fa-trash"></i></button>
-                    </form>
+                    <a onclick="showPopUp('@Url.Action("Delete","Staff",new {id = item.maNhanVien })','Xóa nhân viên')"
+                       class="btn btn-danger"><i class="fas fa-trash"></i></a>
+ 
                 </td>
             </tr>
         }
@@ -66,24 +65,7 @@
 <script type="text/javascript">
 
 </script>
-@* form for delete *@
-<div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Xóa nhân viên</h2>
-            </div>
-            <div class="modal-body">
-                <p>Bạn có chắc chắn muốn xóa không?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" id="submitDeleteForm" class="btn btn-success" data-dismiss="modal">Xóa</button>
-                <button type="button" class="btn btn-secondary"
-                    data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 @* form  *@
 <div class="modal" id="form-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

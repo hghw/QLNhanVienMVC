@@ -107,7 +107,12 @@ namespace MVCExample.Controllers
             return Json(new { data = list, status = "OK" });
 
         }
-
+        [HttpGet]
+        [NoDirectAccess]
+        public IActionResult Delete()
+        {
+            return View();
+        }
         [HttpPost]
         public IActionResult Delete(string id)
         {
@@ -120,7 +125,6 @@ namespace MVCExample.Controllers
                     list.RemoveAt(i);
                     HttpContext.Session.SetObjectAsJson("list", list);
                     return Json(new { status = "OK" });
-
                 }
             }
             return Json(new { status = "OKE" });

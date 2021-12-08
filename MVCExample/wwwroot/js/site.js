@@ -116,24 +116,22 @@ $(document).on("click", "#submitFormSuc", function () {
 
 
 //DELETE POPUP
-jQueryDelete = form =>
-{
-    $(document).on("click", "#DeletePopup", function () {
-        $("#confirm-delete").modal("show")
-    })
-    $(document).on("click", "#submitDeleteForm", function () {
-
+$(document).on("click", "#submitDeleteForm", function () {
         $.ajax({
             type: 'POST',
-            url: form.action,
-            data: new FormData(form),
+            url: 'Staff/delete',
+            data: new FormData($("#formDeleteAction")[0]),
             contentType: false,
             processData: false,
             success: function (res) {
                 if (res.status == 'OK') {
                     $.notify('Xóa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                     $("#table-refresh").load(" #table-refresh")
-                    }
+                }
+                if (res.status == 'OKE') {
+                    $.notify('Sai', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
+                    $("#table-refresh").load(" #table-refresh")
+                }
             },
             error: function (err) {
                 console.log(err);
@@ -141,13 +139,6 @@ jQueryDelete = form =>
         })
     })
 
-return false;
-
-     
-}
-//delete tahnh cong
-$(document).on("click", "#submitDeleteForm",function(){
-})
 
 function JquerySearchForm() {
     $(document).ready(function () {
