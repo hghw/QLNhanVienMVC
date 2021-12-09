@@ -9,6 +9,8 @@ using System.Diagnostics;
 using MVCSamples.Extensions;
 using System.Linq;
 using static MVCExample.Helper;
+using Npgsql;
+using System.Data;
 
 namespace MVCExample.Controllers
 {
@@ -21,16 +23,37 @@ namespace MVCExample.Controllers
         {
             _logger = logger;
         }
-        public IActionResult Index(string keyword)
+        public IActionResult Index()
         {
-            /*Get create*/
-            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-
-
-            //end search
-            return View("Index", list);
+            using(NpgsqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                string sql = "SELECT * FROM nhan_vien";
+                NpgsqlCommand cmm = new NpgsqlCommand(sql, conn);
+            }
+            return View();
         }
+        private static NpgsqlConnection GetConnection()
+        {
+            /*chuoi connect Server=127.0.0.1;Port=5433;Database=NhanVienDB;User Id = postgres; Password=123;*/
+            return new NpgsqlConnection(@"Server=localhost;Port=5433;User Id = postgres; Password=123;Database=NhanVienDB;");
+        }
+        private static void TestConnection()
+        {
+            using (NpgsqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                if (conn.State == ConnectionState.Open)
+                {
+                    Console.WriteLine("Ket noi thanh cong");
+                }
+                else
+                {
+                    Console.WriteLine("Ket noi that bai");
 
+                }
+            }
+        }
         [HttpGet]
         [NoDirectAccess]
         public IActionResult Create()
@@ -40,6 +63,27 @@ namespace MVCExample.Controllers
         [HttpPost]
         public IActionResult Create(Staff model)
         {
+            using (NpgsqlConnection conn = GetConnection())
+            {
+                string sql = @"INSERT INTO public.nhan_vien (
+ma_nhanvien, ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu) VALUES (
+'NV-0001
+', 'Hoang ABC', '05/05/1995'::date, '0376414848', 'Lang Son', 'Truong Phong');";
+                NpgsqlCommand cmm = new NpgsqlCommand(sql, conn);
+
+                conn.Open();
+                int n = cmm.ExecuteNonQuery();
+                if (n == 1)
+                {
+                    Console.WriteLine("Insert thanh cong");
+                }
+                else
+                {
+                    Console.WriteLine("Insert that bai");
+
+                }
+            }
+
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
             Staff staff = new Staff();
             model.maNhanVien = staff.getMaNhanVien(list);
@@ -82,7 +126,6 @@ namespace MVCExample.Controllers
         {
             List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
             // var nv = list.Where(s => s.maNhanVien == std.maNhanVien).FirstOrDefault();
-            // string id = HttpContext.Session.GetString("id"); //get id sua
             string id = staff.maNhanVien;
             for (int i = 0; i < list.Count; i++)
             {

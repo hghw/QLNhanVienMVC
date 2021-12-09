@@ -10,11 +10,11 @@
         <form id="formCreateAction">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @*
-                <div class="form-group">
-                <label asp-for="maNhanVien" class="control-label"></label>
-                <input asp-for="maNhanVien" class="form-control" />
-                <span asp-validation-for="maNhanVien" class="text-danger"></span>
-                </div>
+        <div class="form-group">
+        <label asp-for="maNhanVien" class="control-label"></label>
+        <input asp-for="maNhanVien" class="form-control" />
+        <span asp-validation-for="maNhanVien" class="text-danger"></span>
+        </div>
             *@
             <div class="row">
                 <div class="form-group col-md-6" style="float: left;">
@@ -34,17 +34,17 @@
                     <input asp-for="sdt" id="sdt" class="form-control" />
                     <span asp-validation-for="sdt" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-6" style="float: right;">
-                    <label asp-for="diaChi" class="control-label"></label>
-                    <input asp-for="diaChi" id="diaChi" class="form-control" />
-                    <span asp-validation-for="diaChi" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row">
                 <div class="form-group col-md-6">
                     <label asp-for="chucVu" class="control-label"></label>
                     <input asp-for="chucVu" id="chucVu" class="form-control" />
                     <span asp-validation-for="chucVu" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12" style="float: right;">
+                    <label asp-for="diaChi" class="control-label"></label>
+                    <input asp-for="diaChi" id="diaChi" class="form-control" />
+                    <span asp-validation-for="diaChi" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group text-right">
