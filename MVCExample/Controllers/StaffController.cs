@@ -32,7 +32,7 @@ namespace MVCExample.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            DataTable table = new DataTable();
+            List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             NpgsqlDataReader myReader;
             using(NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
@@ -42,12 +42,12 @@ namespace MVCExample.Controllers
                 using (NpgsqlCommand myCommand = new NpgsqlCommand(sql, myCon))
                 {
                     myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
+                    list.Add(myCommand);
                     myReader.Close();
                     myCon.Close();
                 }
             }
-            return Json(table);
+            return View("Index", list);
         }
         /*[HttpGet]
         public IActionResult Create()
