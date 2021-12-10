@@ -11,100 +11,79 @@ using System.Linq;
 using static MVCExample.Helper;
 using Npgsql;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace MVCExample.Controllers
 {
     public class StaffController : Controller
     {
 
-        private readonly ILogger<StaffController> _logger;
+        /*private readonly ILogger<StaffController> _logger;
 
         public StaffController(ILogger<StaffController> logger)
         {
             _logger = logger;
-        }
-        public IActionResult Index()
+        }*/
+        private readonly IConfiguration _configuration;
+        public StaffController(IConfiguration configuration)
         {
-            using(NpgsqlConnection conn = GetConnection())
-            {
-                conn.Open();
-                string sql = "SELECT * FROM nhan_vien";
-                NpgsqlCommand cmm = new NpgsqlCommand(sql, conn);
-            }
-            return View();
-        }
-        private static NpgsqlConnection GetConnection()
-        {
-            /*chuoi connect Server=127.0.0.1;Port=5433;Database=NhanVienDB;User Id = postgres; Password=123;*/
-            return new NpgsqlConnection(@"Server=localhost;Port=5433;User Id = postgres; Password=123;Database=NhanVienDB;");
-        }
-        private static void TestConnection()
-        {
-            using (NpgsqlConnection conn = GetConnection())
-            {
-                conn.Open();
-                if (conn.State == ConnectionState.Open)
-                {
-                    Console.WriteLine("Ket noi thanh cong");
-                }
-                else
-                {
-                    Console.WriteLine("Ket noi that bai");
-
-                }
-            }
+            _configuration = configuration;
         }
         [HttpGet]
-        [NoDirectAccess]
+        public IActionResult Index()
+        {
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            NpgsqlDataReader myReader;
+            using(NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                string sql = @"SELECT * FROM nhan_vien";
+                using (NpgsqlCommand myCommand = new NpgsqlCommand(sql, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+            return Json(table);
+        }
+        /*[HttpGet]
         public IActionResult Create()
         {
             return View();
-        }
+        }*/
         [HttpPost]
         public IActionResult Create(Staff model)
         {
-            using (NpgsqlConnection conn = GetConnection())
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            NpgsqlDataReader myReader;
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                string sql = @"INSERT INTO public.nhan_vien (
-ma_nhanvien, ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu) VALUES (
-'NV-0001
-', 'Hoang ABC', '05/05/1995'::date, '0376414848', 'Lang Son', 'Truong Phong');";
-                NpgsqlCommand cmm = new NpgsqlCommand(sql, conn);
-
-                conn.Open();
-                int n = cmm.ExecuteNonQuery();
-                if (n == 1)
+                myCon.Open();
+                string sql = @"INSERT INTO nhan_vien (ma_nhanvien, ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu)
+                VALUES (@maNhanVien,@hoTen, @ngaySinh, @sdt, @diaChi, @chucVu);";
+                using (NpgsqlCommand myCommand = new NpgsqlCommand(sql, myCon))
                 {
-                    Console.WriteLine("Insert thanh cong");
+                    myCommand.Parameters.AddWithValue("@ma_nhanvien", model.maNhanVien);
+                    myCommand.Parameters.AddWithValue("@ho_ten", model.hoTen);
+                    myCommand.Parameters.AddWithValue("@ngay_sinh", model.ngaySinh);
+                    myCommand.Parameters.AddWithValue("@sdt", model.sdt);
+                    myCommand.Parameters.AddWithValue("@dia_chi", model.diaChi);
+                    myCommand.Parameters.AddWithValue("@chuc_vu", model.chucVu);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
                 }
-                else
-                {
-                    Console.WriteLine("Insert that bai");
 
-                }
+
             }
-
-            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-            Staff staff = new Staff();
-            model.maNhanVien = staff.getMaNhanVien(list);
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (model.maNhanVien == list[i].maNhanVien)
-                {
-                    model.maNhanVien = staff.getMaNhanVienAdd1(list);
-                }
-                // kiem tra hoten ngay sinh trung khi them
-                if (model.hoTen == list[i].hoTen && model.ngaySinh == list[i].ngaySinh)
-                {
-                    return Json(new { status = "LOI" });
-                }
-            }
-            list.Add(model);
-            HttpContext.Session.SetObjectAsJson("list", list);
-            return Json(new { data = list, status = "OK" });
+            return Json(table);
         }
         [HttpGet]
-        [NoDirectAccess]
 
         public IActionResult Edit(string id)
         {
@@ -121,36 +100,38 @@ ma_nhanvien, ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu) VALUES (
             return View("Index", list);
         }
         [HttpPost]
-        [NoDirectAccess]
         public IActionResult Update(Staff staff)
         {
-            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-            // var nv = list.Where(s => s.maNhanVien == std.maNhanVien).FirstOrDefault();
-            string id = staff.maNhanVien;
-            for (int i = 0; i < list.Count; i++)
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            NpgsqlDataReader myReader;
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                // kiem tra hoten ngay sinh trung khi them
-                if (staff.hoTen == list[i].hoTen && staff.ngaySinh == list[i].ngaySinh)
+                myCon.Open();
+                string sql = @"UPDATE nhan_vien 
+                set ho_ten = @hoTen,
+                sdt = @sdt,
+                dia_chi = @diaChi,
+                chuc_vu = @chucVu
+                where ma_nhanvien = @maNhanVien";
+                using (NpgsqlCommand myCommand = new NpgsqlCommand(sql, myCon))
                 {
-                    return Json(new { status = "LOI" });
-                }
-                if (id == list[i].maNhanVien)
-                {
-                    // list[i].maNhanVien = staff.maNhanVien;
-                    list[i].hoTen = staff.hoTen;
-                    list[i].ngaySinh = staff.ngaySinh;
-                    list[i].sdt = staff.sdt;
-                    list[i].diaChi = staff.diaChi;
-                    list[i].chucVu = staff.chucVu;
+                    myCommand.Parameters.AddWithValue("@ma_nhanvien", staff.maNhanVien);
+                    myCommand.Parameters.AddWithValue("@ho_ten", staff.hoTen);
+                    myCommand.Parameters.AddWithValue("@ngay_sinh", staff.ngaySinh);
+                    myCommand.Parameters.AddWithValue("@sdt", staff.sdt);
+                    myCommand.Parameters.AddWithValue("@dia_chi", staff.diaChi);
+                    myCommand.Parameters.AddWithValue("@chuc_vu", staff.chucVu);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
                 }
             }
-
-            HttpContext.Session.SetObjectAsJson("list", list);
-            return Json(new { data = list, status = "OK" });
+            return Json(table);
 
         }
         [HttpGet]
-        [NoDirectAccess]
         public IActionResult Delete()
         {
             return View();
@@ -158,18 +139,26 @@ ma_nhanvien, ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu) VALUES (
         [HttpPost]
         public IActionResult Delete(string id)
         {
-            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-
-            for (int i = 0; i < list.Count; i++)
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            NpgsqlDataReader myReader;
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                if (id == list[i].maNhanVien)
+                myCon.Open();
+                string sql = @"delete from nhan_vien
+                where ma_nhanvien = @maNhanVien";
+                using (NpgsqlCommand myCommand = new NpgsqlCommand(sql, myCon))
                 {
-                    list.RemoveAt(i);
-                    HttpContext.Session.SetObjectAsJson("list", list);
-                    return Json(new { status = "OK" });
+                    myCommand.Parameters.AddWithValue("@ma_nhanvien", id);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
                 }
+
+
             }
-            return Json(new { status = "OKE" });
+            return Json(table);
         }
         public IActionResult Search(string keyword)
         {
@@ -194,23 +183,6 @@ ma_nhanvien, ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu) VALUES (
             // }
             return View("Index", list);
         }
-        public void SetAlert(string messenge, string type)
-        {
-            TempData["AlertMessenge"] = messenge;
-            if (type == "success")
-            {
-                TempData["AlertType"] = "alert-success";
-            }
-            else if (type == "warning")
-            {
-                TempData["AlertType"] = "alert-warning";
-            }
-            else if (type == "error")
-            {
-                TempData["AlertType"] = "alert-danger";
-            }
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 
         public IActionResult Error()
