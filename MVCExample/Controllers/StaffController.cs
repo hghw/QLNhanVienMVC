@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using MVCSamples.Extensions;
 using System.Linq;
-using static MVCExample.Helper;
 using Npgsql;
 using System.Data;
 using Microsoft.Extensions.Configuration;
+using Dapper;
 
 namespace MVCExample.Controllers
 {
@@ -29,106 +29,80 @@ namespace MVCExample.Controllers
         {
             _configuration = configuration;
         }
-        [HttpGet]
         public IActionResult Index()
         {
             List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            NpgsqlDataReader myReader;
-            using(NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            string sql = "SELECT * FROM nhan_vien";
+
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                myCon.Open();
-                string sql = @"SELECT * FROM nhan_vien";
-                using (NpgsqlCommand myCommand = new NpgsqlCommand(sql, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    list.Add(myCommand);
-                    myReader.Close();
-                    myCon.Close();
-                }
+                list = myCon.Query<Staff>(sql).ToList();
             }
             return View("Index", list);
         }
-        /*[HttpGet]
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
-        }*/
+        }
         [HttpPost]
         public IActionResult Create(Staff model)
         {
-            DataTable table = new DataTable();
+            List<Staff> list = new List<Staff>();
+
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            NpgsqlDataReader myReader;
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                myCon.Open();
-                string sql = @"INSERT INTO nhan_vien (ma_nhanvien, ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu)
-                VALUES (@maNhanVien,@hoTen, @ngaySinh, @sdt, @diaChi, @chucVu);";
-                using (NpgsqlCommand myCommand = new NpgsqlCommand(sql, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@ma_nhanvien", model.maNhanVien);
-                    myCommand.Parameters.AddWithValue("@ho_ten", model.hoTen);
-                    myCommand.Parameters.AddWithValue("@ngay_sinh", model.ngaySinh);
-                    myCommand.Parameters.AddWithValue("@sdt", model.sdt);
-                    myCommand.Parameters.AddWithValue("@dia_chi", model.diaChi);
-                    myCommand.Parameters.AddWithValue("@chuc_vu", model.chucVu);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
+                // string ma_nhanvien2 = model.getma_nhanvien(list);
+                // string sqlma_nhanvien = @"INSERT INTO nhan_vien (ma_nhanvien) VALUES (" + ma_nhanvien2 + ");";
+                string sql = @"INSERT INTO nhan_vien (ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu)
+                VALUES (@ho_ten, @ngay_sinh, @sdt, @dia_chi, @chuc_vu);";
 
+                var affectedRows = myCon.Execute(sql, model);
+                // var affectedRows2 = myCon.Execute(sqlma_nhanvien, model);
 
             }
-            return Json(table);
+            return Json(new { data = list, status = "OK" });
+
         }
         [HttpGet]
 
         public IActionResult Edit(string id)
         {
-            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-            HttpContext.Session.SetString("id", id); //luu id sua
-            for (int i = 0; i < list.Count; i++)
+            List<Staff> list = new List<Staff>();
+
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                if (id == list[i].maNhanVien)
+                for (int i = 0; i < list.Count; i++)
                 {
-                    return View(list[i]);
+                    if (id == list[i].ma_nhanvien)
+                    {
+                        return View(list[i]);
+                    }
                 }
             }
-            // var std = list.Where(s => s.maNhanVien == id).FirstOrDefault();
+            // var std = list.Where(s => s.ma_nhanvien == id).FirstOrDefault();
             return View("Index", list);
         }
         [HttpPost]
         public IActionResult Update(Staff staff)
         {
-            DataTable table = new DataTable();
+            List<Staff> list = new List<Staff>();
+
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            NpgsqlDataReader myReader;
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 myCon.Open();
                 string sql = @"UPDATE nhan_vien 
-                set ho_ten = @hoTen,
-                sdt = @sdt,
-                dia_chi = @diaChi,
-                chuc_vu = @chucVu
-                where ma_nhanvien = @maNhanVien";
-                using (NpgsqlCommand myCommand = new NpgsqlCommand(sql, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@ma_nhanvien", staff.maNhanVien);
-                    myCommand.Parameters.AddWithValue("@ho_ten", staff.hoTen);
-                    myCommand.Parameters.AddWithValue("@ngay_sinh", staff.ngaySinh);
-                    myCommand.Parameters.AddWithValue("@sdt", staff.sdt);
-                    myCommand.Parameters.AddWithValue("@dia_chi", staff.diaChi);
-                    myCommand.Parameters.AddWithValue("@chuc_vu", staff.chucVu);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
+                set ho_ten='" + staff.ho_ten + "',ngay_sinh='" + staff.ngay_sinh +
+                "',sdt='" + staff.sdt + "',dia_chi='" + staff.dia_chi +
+                "',chuc_vu='" + staff.chuc_vu + "' WHERE CustomerID=" + staff.ma_nhanvien;
+                var affectedRows = myCon.Execute(sql);
+
             }
-            return Json(table);
+            return View("Index", list);
 
         }
         [HttpGet]
@@ -139,26 +113,17 @@ namespace MVCExample.Controllers
         [HttpPost]
         public IActionResult Delete(string id)
         {
-            DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            NpgsqlDataReader myReader;
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 myCon.Open();
                 string sql = @"delete from nhan_vien
-                where ma_nhanvien = @maNhanVien";
-                using (NpgsqlCommand myCommand = new NpgsqlCommand(sql, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@ma_nhanvien", id);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-
+                where ma_nhanvien = " + id;
+                var affectedRows = myCon.Execute(sql);
+                return Json(new {status = "OK"});
 
             }
-            return Json(table);
+            return View("Index");
         }
         public IActionResult Search(string keyword)
         {
@@ -167,18 +132,18 @@ namespace MVCExample.Controllers
             //search
             if (!String.IsNullOrEmpty(keyword))
             {
-                var searchs = list.Where(s => s.hoTen.ToLower().Contains(keyword)
-                || s.hoTen.Contains(keyword)
-                || s.hoTen.ToUpper().Contains(keyword)
-                || s.diaChi.Contains(keyword)
-                || s.diaChi.ToUpper().Contains(keyword)
-                || s.diaChi.ToLower().Contains(keyword)
+                var searchs = list.Where(s => s.ho_ten.ToLower().Contains(keyword)
+                || s.ho_ten.Contains(keyword)
+                || s.ho_ten.ToUpper().Contains(keyword)
+                || s.dia_chi.Contains(keyword)
+                || s.dia_chi.ToUpper().Contains(keyword)
+                || s.dia_chi.ToLower().Contains(keyword)
                 );
                 return View("Search", searchs);
             }
             // if (!String.IsNullOrEmpty(keyword))
             // {
-            //     var searchs = list.Where(s => s.maNhanVien.Contains(keyword));
+            //     var searchs = list.Where(s => s.ma_nhanvien.Contains(keyword));
             //     return View("Index", searchs);
             // }
             return View("Index", list);

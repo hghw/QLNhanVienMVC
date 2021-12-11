@@ -7,22 +7,22 @@
     <thead class="table-success">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.maNhanVien)
+                @Html.DisplayNameFor(model => model.ma_nhanvien)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.hoTen)
+                @Html.DisplayNameFor(model => model.ho_ten)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ngaySinh)
+                @Html.DisplayNameFor(model => model.ngay_sinh)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.sdt)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.diaChi)
+                @Html.DisplayNameFor(model => model.dia_chi)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.chucVu)
+                @Html.DisplayNameFor(model => model.chuc_vu)
             </th>
             <th>
             </th>
@@ -33,28 +33,28 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.maNhanVien)
+                    @Html.DisplayFor(modelItem => item.ma_nhanvien)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.hoTen)
+                    @Html.DisplayFor(modelItem => item.ho_ten)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ngaySinh)
+                    @Html.DisplayFor(modelItem => item.ngay_sinh)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.sdt)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.diaChi)
+                    @Html.DisplayFor(modelItem => item.dia_chi)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.chucVu)
+                    @Html.DisplayFor(modelItem => item.chuc_vu)
                 </td>
                 <td class="d-flex" style="justify-content: space-around;">
-                    <a onclick="showPopUp('@Url.Action("Edit","Staff",new {id = item.maNhanVien })','Sửa nhân viên')"
+                    <a onclick="showPopUp('@Url.Action("Edit","Staff",new {id = item.ma_nhanvien })','Sửa nhân viên')"
                        class="btn btn-warning"><i class="far fa-edit"></i> Sửa</a>
                     @* form xoa *@
-                    <a onclick="showPopUp('@Url.Action("Delete","Staff",new {id = item.maNhanVien })','Xóa nhân viên')"
+                    <a onclick="showPopUp('@Url.Action("Delete","Staff",new {id = item.ma_nhanvien })','Xóa nhân viên')"
                        class="btn btn-danger"><i class="fas fa-trash"></i></a>
  
                 </td>
