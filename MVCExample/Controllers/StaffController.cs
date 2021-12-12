@@ -41,6 +41,7 @@ namespace MVCExample.Controllers
             }
             return View("Index", list);
         }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -67,43 +68,33 @@ namespace MVCExample.Controllers
 
         }
         [HttpGet]
-
         public IActionResult Edit(string id)
         {
-            List<Staff> list = new List<Staff>();
+            Staff staff = new Staff();
 
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    if (id == list[i].ma_nhanvien)
-                    {
-                        return View(list[i]);
-                    }
-                }
+                staff = myCon.Query<Staff>("Select * From nhan_vien WHERE ma_nhanvien =" + id, new { id }).FirstOrDefault();
+                return View(staff);
             }
-            // var std = list.Where(s => s.ma_nhanvien == id).FirstOrDefault();
-            return View("Index", list);
         }
         [HttpPost]
         public IActionResult Update(Staff staff)
         {
-            List<Staff> list = new List<Staff>();
-
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                myCon.Open();
-                string sql = @"UPDATE nhan_vien 
-                set ho_ten='" + staff.ho_ten + "',ngay_sinh='" + staff.ngay_sinh +
-                "',sdt='" + staff.sdt + "',dia_chi='" + staff.dia_chi +
-                "',chuc_vu='" + staff.chuc_vu + "' WHERE CustomerID=" + staff.ma_nhanvien;
-                var affectedRows = myCon.Execute(sql);
+                string sqlQuery = "UPDATE nhan_vien SET ho_ten='" + staff.ho_ten +
+                // "',ngay_sinh='" + staff.ngay_sinh +    
+                "',sdt='" + staff.sdt +
+                "',dia_chi='" + staff.dia_chi +
+                "',chuc_vu='" + staff.chuc_vu +
+                "' WHERE ma_nhanvien=" + staff.ma_nhanvien;
 
+                var rowAffect = myCon.Execute(sqlQuery);
             }
-            return View("Index", list);
-
+            return Json(new { status = "OK" });
         }
         [HttpGet]
         public IActionResult Delete()
@@ -113,17 +104,16 @@ namespace MVCExample.Controllers
         [HttpPost]
         public IActionResult Delete(string id)
         {
+            List<Staff> list = new List<Staff>();
+
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                myCon.Open();
                 string sql = @"delete from nhan_vien
                 where ma_nhanvien = " + id;
                 var affectedRows = myCon.Execute(sql);
-                return Json(new {status = "OK"});
-
+                return Json(new { status = "OK" });
             }
-            return View("Index");
         }
         public IActionResult Search(string keyword)
         {

@@ -1,18 +1,15 @@
 ﻿@model MVCExample.Models.Staff
 @{
-    ViewData["Title"] = "Xóa";
-    @* Layout = "~/Views/Shared/_Layout.cshtml"; *@
+    ViewData["Title"] = "Delete";
     Layout = null;
 }
 
 @* form for delete *@
-<form asp-action="Delete" onclick="return DeleteJqueryForm(this)" id="formDeleteAction">
+<form onclick="return formDeleteJqueryy(this)" id="formDeleteView" asp-action="Delete" >
     <p>Bạn có chắc chắn muốn xóa không?</p>
     <div class="text-right">
-        <input type="submit" id="submitDeleteForm" class="btn btn-success" data-dismiss="modal" value="Xóa" />
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Close
-        </button>
+        <input type="submit" id="submitDeleteForm2" value="Xóa" class="btn btn-success" data-dismiss="modal" />
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
     </div>
 </form>
 

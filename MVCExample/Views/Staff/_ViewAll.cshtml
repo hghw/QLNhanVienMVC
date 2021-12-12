@@ -52,11 +52,10 @@
                 </td>
                 <td class="d-flex" style="justify-content: space-around;">
                     <a onclick="showPopUp('@Url.Action("Edit","Staff",new {id = item.ma_nhanvien })','Sửa nhân viên')"
-                       class="btn btn-warning"><i class="far fa-edit"></i> Sửa</a>
+                       class="btn btn-warning"><i class="far fa-edit"></i>Sửa</a>
                     @* form xoa *@
                     <a onclick="showPopUp('@Url.Action("Delete","Staff",new {id = item.ma_nhanvien })','Xóa nhân viên')"
                        class="btn btn-danger"><i class="fas fa-trash"></i></a>
- 
                 </td>
             </tr>
         }
