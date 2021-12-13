@@ -51,22 +51,33 @@ namespace MVCExample.Controllers
         public IActionResult Create(Staff model)
         {
             List<Staff> list = new List<Staff>();
-
+            Staff staff = new Staff();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                // string ma_nhanvien2 = model.getma_nhanvien(list);
-                // string sqlma_nhanvien = @"INSERT INTO nhan_vien (ma_nhanvien) VALUES (" + ma_nhanvien2 + ");";
-                string sql = @"INSERT INTO nhan_vien (ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu)
-                VALUES (@ho_ten, @ngay_sinh, @sdt, @dia_chi, @chuc_vu);";
-
+                string sqlAll = "Select * from nhan_vien"; //truy van csdl de dem soluong csdl
+                var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+                model.ma_nhanvien = staff.getma_nhanvien(listAll);
+                for (int i = 0; i < listAll.Count; i++)
+                {
+                    if (model.ma_nhanvien == listAll[i].ma_nhanvien)
+                    {
+                        model.ma_nhanvien = staff.getma_nhanvienAdd1(listAll);
+                    }
+                    if (model.ho_ten == listAll[i].ho_ten && model.ngay_sinh == listAll[i].ngay_sinh)
+                    {
+                        return Json(new { status = "LOI" });
+                    }
+                }
+                string sql = @"INSERT INTO nhan_vien (ma_nhanvien, ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu)
+                VALUES ('" + model.ma_nhanvien +
+                "', @ho_ten, @ngay_sinh, @sdt, @dia_chi, @chuc_vu);";
                 var affectedRows = myCon.Execute(sql, model);
-                // var affectedRows2 = myCon.Execute(sqlma_nhanvien, model);
-
             }
             return Json(new { data = list, status = "OK" });
 
         }
+
         [HttpGet]
         public IActionResult Edit(string id)
         {
@@ -75,7 +86,7 @@ namespace MVCExample.Controllers
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                staff = myCon.Query<Staff>("Select * From nhan_vien WHERE ma_nhanvien =" + id, new { id }).FirstOrDefault();
+                staff = myCon.Query<Staff>("Select * From nhan_vien WHERE ma_nhanvien ='" + id + "'", new { id }).FirstOrDefault();
                 return View(staff);
             }
         }
@@ -85,8 +96,19 @@ namespace MVCExample.Controllers
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                string sqlQuery = "UPDATE nhan_vien SET ho_ten='" + staff.ho_ten +
-                // "',ngay_sinh='" + staff.ngay_sinh +    
+                string sqlAll = "Select * from nhan_vien"; //truy van csdl de dem soluong csdl
+                var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+                for (int i = 0; i < listAll.Count; i++)
+                {
+                    if (staff.ho_ten == listAll[i].ho_ten && staff.ngay_sinh == listAll[i].ngay_sinh)
+                    {
+                        return Json(new { status = "LOI" });
+                    }
+                }
+
+                string sqlQuery = "UPDATE nhan_vien SET ma_nhanvien='" + staff.ma_nhanvien +
+                "',ho_ten='" + staff.ho_ten +
+                "',ngay_sinh='" + staff.ngay_sinh +
                 "',sdt='" + staff.sdt +
                 "',dia_chi='" + staff.dia_chi +
                 "',chuc_vu='" + staff.chuc_vu +
@@ -110,7 +132,7 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 string sql = @"delete from nhan_vien
-                where ma_nhanvien = " + id;
+                where ma_nhanvien = '" + id + "'";
                 var affectedRows = myCon.Execute(sql);
                 return Json(new { status = "OK" });
             }

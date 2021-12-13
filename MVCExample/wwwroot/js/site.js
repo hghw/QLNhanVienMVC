@@ -59,9 +59,9 @@ $(document).on("click", "#submitFormSuc", function () {
                             $("#table-refresh").load(" #table-refresh")
                             $.notify('Sửa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                         }
-                        // if (res.status == "LOI") {
-                        //     $.notify('Nhân viên này đã tồn tại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
-                        // }
+                        if (res.status == "LOI") {
+                            $.notify('Nhân viên này đã tồn tại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
+                        }
                 },
                 error: function (err) {
                     console.log(err);

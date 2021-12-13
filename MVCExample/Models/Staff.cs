@@ -32,7 +32,7 @@ namespace MVCExample.Models
         {
             float maCount = (float)(listNhanVien.Count + 1) / 1000;
             string ma_nhanvien = Convert.ToString(maCount);
-            ma_nhanvien = ma_nhanvien.Replace(".", "");
+            ma_nhanvien = ma_nhanvien.Replace(",", "");
             ma_nhanvien = "NV-" + ma_nhanvien;
             return ma_nhanvien;
         }
@@ -40,7 +40,7 @@ namespace MVCExample.Models
         {
             float maCount = (float)(listNhanVien.Count + 2) / 1000;
             string ma_nhanvien = Convert.ToString(maCount);
-            ma_nhanvien = ma_nhanvien.Replace(".", "");
+            ma_nhanvien = ma_nhanvien.Replace(",", "");
             ma_nhanvien = "NV-" + ma_nhanvien;
             return ma_nhanvien;
         }
