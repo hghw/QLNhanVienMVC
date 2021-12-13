@@ -1,28 +1,27 @@
-﻿@model IEnumerable<MVCExample.Models.Staff>
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model PagedList.IPagedList<MVCExample.Models.Staff>
+@using PagedList.Mvc;
+
 
 <table class="table table-hover" id="table-refresh">
     <thead class="table-success">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ma_nhanvien)
+                @Html.DisplayNameFor(model => model.First().ma_nhanvien)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ho_ten)
+                @Html.DisplayNameFor(model => model.First().ho_ten)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ngay_sinh)
+                @Html.DisplayNameFor(model => model.First().ngay_sinh)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.sdt)
+                @Html.DisplayNameFor(model => model.First().sdt)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.dia_chi)
+                @Html.DisplayNameFor(model => model.First().dia_chi)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.chuc_vu)
+                @Html.DisplayNameFor(model => model.First().chuc_vu)
             </th>
             <th>
             </th>
@@ -60,10 +59,12 @@
             </tr>
         }
     </tbody>
-</table>
-<script type="text/javascript">
 
-</script>
+</table>
+<br />
+Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+      
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 
 
 @* form  *@
@@ -74,7 +75,7 @@
                 <h2 class="modal-title" text-center></h2>
             </div>
             <div class="modal-body">
-                
+
             </div>
         </div>
     </div>
