@@ -12,9 +12,6 @@ using Npgsql;
 using System.Data;
 using Microsoft.Extensions.Configuration;
 using Dapper;
-using PagedList;
-
-
 
 namespace MVCExample.Controllers
 {
@@ -32,12 +29,9 @@ namespace MVCExample.Controllers
         {
             _configuration = configuration;
         }
-            List<Staff> list = new List<Staff>();
-        Staff staffDB = new Staff();
-        public IActionResult Index(int? page)
+        public IActionResult Index()
         {
-            
-
+            List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             string sql = "SELECT * FROM nhan_vien";
 
@@ -45,15 +39,7 @@ namespace MVCExample.Controllers
             {
                 list = myCon.Query<Staff>(sql).ToList();
             }
-
-            if (page == null) page = 1;
-            var links = (from l in list
-                         select l).OrderBy(x => x.ma_nhanvien);
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
-
-
-            return View(links.ToPagedList(pageNumber, pageSize));
+            return View("Index", list);
         }
 
         [HttpGet]
@@ -64,6 +50,8 @@ namespace MVCExample.Controllers
         [HttpPost]
         public IActionResult Create(Staff model)
         {
+            List<Staff> list = new List<Staff>();
+
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
@@ -98,7 +86,7 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 string sqlQuery = "UPDATE nhan_vien SET ho_ten='" + staff.ho_ten +
-                "',ngay_sinh='" + staff.ngay_sinh +    
+                // "',ngay_sinh='" + staff.ngay_sinh +    
                 "',sdt='" + staff.sdt +
                 "',dia_chi='" + staff.dia_chi +
                 "',chuc_vu='" + staff.chuc_vu +
@@ -116,6 +104,7 @@ namespace MVCExample.Controllers
         [HttpPost]
         public IActionResult Delete(string id)
         {
+            List<Staff> list = new List<Staff>();
 
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
