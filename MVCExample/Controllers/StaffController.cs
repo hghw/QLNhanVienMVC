@@ -29,7 +29,10 @@ namespace MVCExample.Controllers
         {
             _configuration = configuration;
         }
-        public IActionResult Index()
+        // [BindProperty(SupportsGet = true, Name = "p")]
+        public int currentPage { get; set; }
+        public int countPages { get; set; }
+        public IActionResult Index(int page)
         {
             List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
@@ -38,8 +41,27 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 list = myCon.Query<Staff>(sql).ToList();
+                int ITEMS_PER_PAGE = 3;
+
+                int totalItems = list.Count;
+                countPages = (int)Math.Ceiling((double)totalItems / ITEMS_PER_PAGE);
+
+                if (page == 0)
+                {
+                    page = 1;
+                }
+                if (page > countPages)
+                {
+                    page = countPages;
+                }
+
+                var posts = list.Skip(ITEMS_PER_PAGE * (page - 1)).Take(ITEMS_PER_PAGE).ToList();
+
+                ViewData["Page"] = page;
+                ViewData["countPages"] = countPages;
+
+            return View(posts);
             }
-            return View("Index", list);
         }
 
         [HttpGet]

@@ -44,6 +44,14 @@ namespace MVCExample.Models
             ma_nhanvien = "NV-" + ma_nhanvien;
             return ma_nhanvien;
         }
+
+
+    }
+    public class PagingModel
+    {
+        public int currentpage { get; set; }
+        public int countpages { get; set; }
+        public Func<int?, string> generateUrl { get; set; }
     }
 
 }

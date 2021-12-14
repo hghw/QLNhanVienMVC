@@ -113,3 +113,18 @@ function JquerySearchForm() {
 
     })
 }
+
+$(document).on("click", "#pageRedirect", function(){
+    $("#table-refresh").load(" #table-refresh")
+    $.ajax({
+        type: 'POST',
+            url: 'Staff/index',
+            data: { page },
+            success: function (res) {
+                alert("thanh cong")
+            },
+            error: function (err) {
+                console.log(err);
+            }
+    })
+})
