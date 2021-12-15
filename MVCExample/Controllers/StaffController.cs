@@ -36,7 +36,7 @@ namespace MVCExample.Controllers
         {
             List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            string sql = "SELECT * FROM nhan_vien";
+            string sql = "SELECT * FROM nhan_vien Order By ma_nhanvien ASC";
 
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
@@ -126,15 +126,18 @@ namespace MVCExample.Controllers
                     {
                         return Json(new { status = "LOI" });
                     }
+                    if (staff.ho_ten == listAll[i].ho_ten && staff.ngay_sinh == listAll[i].ngay_sinh)
+                    {
+                        return Json(new { status = "LOI" });
+                    }
                 }
 
-                string sqlQuery = "UPDATE nhan_vien SET ma_nhanvien='" + staff.ma_nhanvien +
-                "',ho_ten='" + staff.ho_ten +
+                string sqlQuery = "UPDATE nhan_vien SET ho_ten='" + staff.ho_ten +
                 "',ngay_sinh='" + staff.ngay_sinh +
                 "',sdt='" + staff.sdt +
                 "',dia_chi='" + staff.dia_chi +
                 "',chuc_vu='" + staff.chuc_vu +
-                "' WHERE ma_nhanvien=" + staff.ma_nhanvien;
+                "' WHERE ma_nhanvien='" + staff.ma_nhanvien+ "'";
 
                 var rowAffect = myCon.Execute(sqlQuery);
             }
@@ -148,8 +151,6 @@ namespace MVCExample.Controllers
         [HttpPost]
         public IActionResult Delete(string id)
         {
-            List<Staff> list = new List<Staff>();
-
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
@@ -161,27 +162,19 @@ namespace MVCExample.Controllers
         }
         public IActionResult Search(string keyword)
         {
-
-            List<Staff> list = HttpContext.Session.GetObjectFromJson<List<Staff>>("list");
-            //search
-            if (!String.IsNullOrEmpty(keyword))
+            List<Staff> list = new List<Staff>();
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                var searchs = list.Where(s => s.ho_ten.ToLower().Contains(keyword)
-                || s.ho_ten.Contains(keyword)
-                || s.ho_ten.ToUpper().Contains(keyword)
-                || s.dia_chi.Contains(keyword)
-                || s.dia_chi.ToUpper().Contains(keyword)
-                || s.dia_chi.ToLower().Contains(keyword)
-                );
-                return View("Search", searchs);
+                string sql = @"Select * from nhan_vien
+                where ho_ten like '%" + keyword + "%' Or dia_chi like '%" + keyword +"%'";
+                list = myCon.Query<Staff>(sql).ToList();
+
+                return View(list);
             }
-            // if (!String.IsNullOrEmpty(keyword))
-            // {
-            //     var searchs = list.Where(s => s.ma_nhanvien.Contains(keyword));
-            //     return View("Index", searchs);
-            // }
-            return View("Index", list);
+
         }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 
         public IActionResult Error()

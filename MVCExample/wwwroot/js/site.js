@@ -97,34 +97,66 @@ formDeleteJqueryy = (form) => {
 
 function JquerySearchForm() {
     $(document).ready(function () {
-        $("#inSearch123").on("change", function () {
+        $("#keyword").on("change", function () {
             var value = $(this).val().toLowerCase()
             $("#tableViewAll tr").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             })
         })
 
-        $("#btSearchForm").on("click", function () {
+/*        $("#btSearchForm").on("click", function () {
             var value = $(this).val().toLowerCase()
             $("#tableViewAll tr").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             })
-        })
+        })*/
 
     })
 }
 
 $(document).on("click", "#pageRedirect", function(){
-    $("#table-refresh").load(" #table-refresh")
+
+    var Pagination_url = $(this).attr('href');
     $.ajax({
         type: 'POST',
-            url: 'Staff/index',
-            data: { page },
+            url: Pagination_url,
             success: function (res) {
-                alert("thanh cong")
+                $("#table-refresh").load(" #table-refresh")
             },
             error: function (err) {
                 console.log(err);
             }
+    })
+})
+
+$(document).on("change", "#inSearch123", function () {
+    $.ajax({
+        type: 'POST',
+        url: 'Staff/search',
+        data: new FormData($("#formSearchView")[0]),
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            $("#table-refresh").load(" #table-refresh")
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    })
+
+})
+$(document).on("click", "#buttonsearch123", function () {
+    $.ajax({
+        type: 'POST',
+        url: 'Staff/search',
+        data: new FormData($("#formSearchView")[0]),
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            $("#table-refresh").load(" #table-refresh")
+        },
+        error: function (err) {
+            console.log(err);
+        }
     })
 })

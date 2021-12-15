@@ -71,13 +71,12 @@
 
 }
 @* PHÁT SINH HTML*@
-
 <ul class="pagination justify-content-end">
     <!-- Previous page link -->
     @if (preview != null)
     {
         <li class="page-item" id="pageRedirect">
-            <a class="page-link" href="@generateUrl(preview)">Trang trước</a>
+            <a class="page-link" href="@generateUrl(preview)" data-dismiss="modal">Trang trước</a>
         </li>
     }
     else
@@ -93,7 +92,7 @@
         if (pageitem != currentPage)
         {
             <li class="page-item" id="pageRedirect">
-                <a class="page-link" href="@generateUrl(pageitem)">
+                <a class="page-link" href="@generateUrl(pageitem)" data-dismiss="modal">
                     @pageitem
                 </a>
             </li>
@@ -101,7 +100,7 @@
         else
         {
             <li class="page-item active" aria-current="page" id="pageRedirect">
-                <a class="page-link" href="#">@pageitem <span class="sr-only">(current)</span></a>
+                <a class="page-link" href="#" data-dismiss="modal">@pageitem <span class="sr-only">(current)</span></a>
             </li>
         }
     }
@@ -111,7 +110,7 @@
     @if (next != null)
     {
         <li class="page-item" id="pageRedirect">
-            <a class="page-link" href="@generateUrl(next)">Trang sau</a>
+            <a class="page-link" href="@generateUrl(next)" data-dismiss="modal">Trang sau</a>
         </li>
     }
     else
