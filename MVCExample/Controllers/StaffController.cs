@@ -32,7 +32,7 @@ namespace MVCExample.Controllers
         // [BindProperty(SupportsGet = true, Name = "p")]
         public int currentPage { get; set; }
         public int countPages { get; set; }
-        public IActionResult Index(int page)
+        public IActionResult Index(int page, string keyword)
         {
             List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
@@ -41,7 +41,7 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 list = myCon.Query<Staff>(sql).ToList();
-                int ITEMS_PER_PAGE = 3;
+                int ITEMS_PER_PAGE = 10;
 
                 int totalItems = list.Count;
                 countPages = (int)Math.Ceiling((double)totalItems / ITEMS_PER_PAGE);
@@ -60,7 +60,13 @@ namespace MVCExample.Controllers
                 ViewData["Page"] = page;
                 ViewData["countPages"] = countPages;
 
-            return View(posts);
+
+                string sqlSearch = @"Select * from nhan_vien
+                where ho_ten like '%" + keyword + "%' Or dia_chi like '%" + keyword + "%'";
+                var listSearch = myCon.Query<Staff>(sqlSearch).ToList();
+
+
+                return View(listSearch);
             }
         }
 
@@ -137,7 +143,7 @@ namespace MVCExample.Controllers
                 "',sdt='" + staff.sdt +
                 "',dia_chi='" + staff.dia_chi +
                 "',chuc_vu='" + staff.chuc_vu +
-                "' WHERE ma_nhanvien='" + staff.ma_nhanvien+ "'";
+                "' WHERE ma_nhanvien='" + staff.ma_nhanvien + "'";
 
                 var rowAffect = myCon.Execute(sqlQuery);
             }
@@ -160,20 +166,20 @@ namespace MVCExample.Controllers
                 return Json(new { status = "OK" });
             }
         }
-        public IActionResult Search(string keyword)
-        {
-            List<Staff> list = new List<Staff>();
-            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
-            {
-                string sql = @"Select * from nhan_vien
-                where ho_ten like '%" + keyword + "%' Or dia_chi like '%" + keyword +"%'";
-                list = myCon.Query<Staff>(sql).ToList();
+        // public IActionResult Search(string keyword)
+        // {
+        //     List<Staff> list = new List<Staff>();
+        //     string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+        //     using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+        //     {
+        //         string sqlSearch = @"Select * from nhan_vien
+        //         where ho_ten like '%" + keyword + "%' Or dia_chi like '%" + keyword + "%'";
+        //         var listSearch = myCon.Query<Staff>(sqlSearch).ToList();
 
-                return View(list);
-            }
+        //         return Json(new { data = list, status = "OK" });
+        //     }
 
-        }
+        // }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 

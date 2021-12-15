@@ -12,26 +12,16 @@
     <a onclick="showPopUp('@Url.Action("Create","Staff")','Thêm mới')" class="btn btn-success" style="color: #fff;"><i
             class="fas fa-user-plus"></i> Thêm mới</a>
 
-        
-@*    <div onkeydown="return JquerySearchForm(this)">*@
-        <form asp-action="Search" class="search d-flex" id="formSearchView">
-            <div id="inSearch123">
+    <form id="formSearchSubmit" asp-action="Index">
+        <div class="input-group rounded">
             @Html.TextBox("keyword")
-            </div>
-            <button type="submit" class="input-group-text border-0" id="buttonsearch123" >
-                Search
-            </button>   
-        </form>
-        @*        <div class="input-group rounded">
-            <input type="search" id="inSearch123" class="form-control rounded" placeholder="Nhập từ khóa..."
-                aria-label="Search" aria-describedby="search-addon" />
-            <button type="button" class="input-group-text border-0" id="search-addon btSearchForm">
+            <button type="submit" class="input-group-text border-0" id="btSearchForm">
                 Search
             </button>
-        </div>*@
-    </div>
+        </div>
+    </form>
 
-@*</div>*@
+</div>
 <div id="view-all">
     @await Html.PartialAsync("_ViewAll", Model)
 </div>
@@ -39,7 +29,7 @@
 @{
     Func<int?, string> generateUrl = (int? p) =>
             {
-                return Url.ActionLink("Index", null, new {page = p});
+                return Url.ActionLink("Index", null, new { page = p });
             };
 
     var pagingmodel = new MVCExample.Models.PagingModel()
