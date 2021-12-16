@@ -82,7 +82,12 @@ namespace MVCExample.Controllers
 
                 ViewData["Page"] = page;
                 ViewData["countPages"] = countPages;
-                 return View(posts);
+                 return Json(new
+                 {
+                     data = posts,
+                     total = totalItems,
+                     status = true
+                 });
             }
 
         }
