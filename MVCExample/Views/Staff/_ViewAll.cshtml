@@ -75,19 +75,19 @@
 </div>
 
 <script>
-    
-    $(document).on("click", "#pageRedirect", function(){
 
-    $.ajax({
-        type: 'POST',
-        url: 'Staff/index',
-        success: function (res) {
-            $("#table-refresh").empty()
+    $(document).on("click", "#pageRedirect", function () {
 
-             },
-             error: function (err) {
-                 console.log(err);
-             }
-     })
- })
+        $.ajax({
+            type: 'POST',
+            url: 'Staff/index',
+            success: function (res) {
+                $("#table-refresh").empty()
+
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    })
 </script>

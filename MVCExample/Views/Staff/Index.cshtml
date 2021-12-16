@@ -28,17 +28,4 @@
     @await Html.PartialAsync("_ViewAll", Model)
 </div>
 
-@{
-    Func<int?, string> generateUrl = (int? p) =>
-            {
-                return Url.ActionLink(null,null, new { page = p });
-            };
 
-    var pagingmodel = new MVCExample.Models.PagingModel()
-    {
-        currentpage = ViewBag.Page,
-        countpages = ViewBag.countPages,
-        generateUrl = generateUrl
-    };
-}
-<partial name="_Page" model="@pagingmodel" />

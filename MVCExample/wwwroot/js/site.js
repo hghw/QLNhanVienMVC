@@ -1,5 +1,6 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // Write your Javascript code.
+
 showPopUp = (url, title) => {
     $.ajax({
         type: 'GET',
@@ -115,20 +116,18 @@ formDeleteJqueryy = (form) => {
 //     })
 // }
 
-/*$(document).on("click", "#pageRedirect", function(){
-
+$(document).on("click", "#pageRedirect", function(){
     $.ajax({
         type: 'POST',
-        url: 'Staff/index',
+        url: 'Staff/Index',
         success: function (res) {
-            $("#table-refresh").empty()
-
-             },
+            $("#table-refresh").load(" #table-refresh")
+        },
              error: function (err) {
                  console.log(err);
              }
      })
- })*/
+ })
 
 $(document).on("click","#btSearchForm" , function () {
     $.ajax({
@@ -148,20 +147,20 @@ $(document).on("click","#btSearchForm" , function () {
 
 })
 
-function loaddata() {
-    $.ajax({
-        url: 'Staff/LoadData',
-        type: 'GET',
-        dataType: 'json',
-        success: function (res) {
-            if (res.status) {
-                var data = res.data;
-                var html = '';
-                var template = $('#table-refresh').html();
-                $.each(data, function (i, item) {
+// function loaddata() {
+//     $.ajax({
+//         url: 'Staff/LoadData',
+//         type: 'GET',
+//         dataType: 'json',
+//         success: function (res) {
+//             if (res.status) {
+//                 var data = res.data;
+//                 var html = '';
+//                 var template = $('#table-refresh').html();
+//                 $.each(data, function (i, item) {
 
-                })
-            }
-        }
-    })
-}
+//                 })
+//             }
+//         }
+//     })
+// }

@@ -32,6 +32,7 @@ namespace MVCExample.Controllers
         // [BindProperty(SupportsGet = true, Name = "p")]
         public int currentPage { get; set; }
         public int countPages { get; set; }
+        
         public IActionResult Index(string keyword)
         {
             List<Staff> list = new List<Staff>();
@@ -51,10 +52,10 @@ namespace MVCExample.Controllers
                     ViewData["countPages"] = 0;
                     return View(listSearch);
                 }
-                return View(list);
+                return View();
             }
         }
-        public IActionResult LoadData(int page, int pageSize)
+        public IActionResult LoadData(int page )
         {
             List<Staff> list = new List<Staff>();
 
