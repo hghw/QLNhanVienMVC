@@ -115,32 +115,31 @@ formDeleteJqueryy = (form) => {
 //     })
 // }
 
-// $(document).on("click", "#pageRedirect", function(){
+/*$(document).on("click", "#pageRedirect", function(){
 
-//     var Pagination_url = $(this).attr('href');
-//     $.ajax({
-//         type: 'POST',
-//             url: Pagination_url,
-//             success: function (res) {
-//                 $("#table-refresh").load(" #table-refresh")
-//             },
-//             error: function (err) {
-//                 console.log(err);
-//             }
-//     })
-// })
+    $.ajax({
+        type: 'POST',
+        url: 'Staff/index',
+        success: function (res) {
+            $("#table-refresh").empty()
+
+             },
+             error: function (err) {
+                 console.log(err);
+             }
+     })
+ })*/
 
 $(document).on("click","#btSearchForm" , function () {
     $.ajax({
         type: 'POST',
-        url: 'Staff/search',
+        url: 'Staff/Index',
         data: new FormData($("#formSearchSubmit")[0]),
         contentType: false,
         processData: false,
         success: function (res) {
-            if (res.status == 'OK') {
                 $("#table-refresh").load(" #table-refresh")
-            }
+            
         },
         error: function (err) {
             console.log(err);
@@ -148,3 +147,21 @@ $(document).on("click","#btSearchForm" , function () {
     })
 
 })
+
+function loaddata() {
+    $.ajax({
+        url: 'Staff/LoadData',
+        type: 'GET',
+        dataType: 'json',
+        success: function (res) {
+            if (res.status) {
+                var data = res.data;
+                var html = '';
+                var template = $('#table-refresh').html();
+                $.each(data, function (i, item) {
+
+                })
+            }
+        }
+    })
+}

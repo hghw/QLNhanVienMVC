@@ -75,14 +75,14 @@
     <!-- Previous page link -->
     @if (preview != null)
     {
-        <li class="page-item" id="pageRedirect">
-            <a class="page-link" href="@generateUrl(preview)" data-dismiss="modal">Trang trước</a>
+        <li class="page-item" >
+            <a class="page-link" href="@generateUrl(preview)" data-dismiss="" id="pageRedirect">Trang trước</a>
         </li>
     }
     else
     {
-        <li class="page-item disabled" id="pageRedirect">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trang trước</a>
+        <li class="page-item disabled" >
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true" id="pageRedirect">Trang trước</a>
         </li>
     }
 
@@ -91,16 +91,16 @@
     {
         if (pageitem != currentPage)
         {
-            <li class="page-item" id="pageRedirect">
-                <a class="page-link" href="@generateUrl(pageitem)" data-dismiss="modal">
+            <li class="page-item" >
+                <a class="page-link" href="@generateUrl(pageitem)" data-dismiss="" id="pageRedirect">
                     @pageitem
                 </a>
             </li>
         }
         else
         {
-            <li class="page-item active" aria-current="page" id="pageRedirect">
-                <a class="page-link" href="#" data-dismiss="modal">@pageitem <span class="sr-only">(current)</span></a>
+            <li class="page-item active" aria-current="page" >
+                <a class="page-link" href="" data-dismiss="">@pageitem <span class="sr-only" id="pageRedirect">(current)</span></a>
             </li>
         }
     }
@@ -109,14 +109,14 @@
     <!-- Next page link -->
     @if (next != null)
     {
-        <li class="page-item" id="pageRedirect">
-            <a class="page-link" href="@generateUrl(next)" data-dismiss="modal">Trang sau</a>
+        <li class="page-item">
+            <a class="page-link" href="@generateUrl(next)" data-dismiss="" id="pageRedirect">Trang sau</a>
         </li>
     }
     else
     {
-        <li class="page-item disabled" id="pageRedirect">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trang sau</a>
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true" id="pageRedirect">Trang sau</a>
         </li>
     }
 </ul>
