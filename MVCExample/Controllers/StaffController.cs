@@ -60,13 +60,14 @@ namespace MVCExample.Controllers
                 ViewData["Page"] = page;
                 ViewData["countPages"] = countPages;
 
-
-                string sqlSearch = @"Select * from nhan_vien
-                where ho_ten like '%" + keyword + "%' Or dia_chi like '%" + keyword + "%'";
-                var listSearch = myCon.Query<Staff>(sqlSearch).ToList();
-
-
-                return View(listSearch);
+                if (keyword != null)
+                {
+                    string sqlSearch = @"Select * from nhan_vien
+                    where ho_ten like '%" + keyword + "%' Or dia_chi like '%" + keyword + "%'";
+                    var listSearch = myCon.Query<Staff>(sqlSearch).ToList();
+                    return View(listSearch);
+                }
+                return View(posts);
             }
         }
 
