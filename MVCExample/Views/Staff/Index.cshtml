@@ -12,17 +12,16 @@
     <a onclick="showPopUp('@Url.Action("Create","Staff")','Thêm mới')" class="btn btn-success" style="color: #fff;"><i
             class="fas fa-user-plus"></i> Thêm mới</a>
 
-    <form id="formSearchSubmit" asp-action="Index">
-        <div class="input-group rounded">
-            @Html.TextBox("keyword")
-            @*<input type="search" id="inSearch123" class="form-control rounded" placeholder="Nhập từ khóa..."
-                aria-label="Search" aria-describedby="search-addon" />*@
-            <button type="submit" class="input-group-text border-0" id="btSearchForm">
-                Search
-            </button>
-        </div>
-    </form>
+    <div class="input-group rounded" style="width: 250px;">
+            @* @Html.TextBox("keyword") *@
+    
 
+         <input type="search" id="keyword" class="form-control rounded" placeholder="Nhập từ khóa..."
+            aria-label="Search"
+            aria-describedby="search-addon" />
+        <button type="button" class="input-group-text border-0" id="subSearch">Search</button> 
+
+    </div>
 </div>
 
 <table class="table table-hover" id="table-refresh">
@@ -39,9 +38,13 @@
         </tr>
     </thead>
     <tbody id="tableViewAll">
-        <div class="loadData"></div>
+        <div class="loadData" id="loadData"></div>
     </tbody>
 </table>
+
+<ul id="pagination" class="pagination pagination-sm" style="justify-content: flex-end;">
+
+</ul>
 
 
 @* form *@
@@ -57,27 +60,9 @@
         </div>
     </div>
 </div>
-
 <script>
     @* $("#loadData").html("") *@
         $.get("/Staff/GetDataList", null, callback);
-    function callback(list) {
-        var SetData = $("#tableViewAll");
-        for (var i = 0; i < list.length; i++) {
-            var Data = "<tr class='row_" + list[i].ma_nhanvien + "'>" +
-                "<td>" + list[i].ma_nhanvien + "</td>" +
-                "<td>" + list[i].ho_ten + "</td>" +
-                "<td>" + list[i].ngay_sinh + "</td>" +
-                "<td>" + list[i].sdt + "</td>" +
-                "<td>" + list[i].dia_chi + "</td>" +
-                "<td>" + list[i].chuc_vu + "</td>" +
-                "<td class='d-flex' style='justify-content: space-around;'>" 
-                + "<a onclick='showPopUp(Url.Action('Edit','Staff', new {id = "+list[i].ma_nhanvien+"}), 'Sửa nhân viên')' class='btn btn-warning'> <i class='far fa-edit'></i>Sửa</a >" 
-                + "<a class='btn btn-danger'><i class='fa fa-trash'></i></a >" 
-                + "</td>" +
-                "</tr>";
-            SetData.append(Data);
+
     @* $("#loadData").html(" "); *@
-        }
-    }
 </script>

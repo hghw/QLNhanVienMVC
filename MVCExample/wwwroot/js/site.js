@@ -1,10 +1,41 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // Write your Javascript code.
 
-
-
-
-
+function callback() {
+    $.ajax({
+        type: 'POST',
+        url: 'Staff/GetDataList',
+        success: function (res) {
+            var list= res.posts;
+            var SetData = $("#tableViewAll");
+            for (var i = 0; i < list.length; i++) {
+                var Data = "<tr class='row_" + list[i].ma_nhanvien + "'>" +
+                    "<td>" + list[i].ma_nhanvien + "</td>" +
+                    "<td>" + list[i].ho_ten + "</td>" +
+                    "<td>" + list[i].ngay_sinh + "</td>" +
+                    "<td>" + list[i].sdt + "</td>" +
+                    "<td>" + list[i].dia_chi + "</td>" +
+                    "<td>" + list[i].chuc_vu + "</td>" +
+                    "<td class='d-flex' style='justify-content: space-around;'>" 
+                    // + '<a onclick=showPopUp("@Url.Action('+"'Edit'"+",'Staff'"+',new{'+'id'+"=" + list[i].ma_nhanvien + '})","Sửa") class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >' 
+                   
+                    + '<a onclick=showPopUp("Staff/Edit/'+ list[i].ma_nhanvien + '","Edit") class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >' 
+                    + '<a onclick=showPopUp("Staff/Delete/' + list[i].ma_nhanvien + '","Delete") class="btn btn-danger"><i class="fa fa-trash"></i></a >' 
+                    + "</td>" +
+                    "</tr>";
+                SetData.append(Data);
+            }
+            //page
+            var SetDataPage = $("#pagination");
+            var rowData = "";
+            for (var i = 0; i < res.countPages; i++) {
+                rowData = rowData + '<li class="page-item"><a class="page-link" href="#">'+(i+1)+'</a></li>';
+            }
+            SetDataPage.append(rowData)
+        }
+    })
+    
+}
 
 showPopUp = (url, title) => {
     $.ajax({
@@ -38,7 +69,8 @@ $(document).on("click", "#submitFormSuc", function () {
             processData: false,
             success: function (res) {
                 if (res.status == "OK") {
-                    $("#table-refresh").load(" #table-refresh")
+                    $("#tableViewAll").children().remove()
+                    callback(res.data)
                     $.notify('Thêm thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                 }
                 if (res.status == "LOI") {
@@ -62,7 +94,8 @@ $(document).on("click", "#submitFormSuc", function () {
                 processData: false,
                     success: function (res) {
                         if (res.status == "OK") {
-                            $("#table-refresh").load(" #table-refresh")
+                            $("#tableViewAll").children().remove()
+                            callback(res.data)
                             $.notify('Sửa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                         }
                         if (res.status == "LOI") {
@@ -89,7 +122,8 @@ formDeleteJqueryy = (form) => {
             success: function (res) {
                 if (res.status == 'OK') {
                     $.notify('Xóa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
-                    $("#table-refresh").load(" #table-refresh")
+                    $("#tableViewAll").children().remove()
+                    callback(res.data)
                 }
             },
             error: function (err) {
@@ -101,71 +135,34 @@ formDeleteJqueryy = (form) => {
 }
     
 
-// function JquerySearchForm() {
-//     $(document).ready(function () {
-//         $("#inSearch123").on("change", function () {
-//             var value = $(this).val().toLowerCase()
-//             $("#tableViewAll tr").filter(function () {
-//                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//             })
 
-//         })
+    $(document).ready(function () {
+        $("#keyword").on("change", function () {
+            var value = $(this).val().toLowerCase()
+            $("#tableViewAll tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            })
 
-//         $("#btSearchForm").on("click", function () {
-//             var value = $(this).val().toLowerCase()
-//             $("#tableViewAll tr").filter(function () {
-//                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//             })
-//         })
+        })
 
-//     })
-// }
-
-$(document).on("click", "#pageRedirect", function(){
-    $.ajax({
-        type: 'POST',
-        url: 'Staff/Index',
-        success: function (res) {
-            $("#table-refresh").load(" #table-refresh")
-        },
-             error: function (err) {
-                 console.log(err);
-             }
-     })
- })
-
-$(document).on("click","#btSearchForm" , function () {
-    $.ajax({
-        type: 'POST',
-        url: 'Staff/Index',
-        data: new FormData($("#formSearchSubmit")[0]),
-        contentType: false,
-        processData: false,
-        success: function (res) {
-                $("#table-refresh").load(" #table-refresh")
+        $("#subSearch").on("click", function () {
+            var value = $("#keyword").val().toLowerCase()
+            $("#tableViewAll tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            })
+            // $.ajax({//no
+            //     type: 'GET',
+            //     url: 'Staff/GetDataList/',
+            //     success: function (res) {
+            //         var SetData = $("#tableViewAll");
+            //         var listSearch2 = res.listSearch;  
+            //          SetData.remove()
+            //          SetData.append(listSearch2)
+            //     }
+            // })
             
-        },
-        error: function (err) {
-            console.log(err);
-        }
+        })
+
     })
 
-})
-
-// function loaddata() {
-//     $.ajax({
-//         url: 'Staff/LoadData',
-//         type: 'GET',
-//         dataType: 'json',
-//         success: function (res) {
-//             if (res.status) {
-//                 var data = res.data;
-//                 var html = '';
-//                 var template = $('#table-refresh').html();
-//                 $.each(data, function (i, item) {
-
-//                 })
-//             }
-//         }
-//     })
-// }
+    

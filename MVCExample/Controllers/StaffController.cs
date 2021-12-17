@@ -37,7 +37,7 @@ namespace MVCExample.Controllers
         {
             return View();
         }
-        public IActionResult GetDataList()
+        public IActionResult GetDataList(int page, string keyword)
         {
             List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
@@ -46,19 +46,7 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 list = myCon.Query<Staff>(sql).ToList();
-                return Json(list);
-            }
-        }
-        public IActionResult LoadData(int page)
-        {
-            List<Staff> list = new List<Staff>();
-
-            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            string sql = "SELECT * FROM nhan_vien Order By ma_nhanvien ASC";
-
-            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
-            {
-                list = myCon.Query<Staff>(sql).ToList();
+                //page
                 int ITEMS_PER_PAGE = 10;
 
                 int totalItems = list.Count;
@@ -77,15 +65,22 @@ namespace MVCExample.Controllers
 
                 ViewData["Page"] = page;
                 ViewData["countPages"] = countPages;
+
+                //search
+                string sqlSearch = @"Select * from nhan_vien
+                    where LOWER(ho_ten) like LOWER('%" + keyword + "%') Or UPPER(ho_ten) like UPPER('%" + keyword + "%') Or LOWER(dia_chi) like LOWER('%" + keyword + "%') Or UPPER(dia_chi) like UPPER('%" + keyword + "%')";
+                var listSearch = myCon.Query<Staff>(sqlSearch).ToList();
                 return Json(new
                 {
-                    data = posts,
-                    total = totalItems,
-                    status = true
+                    data = list,
+                    countPages = countPages,
+                    posts = posts,
+                    listSearch = listSearch
                 });
-            }
 
+            }
         }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -99,7 +94,7 @@ namespace MVCExample.Controllers
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                string sqlAll = "Select * from nhan_vien"; //truy van csdl de dem soluong csdl
+                string sqlAll = "Select * from nhan_vien Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
                 var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
                 model.ma_nhanvien = staff.getma_nhanvien(listAll);
                 for (int i = 0; i < listAll.Count; i++)
@@ -117,8 +112,10 @@ namespace MVCExample.Controllers
                 VALUES ('" + model.ma_nhanvien +
                 "', @ho_ten, @ngay_sinh, @sdt, @dia_chi, @chuc_vu);";
                 var affectedRows = myCon.Execute(sql, model);
+                var listAll2 = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+
+                return Json(new { data = listAll2, status = "OK" });
             }
-            return Json(new { data = list, status = "OK" });
 
         }
 
@@ -158,7 +155,8 @@ namespace MVCExample.Controllers
                 "' WHERE ma_nhanvien='" + staff.ma_nhanvien + "'";
 
                 var rowAffect = myCon.Execute(sqlQuery);
-                return Json(new { status = "OK" });
+                var listAll2 = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+                return Json(new { data = listAll2, status = "OK" });
             }
         }
         [HttpGet]
@@ -172,10 +170,14 @@ namespace MVCExample.Controllers
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
+                string sqlAll = "Select * from nhan_vien  Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
+                var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
                 string sql = @"delete from nhan_vien
                 where ma_nhanvien = '" + id + "'";
                 var affectedRows = myCon.Execute(sql);
-                return Json(new { status = "OK" });
+                var listAll2 = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+
+                return Json(new { data = listAll2, status = "OK" });
             }
         }
         public IActionResult Search(string keyword)
@@ -187,9 +189,7 @@ namespace MVCExample.Controllers
                 string sqlSearch = @"Select * from nhan_vien
                     where LOWER(ho_ten) like LOWER('%" + keyword + "%') Or UPPER(ho_ten) like UPPER('%" + keyword + "%') Or LOWER(dia_chi) like LOWER('%" + keyword + "%') Or UPPER(dia_chi) like UPPER('%" + keyword + "%')";
                 var listSearch = myCon.Query<Staff>(sqlSearch).ToList();
-                ViewData["Page"] = 0;
-                ViewData["countPages"] = 0;
-                return View(listSearch);
+                return Json(new { listSearch = listSearch });
             }
         }
 
