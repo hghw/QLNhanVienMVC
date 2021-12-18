@@ -74,7 +74,7 @@
 
 <ul class="pagination justify-content-end">
     <!-- Previous page link -->
-    @if (preview != null)
+    @* @if (preview != null)
     {
         <li class="page-item" id="pageRedirect">
             <a class="page-link" href="@generateUrl(preview)">Trang trước</a>
@@ -85,7 +85,7 @@
         <li class="page-item disabled" id="pageRedirect">
             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trang trước</a>
         </li>
-    }
+    } *@
 
     <!-- Numbered page links -->
     @foreach (var pageitem in pagesRanges)
@@ -93,7 +93,7 @@
         if (pageitem != currentPage)
         {
             <li class="page-item" id="pageRedirect">
-                <a class="page-link" href="@generateUrl(pageitem)">
+                <a class="page-link" href="@generateUrl(pageitem)" data-page='@pageitem'>
                     @pageitem
                 </a>
             </li>
@@ -101,14 +101,14 @@
         else
         {
             <li class="page-item active" aria-current="page" id="pageRedirect">
-                <a class="page-link" href="#">@pageitem <span class="sr-only">(current)</span></a>
+                <a class="page-link" href="#" data-page='@pageitem'>@pageitem <span class="sr-only">(current)</span></a>
             </li>
         }
     }
 
 
     <!-- Next page link -->
-    @if (next != null)
+    @* @if (next != null)
     {
         <li class="page-item" id="pageRedirect">
             <a class="page-link" href="@generateUrl(next)">Trang sau</a>
@@ -119,5 +119,5 @@
         <li class="page-item disabled" id="pageRedirect">
             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trang sau</a>
         </li>
-    }
+    } *@
 </ul>

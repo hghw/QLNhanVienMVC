@@ -37,36 +37,25 @@ namespace MVCExample.Controllers
         {
             return View();
         }
-        public IActionResult GetDataList(int page)
+
+        public IActionResult GetPaging(string txtSearch, int page)
         {
             List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             string sql = "SELECT * FROM nhan_vien Order By ma_nhanvien ASC";
-
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 list = myCon.Query<Staff>(sql).ToList();
-                // //page
-                int ITEMS_PER_PAGE = 5;
+                //search
+                if (!String.IsNullOrEmpty(txtSearch))
+                {
+                    ViewBag.txtSearch = txtSearch;
+                    string sqlSearch = @"Select * from nhan_vien
+                where ho_ten like '%" + txtSearch + "%' Or dia_chi like '%" + txtSearch + "%'";
+                    list = myCon.Query<Staff>(sqlSearch).ToList();
 
-                int totalItems = list.Count;
-                countPages = (int)Math.Ceiling((double)totalItems / ITEMS_PER_PAGE);
-                var posts = list.Skip(ITEMS_PER_PAGE * (page - 1)).Take(ITEMS_PER_PAGE).ToList();
-
-                return Json(posts);
-            }
-        }
-        public IActionResult GetPaging(int page)
-        {
-            List<Staff> list = new List<Staff>();
-            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            string sql = "SELECT * FROM nhan_vien Order By ma_nhanvien ASC";
-
-            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
-            {
-
-                list = myCon.Query<Staff>(sql).ToList();
-                // //page
+                }
+                //page
                 int ITEMS_PER_PAGE = 5;
 
                 int totalItems = list.Count;
@@ -80,15 +69,13 @@ namespace MVCExample.Controllers
                     page = countPages;
                 }
                 var posts = list.Skip(ITEMS_PER_PAGE * (page - 1)).Take(ITEMS_PER_PAGE).ToList();
-
-                return Json(new{
+                return Json(new
+                {
                     page = page,
                     countPages = countPages,
                     posts = posts
                 });
             }
-
-            
         }
 
         [HttpGet]

@@ -14,10 +14,8 @@
 
     <div class="input-group rounded" style="width: 250px;">
         @* @Html.TextBox("keyword") *@
-
-
-        <input type="search" id="keyword" class="form-control rounded" placeholder="Nhập từ khóa..." aria-label="Search"
-            aria-describedby="search-addon" />
+        <input type="search" id="txtSearch" name="txtSearch" class="txtSearch form-control rounded"
+            placeholder="Nhập từ khóa..." aria-label="Search" aria-describedby="search-addon" />
         <button type="button" class="input-group-text border-0" id="subSearch">Search</button>
 
     </div>
@@ -37,14 +35,14 @@
         </tr>
     </thead>
     <tbody id="tableViewAll">
-        <div class="loadData" id="loadData"></div>
+
     </tbody>
 
 </table>
 <ul id="pagination" class="pagination pagination-sm" style="justify-content: flex-end;">
 
-    </ul>
-    @* <button id="adadadad">addada</button> *@
+</ul>
+
 @* form *@
 <div class="modal" id="form-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -59,7 +57,5 @@
     </div>
 </div>
 <script>
-    @* $("#loadData").html("") *@
-         $.get("/Staff/GetDataList/", null, callback);
-
+ 
 </script>
