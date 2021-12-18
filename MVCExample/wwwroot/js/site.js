@@ -1,41 +1,65 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // Write your Javascript code.
 
-function callback() {
+function callback(list) {
+    var SetData = $("#tableViewAll");
+    for (var i = 0; i < list.length; i++) {
+        var Data = "<tr class='row_" + list[i].ma_nhanvien + "'>" +
+            "<td>" + list[i].ma_nhanvien + "</td>" +
+            "<td>" + list[i].ho_ten + "</td>" +
+            "<td>" + list[i].ngay_sinh + "</td>" +
+            "<td>" + list[i].sdt + "</td>" +
+            "<td>" + list[i].dia_chi + "</td>" +
+            "<td>" + list[i].chuc_vu + "</td>" +
+            "<td class='d-flex' style='justify-content: space-around;'>"
+            + '<a onclick=showPopUp("Staff/Edit/' + list[i].ma_nhanvien + '","Edit") class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >'
+            + '<a onclick=showPopUp("Staff/Delete/' + list[i].ma_nhanvien + '","Delete") class="btn btn-danger"><i class="fa fa-trash"></i></a >'
+            + "</td>" +
+            "</tr>";
+        SetData.append(Data);
+    }
     $.ajax({
         type: 'POST',
-        url: 'Staff/GetDataList',
+        url: 'Staff/GetPaging',
         success: function (res) {
-            var list= res.posts;
+            var countPages = res.countPages
+           var SetDataPage = $("#pagination");
+           var rowData = "";
+           for (var i = 0; i < countPages; i++) {
+               rowData = rowData + '<li class="page-item" id="pageRedirect"><button onclick="removePage()" class="page-link">'+(i+1)+'</button></li>';
+           }
+           SetDataPage.append(rowData)  
+           if(res.posts != null){
+            ("#tableViewAll").remove()
+            var listPage = res.posts
             var SetData = $("#tableViewAll");
-            for (var i = 0; i < list.length; i++) {
-                var Data = "<tr class='row_" + list[i].ma_nhanvien + "'>" +
-                    "<td>" + list[i].ma_nhanvien + "</td>" +
-                    "<td>" + list[i].ho_ten + "</td>" +
-                    "<td>" + list[i].ngay_sinh + "</td>" +
-                    "<td>" + list[i].sdt + "</td>" +
-                    "<td>" + list[i].dia_chi + "</td>" +
-                    "<td>" + list[i].chuc_vu + "</td>" +
-                    "<td class='d-flex' style='justify-content: space-around;'>" 
-                    // + '<a onclick=showPopUp("@Url.Action('+"'Edit'"+",'Staff'"+',new{'+'id'+"=" + list[i].ma_nhanvien + '})","Sửa") class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >' 
-                   
-                    + '<a onclick=showPopUp("Staff/Edit/'+ list[i].ma_nhanvien + '","Edit") class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >' 
-                    + '<a onclick=showPopUp("Staff/Delete/' + list[i].ma_nhanvien + '","Delete") class="btn btn-danger"><i class="fa fa-trash"></i></a >' 
+            for (var i = 0; i < listPage.length; i++) {
+                var Data = "<tr class='row_" + listPage[i].ma_nhanvien + "'>" +
+                    "<td>" + listPage[i].ma_nhanvien + "</td>" +
+                    "<td>" + listPage[i].ho_ten + "</td>" +
+                    "<td>" + listPage[i].ngay_sinh + "</td>" +
+                    "<td>" + listPage[i].sdt + "</td>" +
+                    "<td>" + listPage[i].dia_chi + "</td>" +
+                    "<td>" + listPage[i].chuc_vu + "</td>" +
+                    "<td class='d-flex' style='justify-content: space-around;'>"
+                    + '<a onclick=showPopUp("Staff/Edit/' + listPage[i].ma_nhanvien + '","Edit") class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >'
+                    + '<a onclick=showPopUp("Staff/Delete/' + listPage[i].ma_nhanvien + '","Delete") class="btn btn-danger"><i class="fa fa-trash"></i></a >'
                     + "</td>" +
                     "</tr>";
                 SetData.append(Data);
             }
-            //page
-            var SetDataPage = $("#pagination");
-            var rowData = "";
-            for (var i = 0; i < res.countPages; i++) {
-                rowData = rowData + '<li class="page-item"><a class="page-link" href="#">'+(i+1)+'</a></li>';
-            }
-            SetDataPage.append(rowData)
+        }
         }
     })
-    
+
 }
+function removePage(){
+    $(document).on("click", "#pageRedirect", function(){
+        $("#tableViewAll").remove()
+        alert("ahaha")
+    })
+}
+
 
 showPopUp = (url, title) => {
     $.ajax({

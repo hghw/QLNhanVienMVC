@@ -13,13 +13,12 @@
             class="fas fa-user-plus"></i> Thêm mới</a>
 
     <div class="input-group rounded" style="width: 250px;">
-            @* @Html.TextBox("keyword") *@
-    
+        @* @Html.TextBox("keyword") *@
 
-         <input type="search" id="keyword" class="form-control rounded" placeholder="Nhập từ khóa..."
-            aria-label="Search"
+
+        <input type="search" id="keyword" class="form-control rounded" placeholder="Nhập từ khóa..." aria-label="Search"
             aria-describedby="search-addon" />
-        <button type="button" class="input-group-text border-0" id="subSearch">Search</button> 
+        <button type="button" class="input-group-text border-0" id="subSearch">Search</button>
 
     </div>
 </div>
@@ -40,13 +39,12 @@
     <tbody id="tableViewAll">
         <div class="loadData" id="loadData"></div>
     </tbody>
-</table>
 
+</table>
 <ul id="pagination" class="pagination pagination-sm" style="justify-content: flex-end;">
 
-</ul>
-
-
+    </ul>
+    @* <button id="adadadad">addada</button> *@
 @* form *@
 <div class="modal" id="form-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -62,7 +60,6 @@
 </div>
 <script>
     @* $("#loadData").html("") *@
-        $.get("/Staff/GetDataList", null, callback);
+         $.get("/Staff/GetDataList/", null, callback);
 
-    @* $("#loadData").html(" "); *@
 </script>

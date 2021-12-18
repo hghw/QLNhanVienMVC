@@ -37,7 +37,7 @@ namespace MVCExample.Controllers
         {
             return View();
         }
-        public IActionResult GetDataList(int page, string keyword)
+        public IActionResult GetDataList(int page)
         {
             List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
@@ -46,12 +46,31 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 list = myCon.Query<Staff>(sql).ToList();
-                //page
-                int ITEMS_PER_PAGE = 10;
+                // //page
+                int ITEMS_PER_PAGE = 5;
 
                 int totalItems = list.Count;
                 countPages = (int)Math.Ceiling((double)totalItems / ITEMS_PER_PAGE);
+                var posts = list.Skip(ITEMS_PER_PAGE * (page - 1)).Take(ITEMS_PER_PAGE).ToList();
 
+                return Json(posts);
+            }
+        }
+        public IActionResult GetPaging(int page)
+        {
+            List<Staff> list = new List<Staff>();
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            string sql = "SELECT * FROM nhan_vien Order By ma_nhanvien ASC";
+
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            {
+
+                list = myCon.Query<Staff>(sql).ToList();
+                // //page
+                int ITEMS_PER_PAGE = 5;
+
+                int totalItems = list.Count;
+                countPages = (int)Math.Ceiling((double)totalItems / ITEMS_PER_PAGE);
                 if (page == 0)
                 {
                     page = 1;
@@ -60,25 +79,16 @@ namespace MVCExample.Controllers
                 {
                     page = countPages;
                 }
-
                 var posts = list.Skip(ITEMS_PER_PAGE * (page - 1)).Take(ITEMS_PER_PAGE).ToList();
 
-                ViewData["Page"] = page;
-                ViewData["countPages"] = countPages;
-
-                //search
-                string sqlSearch = @"Select * from nhan_vien
-                    where LOWER(ho_ten) like LOWER('%" + keyword + "%') Or UPPER(ho_ten) like UPPER('%" + keyword + "%') Or LOWER(dia_chi) like LOWER('%" + keyword + "%') Or UPPER(dia_chi) like UPPER('%" + keyword + "%')";
-                var listSearch = myCon.Query<Staff>(sqlSearch).ToList();
-                return Json(new
-                {
-                    data = list,
+                return Json(new{
+                    page = page,
                     countPages = countPages,
-                    posts = posts,
-                    listSearch = listSearch
+                    posts = posts
                 });
-
             }
+
+            
         }
 
         [HttpGet]
