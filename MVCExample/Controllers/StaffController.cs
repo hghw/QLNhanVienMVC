@@ -51,7 +51,8 @@ namespace MVCExample.Controllers
                 {
                     ViewBag.txtSearch = txtSearch;
                     string sqlSearch = @"Select * from nhan_vien
-                where ho_ten like '%" + txtSearch + "%' Or dia_chi like '%" + txtSearch + "%'";
+                    where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%')";
+
                     list = myCon.Query<Staff>(sqlSearch).ToList();
 
                 }
@@ -177,19 +178,6 @@ namespace MVCExample.Controllers
                 return Json(new { data = listAll2, status = "OK" });
             }
         }
-        public IActionResult Search(string keyword)
-        {
-            List<Staff> list = new List<Staff>();
-            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
-            {
-                string sqlSearch = @"Select * from nhan_vien
-                    where LOWER(ho_ten) like LOWER('%" + keyword + "%') Or UPPER(ho_ten) like UPPER('%" + keyword + "%') Or LOWER(dia_chi) like LOWER('%" + keyword + "%') Or UPPER(dia_chi) like UPPER('%" + keyword + "%')";
-                var listSearch = myCon.Query<Staff>(sqlSearch).ToList();
-                return Json(new { listSearch = listSearch });
-            }
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 
         public IActionResult Error()

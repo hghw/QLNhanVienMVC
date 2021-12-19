@@ -12,6 +12,8 @@ $.ajax({
         var SetData = $("#tableViewAll");
         var listPage = res.posts;
         for (var i = 0; i < listPage.length; i++) {
+            var dateformat = listPage[i].ngay_sinh;
+            
             var Data = "<tr class='row_" + listPage[i].ma_nhanvien + "'>" +
                 "<td>" + listPage[i].ma_nhanvien + "</td>" +
                 "<td>" + listPage[i].ho_ten + "</td>" +
@@ -20,8 +22,8 @@ $.ajax({
                 "<td>" + listPage[i].dia_chi + "</td>" +
                 "<td>" + listPage[i].chuc_vu + "</td>" +
                 "<td class='d-flex' style='justify-content: space-around;'>"
-                + '<a onclick=showPopUp("Staff/Edit/' + listPage[i].ma_nhanvien + '","Edit") class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >'
-                + '<a onclick=showPopUp("Staff/Delete/' + listPage[i].ma_nhanvien + '","Delete") class="btn btn-danger"><i class="fa fa-trash"></i></a >'
+                + '<a onclick=showPopUp("Staff/Edit/' + listPage[i].ma_nhanvien + '","Edit")  class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >'
+                + '<a onclick=Delete("'+ listPage[i].ma_nhanvien +'") class="btn btn-danger"><i class="fa fa-trash"></i></a >'
                 + "</td>" +
                 "</tr>";
             SetData.append(Data);
@@ -89,6 +91,16 @@ $(function () {
 
 //them
 $(document).on("click", "#submitFormSuc", function () {
+    var ho_ten = $("#ho_ten").val()
+    var ngay_sinh = $("#ngay_sinh").val()
+    var sdt = $("#sdt").val()
+    var dia_chi = $("#dia_chi").val()
+    var chuc_vu = $("#chuc_vu").val()
+    if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "") {
+        $.notify("Chưa nhập đầy đủ thông tin", { position: "top right",  autoHideDelay: 2000 })
+        showPopUp("Staff/Create","Thêm mới")
+    }
+    else {
         $.ajax({
             type: 'POST',
             url: 'Staff/create',
@@ -97,6 +109,7 @@ $(document).on("click", "#submitFormSuc", function () {
             processData: false,
             success: function (res) {
                 if (res.status == "OK") {
+                    // $("#form-modal ").modal('hide');
                     $("#tableViewAll").children().remove()
                     LoadSearachPage()
                     $("#pagination").html("")
@@ -111,11 +124,23 @@ $(document).on("click", "#submitFormSuc", function () {
                 console.log(err);
             }
         })
+    }
 })
 
 
 /*Update NoRefresh*/
     $(document).on("click", "#submitUpdate", function () {
+        var ho_ten = $("#ho_ten").val()
+        var ngay_sinh = $("#ngay_sinh").val()
+        var sdt = $("#sdt").val()
+        var dia_chi = $("#dia_chi").val()
+        var chuc_vu = $("#chuc_vu").val()
+        if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "") {
+            $.notify("Chưa nhập đầy đủ thông tin", { position: "top right",  autoHideDelay: 2000 })
+            showPopUp("Staff/Create","Thêm mới")
+        }
+        else
+        {
             $.ajax({
                 type: 'POST',
                 url: 'Staff/update',
@@ -138,33 +163,72 @@ $("#pagination").html("")
                     console.log(err);
                 }
             })
-
+        }
     })
 
 
 //DELETE POPUP
-formDeleteJqueryy = (form) => {
-    $(document).on("click", "#submitDeleteForm2", function () {
+function Delete(id){
+    var conf = confirm("Bạn có chắc chắn muốn xóa!")
+    if(conf){
         $.ajax({
             type: 'POST',
-            url: form.action,
-            data: new FormData($("#formDeleteView")[0]),
-            contentType: false,
-            processData: false,
+            url: "Staff/Delete",
+            data: {id:id},
             success: function (res) {
                 if (res.status == 'OK') {
                     $.notify('Xóa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                     $("#tableViewAll").children().remove()
                     LoadSearachPage()
-$("#pagination").html("")
+                    $("#pagination").html("")
 
                 }
             },
             error: function (err) {
                 console.log(err);
             }
-        })
-    })
-    return false;
+        })   
+}
 }
     
+    
+
+function validate() {  
+    var isValid = true;  
+    if ($('#ho_ten').val().trim() == "") {  
+        $('#ho_ten').css('border-color', 'Red');  
+        isValid = false;  
+    }  
+    else {  
+        $('#ho_ten').css('border-color', 'lightgrey');  
+    }  
+    if ($('#ngay_sinh').val().trim() == "") {  
+        $('#ngay_sinh').css('border-color', 'Red');  
+        isValid = false;  
+    }  
+    else {  
+        $('#ngay_sinh').css('border-color', 'lightgrey');  
+    }  
+    if ($('#sdt').val().trim() == "") {  
+        $('#sdt').css('border-color', 'Red');  
+        isValid = false;  
+    }  
+    else {  
+        $('#sdt').css('border-color', 'lightgrey');  
+    }  
+    if ($('#dia_chi').val().trim() == "") {  
+        $('#dia_chi').css('border-color', 'Red');  
+        isValid = false;  
+    }  
+    else {  
+        $('#dia_chi').css('border-color', 'lightgrey');  
+    }  
+    if ($('#chuc_vu').val().trim() == "") {  
+        $('#chuc_vu').css('border-color', 'Red');  
+        isValid = false;  
+    }  
+    else {  
+        $('#chuc_vu').css('border-color', 'lightgrey');  
+    }  
+    return isValid;  
+}

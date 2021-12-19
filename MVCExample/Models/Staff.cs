@@ -27,10 +27,10 @@ namespace MVCExample.Models
 
         public string getma_nhanvien(List<Staff> listNhanVien)
         {
-            float maCount = (float)(listNhanVien.Count + 1) / 1000;
+            float maCount = (float)(listNhanVien.Count + 1) / 10;
             string ma_nhanvien = Convert.ToString(maCount);
             ma_nhanvien = ma_nhanvien.Replace(",", "");
-            ma_nhanvien = "NV-" + ma_nhanvien;
+            ma_nhanvien = "NV-00" + ma_nhanvien;
             return ma_nhanvien;
         }
         public string getma_nhanvienAdd1(List<Staff> listNhanVien)
