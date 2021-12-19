@@ -1,9 +1,9 @@
 ﻿
 $(document).ready(function () {
-    LoadSearachPage(null, 1);
+    LoadData(null, 1);
 })
 
-function LoadSearachPage(txtSearch, page) {
+function LoadData(txtSearch, page) {
 $.ajax({
     type: 'GET',
     url: 'Staff/GetPaging',
@@ -12,12 +12,23 @@ $.ajax({
         var SetData = $("#tableViewAll");
         var listPage = res.posts;
         for (var i = 0; i < listPage.length; i++) {
-            var dateformat = listPage[i].ngay_sinh;
-            
+            // format ngay thang nam
+            var dateformat = new Date(listPage[i].ngay_sinh);
+            var d = dateformat.getDate();
+            var m = dateformat.getMonth() + 1;
+            var y = dateformat.getFullYear();
+            if(d < 9){
+                d = "0" + d;
+            }
+            if(m < 9){
+                m = "0" + m;
+            }
+            var date = (d + '/' + m + '/' + y);
+            //
             var Data = "<tr class='row_" + listPage[i].ma_nhanvien + "'>" +
                 "<td>" + listPage[i].ma_nhanvien + "</td>" +
                 "<td>" + listPage[i].ho_ten + "</td>" +
-                "<td>" + listPage[i].ngay_sinh + "</td>" +
+                "<td>" + date + "</td>" +
                 "<td>" + listPage[i].sdt + "</td>" +
                 "<td>" + listPage[i].dia_chi + "</td>" +
                 "<td>" + listPage[i].chuc_vu + "</td>" +
@@ -51,22 +62,22 @@ $(document).on("click", ".page-item .page-link", function () {
 var page = $(this).attr('data-page');
 $("#tableViewAll").html("")
 $("#pagination").html("")
-LoadSearachPage(null, page)
+LoadData(null, page)
 })
 $(document).on("click", "#subSearch", function () {
     $("#tableViewAll").html("")
     $("#pagination").html("")
 var txtSearch = $("#txtSearch").val();
 if (txtSearch != "") {
-    LoadSearachPage(txtSearch, 1)
+    LoadData(txtSearch, 1)
 }
 else {
-    LoadSearachPage(null, 1);
+    LoadData(null, 1);
 }
 });
 
 
-
+// popup
 showPopUp = (url, title) => {
     $.ajax({
         type: 'GET',
@@ -78,7 +89,7 @@ showPopUp = (url, title) => {
         }
     })
 }
-
+//load body quay tron :v
 $(function () {
     $("#loaderbody").addClass('d-none');
 
@@ -111,7 +122,7 @@ $(document).on("click", "#submitFormSuc", function () {
                 if (res.status == "OK") {
                     // $("#form-modal ").modal('hide');
                     $("#tableViewAll").children().remove()
-                    LoadSearachPage()
+                    LoadData()
                     $("#pagination").html("")
 
                     $.notify('Thêm thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
@@ -150,7 +161,7 @@ $(document).on("click", "#submitFormSuc", function () {
                     success: function (res) {
                         if (res.status == "OK") {
                             $("#tableViewAll").children().remove()
-                            LoadSearachPage()
+                            LoadData()
 $("#pagination").html("")
 
                             $.notify('Sửa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
@@ -166,7 +177,6 @@ $("#pagination").html("")
         }
     })
 
-
 //DELETE POPUP
 function Delete(id){
     var conf = confirm("Bạn có chắc chắn muốn xóa!")
@@ -179,56 +189,15 @@ function Delete(id){
                 if (res.status == 'OK') {
                     $.notify('Xóa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                     $("#tableViewAll").children().remove()
-                    LoadSearachPage()
+                    LoadData()
                     $("#pagination").html("")
-
                 }
             },
             error: function (err) {
                 console.log(err);
             }
         })   
-}
+    }
 }
     
     
-
-function validate() {  
-    var isValid = true;  
-    if ($('#ho_ten').val().trim() == "") {  
-        $('#ho_ten').css('border-color', 'Red');  
-        isValid = false;  
-    }  
-    else {  
-        $('#ho_ten').css('border-color', 'lightgrey');  
-    }  
-    if ($('#ngay_sinh').val().trim() == "") {  
-        $('#ngay_sinh').css('border-color', 'Red');  
-        isValid = false;  
-    }  
-    else {  
-        $('#ngay_sinh').css('border-color', 'lightgrey');  
-    }  
-    if ($('#sdt').val().trim() == "") {  
-        $('#sdt').css('border-color', 'Red');  
-        isValid = false;  
-    }  
-    else {  
-        $('#sdt').css('border-color', 'lightgrey');  
-    }  
-    if ($('#dia_chi').val().trim() == "") {  
-        $('#dia_chi').css('border-color', 'Red');  
-        isValid = false;  
-    }  
-    else {  
-        $('#dia_chi').css('border-color', 'lightgrey');  
-    }  
-    if ($('#chuc_vu').val().trim() == "") {  
-        $('#chuc_vu').css('border-color', 'Red');  
-        isValid = false;  
-    }  
-    else {  
-        $('#chuc_vu').css('border-color', 'lightgrey');  
-    }  
-    return isValid;  
-}

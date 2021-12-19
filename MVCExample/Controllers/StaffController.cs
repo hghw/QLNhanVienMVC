@@ -112,7 +112,7 @@ namespace MVCExample.Controllers
                 var affectedRows = myCon.Execute(sql, model);
                 var listAll2 = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
 
-                return Json(new { data = listAll2, status = "OK" });
+                return Json(new { status = "OK" });
             }
 
         }

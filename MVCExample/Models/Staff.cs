@@ -27,18 +27,40 @@ namespace MVCExample.Models
 
         public string getma_nhanvien(List<Staff> listNhanVien)
         {
-            float maCount = (float)(listNhanVien.Count + 1) / 10;
-            string ma_nhanvien = Convert.ToString(maCount);
-            ma_nhanvien = ma_nhanvien.Replace(",", "");
-            ma_nhanvien = "NV-00" + ma_nhanvien;
+            int maCount = listNhanVien.Count + 1;
+            string ma_nhanvien =  "NV-";
+            if (maCount < 10)
+            {
+                ma_nhanvien = ma_nhanvien + "000";
+            }
+            else if (maCount > 9 && maCount <= 99)
+            {
+                ma_nhanvien = ma_nhanvien + "00";
+            }
+            else if (maCount > 99 && maCount <= 999)
+            {
+                ma_nhanvien = ma_nhanvien + "0";
+            }
+            ma_nhanvien = ma_nhanvien + maCount.ToString();
             return ma_nhanvien;
         }
         public string getma_nhanvienAdd1(List<Staff> listNhanVien)
         {
-            float maCount = (float)(listNhanVien.Count + 2) / 1000;
-            string ma_nhanvien = Convert.ToString(maCount);
-            ma_nhanvien = ma_nhanvien.Replace(",", "");
-            ma_nhanvien = "NV-" + ma_nhanvien;
+            int maCount = listNhanVien.Count + 2;
+            string ma_nhanvien =  "NV-";
+            if (maCount < 10)
+            {
+                ma_nhanvien = ma_nhanvien + "000";
+            }
+            else if (maCount > 9 && maCount <= 99)
+            {
+                ma_nhanvien = ma_nhanvien + "00";
+            }
+            else if (maCount > 99 && maCount <= 999)
+            {
+                ma_nhanvien = ma_nhanvien + "0";
+            }
+            ma_nhanvien = ma_nhanvien + maCount.ToString();
             return ma_nhanvien;
         }
 
