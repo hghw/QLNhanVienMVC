@@ -154,7 +154,7 @@ $(document).on("click", "#submitFormSuc", function () {
         {
             $.ajax({
                 type: 'POST',
-                url: 'Staff/update',
+                url: 'Staff/Update',
                 data: new FormData($("#formEditAction")[0]),
                 contentType: false,
                 processData: false,

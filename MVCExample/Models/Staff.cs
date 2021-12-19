@@ -13,9 +13,9 @@ namespace MVCExample.Models
         [Display(Name = "Họ tên")]
         public string ho_ten { set; get; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-        [Display(Name = "Ngày/Tháng/Năm")]
-        public Nullable<System.DateTime> ngay_sinh { get; set; }
+ 
+        [Display(Name = "Ngày sinh")]
+        public DateTime ngay_sinh { get; set; }
         [Display(Name = "Số điện thoại")]
         public string sdt { set; get; }
         [Display(Name = "Địa chỉ")]
@@ -28,7 +28,7 @@ namespace MVCExample.Models
         public string getma_nhanvien(List<Staff> listNhanVien)
         {
             int maCount = listNhanVien.Count + 1;
-            string ma_nhanvien =  "NV-";
+            string ma_nhanvien = "NV-";
             if (maCount < 10)
             {
                 ma_nhanvien = ma_nhanvien + "000";
@@ -47,7 +47,7 @@ namespace MVCExample.Models
         public string getma_nhanvienAdd1(List<Staff> listNhanVien)
         {
             int maCount = listNhanVien.Count + 2;
-            string ma_nhanvien =  "NV-";
+            string ma_nhanvien = "NV-";
             if (maCount < 10)
             {
                 ma_nhanvien = ma_nhanvien + "000";
@@ -64,13 +64,5 @@ namespace MVCExample.Models
             return ma_nhanvien;
         }
 
-
+    } 
     }
-    public class PagingModel
-    {
-        public int currentpage { get; set; }
-        public int countpages { get; set; }
-        public Func<int?, string> generateUrl { get; set; }
-    }
-
-}

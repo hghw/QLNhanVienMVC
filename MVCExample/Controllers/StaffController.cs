@@ -110,7 +110,7 @@ namespace MVCExample.Controllers
                 VALUES ('" + model.ma_nhanvien +
                 "', @ho_ten, @ngay_sinh, @sdt, @dia_chi, @chuc_vu);";
                 var affectedRows = myCon.Execute(sql, model);
-                var listAll2 = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+
 
                 return Json(new { status = "OK" });
             }
@@ -144,17 +144,22 @@ namespace MVCExample.Controllers
                         return Json(new { status = "LOI" });
                     }
                 }
+                //format ngay sinh no bugg
+                var dateformat =  (staff.ngay_sinh);
+                var d = dateformat.Day;
+                var m = dateformat.Month;
+                var y = dateformat.Year;
+                var datetie = (d + "/" + m + "/" + y);
 
                 string sqlQuery = "UPDATE nhan_vien SET ho_ten='" + staff.ho_ten +
-                "',ngay_sinh='" + staff.ngay_sinh +
+                "',ngay_sinh='" + datetie +
                 "',sdt='" + staff.sdt +
                 "',dia_chi='" + staff.dia_chi +
                 "',chuc_vu='" + staff.chuc_vu +
                 "' WHERE ma_nhanvien='" + staff.ma_nhanvien + "'";
 
                 var rowAffect = myCon.Execute(sqlQuery);
-                var listAll2 = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
-                return Json(new { data = listAll2, status = "OK" });
+                return Json(new { status = "OK" });
             }
         }
         [HttpGet]
