@@ -12,7 +12,6 @@ using Npgsql;
 using System.Data;
 using Microsoft.Extensions.Configuration;
 using Dapper;
-
 namespace MVCExample.Controllers
 {
     public class StaffController : Controller
@@ -52,12 +51,10 @@ namespace MVCExample.Controllers
                     ViewBag.txtSearch = txtSearch;
                     string sqlSearch = @"Select * from nhan_vien
                     where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%')";
-
                     list = myCon.Query<Staff>(sqlSearch).ToList();
-
                 }
                 //page
-                int ITEMS_PER_PAGE = 5;
+                int ITEMS_PER_PAGE = 10;
 
                 int totalItems = list.Count;
                 countPages = (int)Math.Ceiling((double)totalItems / ITEMS_PER_PAGE);
@@ -145,7 +142,7 @@ namespace MVCExample.Controllers
                     }
                 }
                 //format ngay sinh no bugg
-                var dateformat =  (staff.ngay_sinh);
+                var dateformat = (staff.ngay_sinh);
                 var d = dateformat.Day;
                 var m = dateformat.Month;
                 var y = dateformat.Year;
@@ -182,6 +179,39 @@ namespace MVCExample.Controllers
 
                 return Json(new { data = listAll2, status = "OK" });
             }
+        }
+        public void DownloadExcel()
+        {
+            // string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            // using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            // {
+            //     string sqlAll = "Select * from nhan_vien  Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
+            //     var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+            //     ExcelPackage Ep = new ExcelPackage();
+            //     ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
+            //     Sheet.Cells["A1"].Value = "Name";
+            //     Sheet.Cells["B1"].Value = "Department";
+            //     Sheet.Cells["C1"].Value = "Address";
+            //     Sheet.Cells["D1"].Value = "City";
+            //     Sheet.Cells["E1"].Value = "Country";
+            //     int row = 2;
+            //     foreach (var item in collection)
+            //     {
+
+            //         Sheet.Cells[string.Format("A{0}", row)].Value = item.Name;
+            //         Sheet.Cells[string.Format("B{0}", row)].Value = item.Department;
+            //         Sheet.Cells[string.Format("C{0}", row)].Value = item.Address;
+            //         Sheet.Cells[string.Format("D{0}", row)].Value = item.City;
+            //         Sheet.Cells[string.Format("E{0}", row)].Value = item.Country;
+            //         row++;
+            //     }
+            //     Sheet.Cells["A:AZ"].AutoFitColumns();
+            //     Response.Clear();
+            //     Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //     Response.AddHeader("content-disposition", "attachment: filename=" + "Report.xlsx");
+            //     Response.BinaryWrite(Ep.GetAsByteArray());
+            //     Response.End();
+            // }
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 

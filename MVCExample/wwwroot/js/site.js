@@ -17,10 +17,10 @@ $.ajax({
             var d = dateformat.getDate();
             var m = dateformat.getMonth() + 1;
             var y = dateformat.getFullYear();
-            if(d < 9){
+            if(d < 10){
                 d = "0" + d;
             }
-            if(m < 9){
+            if(m < 10){
                 m = "0" + m;
             }
             var date = (d + '/' + m + '/' + y);
