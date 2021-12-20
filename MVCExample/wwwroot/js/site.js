@@ -1,5 +1,4 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
     LoadData(null, 1);
 })
 
@@ -54,26 +53,29 @@ $.ajax({
             }
         }
         $("#pagination").append(pagination_string);
+    },
+    error: function (err) {
+        console.log(err);
     }
 })
 
 }
 $(document).on("click", ".page-item .page-link", function () {
-var page = $(this).attr('data-page');
-$("#tableViewAll").html("")
-$("#pagination").html("")
-LoadData(null, page)
+    var page = $(this).attr('data-page');
+    $("#tableViewAll").html("")
+    $("#pagination").html("")
+    LoadData(null, page)
 })
 $(document).on("click", "#subSearch", function () {
     $("#tableViewAll").html("")
     $("#pagination").html("")
-var txtSearch = $("#txtSearch").val();
-if (txtSearch != "") {
-    LoadData(txtSearch, 1)
-}
-else {
-    LoadData(null, 1);
-}
+    var txtSearch = $("#txtSearch").val();
+    if (txtSearch != "") {
+        LoadData(txtSearch, 1)
+    }
+    else {
+        LoadData(null, 1);
+    }
 });
 
 

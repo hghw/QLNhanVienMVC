@@ -57,12 +57,25 @@ namespace MVCExample.Controllers
                     list = myCon.Query<Staff>(sqlSearch).ToList();
                 }
                 //page
-                int ITEMS_PER_PAGE = 10;
-                int skiper = ITEMS_PER_PAGE * (page - 1);
 
-                string sqlPage = @"SELECT * FROM nhan_vien ORDER BY ma_nhanvien OFFSET "+(skiper) +" ROWS FETCH NEXT "+ (ITEMS_PER_PAGE)+ " ROWS ONLY";
-                var posts = myCon.Query<Staff>(sqlPage).ToList();
-                int countPages = posts.Count;//chua xong
+                int ITEMS_PER_PAGE = 10;
+
+                string sqlPageCount = @"SELECT COUNT(ma_nhanvien)FROM nhan_vien;";
+                int totalRecord = myCon.Query<int>(sqlPageCount).FirstOrDefault();
+                int countPages = (int)Math.Ceiling((double)totalRecord / ITEMS_PER_PAGE);
+                if (page == 0)
+                {
+                    page = 1;
+                }
+                if (page > countPages)
+                {
+                    page = countPages;
+                }
+                int PageNumber = (page - 1) * ITEMS_PER_PAGE;
+                // tổng số trang
+                //sai
+                string sqlPage = @"SELECT * FROM nhan_vien ORDER BY ma_nhanvien OFFSET " + PageNumber + " ROWS FETCH NEXT " + (ITEMS_PER_PAGE) + " ROWS ONLY";
+                var posts = myCon.Query<Staff>(sqlPage);//  
 
                 return Json(new
                 {
