@@ -1,19 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using MVCExample.Models;
 using MVCSamples.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using MVCSamples.Extensions;
-
 using Npgsql;
-using System.Data;
 using Microsoft.Extensions.Configuration;
 using Dapper;
 using OfficeOpenXml;
 using System.Linq;
+using System.IO;
 
 namespace MVCExample.Controllers
 {
@@ -57,7 +54,7 @@ namespace MVCExample.Controllers
                     where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%') Order By ma_nhanvien ASC";
                     list = myCon.Query<Staff>(sqlSearch).ToList();
                     posts = list.ToList();
-                    return Json(new{posts = posts});
+                    return Json(new { posts = posts });
                 }
                 //page
 
@@ -193,38 +190,53 @@ namespace MVCExample.Controllers
                 return Json(new { data = listAll2, status = "OK" });
             }
         }
-        /*public void DownloadExcel()
+        public Stream DownloadExcel(Stream stream = null)
         {
-             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
-             {
-                 string sqlAll = "Select * from nhan_vien  Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
-                 var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
-
-                 ExcelPackage Ep = new ExcelPackage();
-                 ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Staff");
-                 Sheet.Cells["A1"].Value = "Mã nhân viên";
-                 Sheet.Cells["B1"].Value = "Họ tên";
-                 Sheet.Cells["C1"].Value = "Ngày sinh";
-                 Sheet.Cells["D1"].Value = "SĐT";
-                 Sheet.Cells["E1"].Value = "Địa chỉ";
-                 Sheet.Cells["F1"].Value = "Chức vụ";
-                 int row = 2;
-                 foreach (var item in listAll)
-                 {
-
-                     Sheet.Cells[string.Format("A{0}", row)].Value = item.ma_nhanvien;
-                     Sheet.Cells[string.Format("B{0}", row)].Value = item.ho_ten;
-                     Sheet.Cells[string.Format("C{0}", row)].Value = item.ngay_sinh;
-                     Sheet.Cells[string.Format("D{0}", row)].Value = item.sdt;
-                     Sheet.Cells[string.Format("E{0}", row)].Value = item.dia_chi;
-                     Sheet.Cells[string.Format("F{0}", row)].Value = item.chuc_vu;
-                     row++;
-                 }
-                 Sheet.Cells["A:AZ"].AutoFitColumns();
-                 Session["DownloadExcel_FileManager"] = excelPackage.GetAsByteArray();  
-             }
-        }*/
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            {
+                string sqlAll = "Select * from nhan_vien  Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
+                var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+                var file = new FileInfo("staff.xlsx");
+                using (ExcelPackage Ep = new ExcelPackage(file))
+                {
+                    ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Staff");
+                    Sheet.Cells["A1"].Value = "Mã nhân viên";
+                    Sheet.Cells["B1"].Value = "Họ tên";
+                    Sheet.Cells["C1"].Value = "Ngày sinh";
+                    Sheet.Cells["D1"].Value = "SĐT";
+                    Sheet.Cells["E1"].Value = "Địa chỉ";
+                    Sheet.Cells["F1"].Value = "Chức vụ";
+                    int row = 2;
+                    foreach (var item in listAll)
+                    {
+                        Sheet.Cells[string.Format("A{0}", row)].Value = item.ma_nhanvien;
+                        Sheet.Cells[string.Format("B{0}", row)].Value = item.ho_ten;
+                        Sheet.Cells[string.Format("C{0}", row)].Value = item.ngay_sinh;
+                        Sheet.Cells[string.Format("D{0}", row)].Value = item.sdt;
+                        Sheet.Cells[string.Format("E{0}", row)].Value = item.dia_chi;
+                        Sheet.Cells[string.Format("F{0}", row)].Value = item.chuc_vu;
+                        row++;
+                    }
+                    // Sheet.Cells["A:AZ"].AutoFitColumns();
+                    Sheet.Cells[1, 1].LoadFromCollection(listAll, true);
+                    Ep.Save();
+                    return Ep.Stream;
+                }
+            }
+        }
+        [HttpGet]
+        public IActionResult Export()
+        {
+            var stream = DownloadExcel();
+            var buffer = stream as MemoryStream;
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.Headers.Add("Content-Disposition", "attachment; filename=staff.xlsx");
+            /*            Response.BinaryWrite(buffer.ToArray());
+                        Response.Flush();
+                        Response.End();*/
+            return RedirectToAction("Index");
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 
         public IActionResult Error()
