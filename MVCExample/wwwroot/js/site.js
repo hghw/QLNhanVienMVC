@@ -114,7 +114,14 @@ $(function () {
 });
 
 //them
-$(document).on("click", "#submitFormSuc", function () {
+function addStaff() {
+    var staff = {
+        ho_ten: $("#ho_ten").val(),
+        ngay_sinh: $("#ngay_sinh").val(),
+        sdt: $("#sdt").val(),
+        dia_chi: $("#dia_chi").val(),
+        chuc_vu: $("#chuc_vu").val(),
+    }
     var ho_ten = $("#ho_ten").val()
     var ngay_sinh = $("#ngay_sinh").val()
     var sdt = $("#sdt").val()
@@ -122,15 +129,12 @@ $(document).on("click", "#submitFormSuc", function () {
     var chuc_vu = $("#chuc_vu").val()
     if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "") {
         $.notify("Chưa nhập đầy đủ thông tin", { position: "top right",  autoHideDelay: 2000 })
-        showPopUp("Staff/Create","Thêm mới")
     }
     else {
         $.ajax({
             type: 'POST',
             url: 'Staff/create',
-            data: new FormData($("#formCreateAction")[0]),
-            contentType: false,
-            processData: false,
+            data: {model: staff},
             success: function (res) {
                 if (res.status == "OK") {
                     $("#form-modal").modal('hide');
@@ -148,11 +152,18 @@ $(document).on("click", "#submitFormSuc", function () {
             }
         })
     }
-})
-
+}
 
 /*Update NoRefresh*/
-    $(document).on("click", "#submitUpdate", function () {
+function updateStaff() {
+    var staff = {
+        ma_nhanvien: $("#ma_nhanvien").val(),
+        ho_ten: $("#ho_ten").val(),
+        ngay_sinh: $("#ngay_sinh").val(),
+        sdt: $("#sdt").val(),
+        dia_chi: $("#dia_chi").val(),
+        chuc_vu: $("#chuc_vu").val(),
+    }
         var ho_ten = $("#ho_ten").val()
         var ngay_sinh = $("#ngay_sinh").val()
         var sdt = $("#sdt").val()
@@ -160,23 +171,22 @@ $(document).on("click", "#submitFormSuc", function () {
         var chuc_vu = $("#chuc_vu").val()
         if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "") {
             $.notify("Chưa nhập đầy đủ thông tin", { position: "top right",  autoHideDelay: 2000 })
-            showPopUp("Staff/Create","Thêm mới")
+        }else
+        if(sdt.length > 10 || sdt.length < 1){
+            $.notify("Số điện thoại lớn hơn 0 nhỏ hơn 10 ký tự!", { position: "top right",  autoHideDelay: 2000 })
         }
         else
         {
             $.ajax({
                 type: 'POST',
                 url: 'Staff/Update',
-                data: new FormData($("#formEditAction")[0]),
-                contentType: false,
-                processData: false,
+                data: {staff: staff},
                     success: function (res) {
                         if (res.status == "OK") {
                             $("#form-modal").modal('hide');
                             $("#tableViewAll").children().remove()
-                    LoadData()
+                            LoadData()
                             $("#pagination").html("")
-
                             $.notify('Sửa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                         }
                         if (res.status == "LOI") {
@@ -188,7 +198,7 @@ $(document).on("click", "#submitFormSuc", function () {
                 }
             })
         }
-    })
+    }
 
 //DELETE POPUP
 function Delete(id){

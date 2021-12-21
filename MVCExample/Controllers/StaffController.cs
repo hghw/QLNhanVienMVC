@@ -57,11 +57,7 @@ namespace MVCExample.Controllers
                     where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%') Order By ma_nhanvien ASC";
                     list = myCon.Query<Staff>(sqlSearch).ToList();
                     posts = list.ToList();
-                    return Json(new
-                    {
-                        posts = posts
-                    });
-
+                    return Json(new{posts = posts});
                 }
                 //page
 
