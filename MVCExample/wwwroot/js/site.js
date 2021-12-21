@@ -66,6 +66,17 @@ $(document).on("click", ".page-item .page-link", function () {
     $("#pagination").html("")
     LoadData(null, page)
 })
+$(document).on("change", "#txtSearch", function(){
+    $("#tableViewAll").html("")
+    $("#pagination").html("")
+    var txtSearch = $("#txtSearch").val();
+    if (txtSearch != "") {
+        LoadData(txtSearch, 1)
+    }
+    else {
+        LoadData(null, 1);
+    }
+})
 $(document).on("click", "#subSearch", function () {
     $("#tableViewAll").html("")
     $("#pagination").html("")
@@ -122,11 +133,10 @@ $(document).on("click", "#submitFormSuc", function () {
             processData: false,
             success: function (res) {
                 if (res.status == "OK") {
-                    // $("#form-modal ").modal('hide');
+                    $("#form-modal").modal('hide');
                     $("#tableViewAll").children().remove()
                     LoadData()
                     $("#pagination").html("")
-
                     $.notify('Thêm thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                 }
                 if (res.status == "LOI") {
@@ -162,9 +172,10 @@ $(document).on("click", "#submitFormSuc", function () {
                 processData: false,
                     success: function (res) {
                         if (res.status == "OK") {
+                            $("#form-modal").modal('hide');
                             $("#tableViewAll").children().remove()
-                            LoadData()
-$("#pagination").html("")
+                    LoadData()
+                            $("#pagination").html("")
 
                             $.notify('Sửa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                         }
@@ -190,8 +201,9 @@ function Delete(id){
             success: function (res) {
                 if (res.status == 'OK') {
                     $.notify('Xóa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
-                    $("#tableViewAll").children().remove()
                     LoadData()
+                    $("#form-modal").modal('hide');
+                    $("#tableViewAll").children().remove()
                     $("#pagination").html("")
                 }
             },

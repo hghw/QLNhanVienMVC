@@ -48,13 +48,20 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 list = myCon.Query<Staff>(sql).ToList();
+                var posts = list;
                 //search
                 if (!String.IsNullOrEmpty(txtSearch))
                 {
                     ViewBag.txtSearch = txtSearch;
-                    string sqlSearch = @"Select * from nhan_vien
-                    where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%')";
+                    string sqlSearch = @"Select * from nhan_vien 
+                    where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%') Order By ma_nhanvien ASC";
                     list = myCon.Query<Staff>(sqlSearch).ToList();
+                    posts = list.ToList();
+                    return Json(new
+                    {
+                        posts = posts
+                    });
+
                 }
                 //page
 
@@ -75,7 +82,7 @@ namespace MVCExample.Controllers
                 // tổng số trang
                 //sai
                 string sqlPage = @"SELECT * FROM nhan_vien ORDER BY ma_nhanvien OFFSET " + PageNumber + " ROWS FETCH NEXT " + (ITEMS_PER_PAGE) + " ROWS ONLY";
-                var posts = myCon.Query<Staff>(sqlPage);//  
+                posts = myCon.Query<Staff>(sqlPage).ToList();//  
 
                 return Json(new
                 {

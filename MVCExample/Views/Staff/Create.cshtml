@@ -9,13 +9,13 @@
     <div class="col-md-12">
         <form id="formCreateAction">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-        @* <div class="form-group">
-        <label asp-for="ma_nhanvien" class="control-label"></label>
-        <input asp-for="ma_nhanvien" class="form-control" />
-        <span asp-validation-for="ma_nhanvien" class="text-danger"></span>
-        </div> *@
-            
+
+            @* <div class="form-group">
+                <label asp-for="ma_nhanvien" class="control-label"></label>
+                <input asp-for="ma_nhanvien" class="form-control" />
+                <span asp-validation-for="ma_nhanvien" class="text-danger"></span>
+                </div> *@
+
             <div class="row">
                 <div class="form-group col-md-6" style="float: left;">
                     <label asp-for="ho_ten" class="control-label"></label>
@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="form-group text-right">
-                <input type="submit" id="submitFormSuc" value="Lưu" class="btn btn-primary" data-dismiss="modal" />
+                <input type="button" id="submitFormSuc" value="Lưu" class="btn btn-primary" />
                 <button class="btn btn-danger d-inline" data-dismiss="modal">Hủy bỏ</button>
             </div>
         </form>
