@@ -11,25 +11,19 @@
     <a onclick="showPopUp('@Url.Action("Create","Staff")','Thêm mới')" class="btn btn-success" style="color: #fff;">
         <i class="fas fa-user-plus"></i> Thêm mới
     </a>
-    
+
     <div class="input-group rounded" style="width: 450px;">
 
-        @*dropdown*@
-        <div class="dropdown" style="margin-right: 10px;">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                --Tất cả--
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <input type="button" id="dropdownValue" class="dropdown-item" value="Phòng IT"/>
-                <input type="button" id="dropdownValue" class="dropdown-item" value="Phòng Designer" />
-                <input type="button" id="dropdownValue" class="dropdown-item" value="Phòng Khác" />
-            </div>
-        </div>
-        @*//dropdown*@
+        <select class="form-control" id="dropdownValue">
+            <option value="0">--Tất cả--</option>
+            <option value="1">Phòng IT</option>
+            <option value="2">Phòng Designer</option>
+            <option value="3">Phòng Khác</option>
+        </select>
 
         @* @Html.TextBox("keyword") *@
         <input type="search" id="txtSearch" name="txtSearch" class="txtSearch form-control rounded"
-               placeholder="Nhập từ khóa..." aria-label="Search" aria-describedby="search-addon" />
+            placeholder="Nhập từ khóa..." aria-label="Search" aria-describedby="search-addon" />
         <button type="button" class="input-group-text border-0" id="subSearch">Search</button>
 
     </div>

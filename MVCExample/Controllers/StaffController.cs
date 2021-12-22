@@ -37,7 +37,7 @@ namespace MVCExample.Controllers
             return View();
         }
 
-        public IActionResult GetPaging(string txtSearch, int page)
+        public IActionResult GetPaging(int txtPhongban, string txtSearch, int page)
         {
             List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
@@ -56,6 +56,17 @@ namespace MVCExample.Controllers
                     posts = list.ToList();
                     return Json(new { posts = posts });
                 }
+                //phong ban search
+                if (txtPhongban > 0)
+                {
+                    ViewBag.txtPhongban = txtPhongban;
+                    string sqlSearch = @"Select * from nhan_vien 
+                    where phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
+                    list = myCon.Query<Staff>(sqlSearch).ToList();
+                    posts = list.ToList();
+                    return Json(new { posts = posts });
+                }
+
                 //page
 
                 int ITEMS_PER_PAGE = 10;
@@ -198,7 +209,7 @@ namespace MVCExample.Controllers
                 string sqlAll = "Select * from nhan_vien  Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
                 var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
 
-                
+
                 using (ExcelPackage Ep = new ExcelPackage(new FileInfo("nhanvien.xlsx")))
                 {
                     ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Staff");
@@ -241,28 +252,28 @@ namespace MVCExample.Controllers
             /*            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";*/
             return Json(new
             {
-                status= "OK"
+                status = "OK"
             });
         }
 
-        public IActionResult dropdownList(string txtPhongban)
-        {
-            List<Staff> list = new List<Staff>();
-            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            string sql = "SELECT * FROM nhan_vien Order By ma_nhanvien ASC";
-            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
-            {
-                list = myCon.Query<Staff>(sql).ToList();
-                var posts = list;
-                //search
-                    ViewBag.txtSearch = txtPhongban;
-                    string sqlSearch = @"Select * from nhan_vien 
-                    where LOWER(phongban_id) like LOWER('%" + txtPhongban + "%') Order By ma_nhanvien ASC";
-                    list = myCon.Query<Staff>(sqlSearch).ToList();
-                    posts = list.ToList();
-                    return Json(new { posts = posts });
-            }
-        }
+        // public IActionResult dropdownList(string txtPhongban)
+        // {
+        //     List<Staff> list = new List<Staff>();
+        //     string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+        //     string sql = "SELECT * FROM nhan_vien Order By ma_nhanvien ASC";
+        //     using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+        //     {
+        //         list = myCon.Query<Staff>(sql).ToList();
+        //         var posts = list;
+        //         //search
+        //             ViewBag.txtSearch = txtPhongban;
+        //             string sqlSearch = @"Select * from nhan_vien 
+        //             where LOWER(phongban_id) like LOWER('%" + txtPhongban + "%') Order By ma_nhanvien ASC";
+        //             list = myCon.Query<Staff>(sqlSearch).ToList();
+        //             posts = list.ToList();
+        //             return Json(new { posts = posts });
+        //     }
+        // }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 
         public IActionResult Error()

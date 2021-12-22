@@ -1,12 +1,12 @@
 ﻿$(document).ready(function () {
-    LoadData(null, 1);
+    LoadData(null, null, 1);
 })
 
-function LoadData(txtSearch, page) {
+function LoadData(txtPhongban, txtSearch, page) {
 $.ajax({
     type: 'GET',
     url: 'Staff/GetPaging',
-    data: { txtSearch: txtSearch, page: page },
+    data: {txtPhongban: txtPhongban, txtSearch: txtSearch, page: page },
     success: function (res) {
         var SetData = $("#tableViewAll");
         var listPage = res.posts;
@@ -64,17 +64,17 @@ $(document).on("click", ".page-item .page-link", function () {
     var page = $(this).attr('data-page');
     $("#tableViewAll").html("")
     $("#pagination").html("")
-    LoadData(null, page)
+    LoadData(null, null, page)
 })
 $(document).on("change", "#txtSearch", function(){
     $("#tableViewAll").html("")
     $("#pagination").html("")
     var txtSearch = $("#txtSearch").val();
     if (txtSearch != "") {
-        LoadData(txtSearch, 1)
+        LoadData(null, txtSearch, 1)
     }
     else {
-        LoadData(null, 1);
+        LoadData(null, null, 1);
     }
 })
 $(document).on("click", "#subSearch", function () {
@@ -82,24 +82,28 @@ $(document).on("click", "#subSearch", function () {
     $("#pagination").html("")
     var txtSearch = $("#txtSearch").val();
     if (txtSearch != "") {
-        LoadData(txtSearch, 1)
+        LoadData(null, txtSearch, 1)
     }
     else {
-        LoadData(null, 1);
+        LoadData(null, null, 1);
     }
 });
 //dropdown-test
-$(document).on("click", ".dropdown-item", function () {
+$(document).on("click", "#dropdownValue", function () {
+    var txtPhongban = $("#dropdownValue").val();
+    if(txtPhongban == 0 ){
+        return false;
+    }
     $("#tableViewAll").html("")
     $("#pagination").html("")
-    var txtSearch = $("#dropdownValue").val();
-    if (txtSearch != "") {
-        LoadData(txtSearch, 1)
+    if (txtPhongban > 0) {
+        LoadData(txtPhongban, null, 1)
     }
     else {
-        LoadData(null, 1);
+        LoadData(null, null, 1);
     }
 })
+
 
 
 // popup
@@ -251,16 +255,16 @@ function donwloadExcel() {
     })
 }
 
-function dropdownPhongBanList(txtPhongban) {
-    $.ajax({
-        type: 'GET',
-        url: 'Staff/dropdownList',
-        data: { txtPhongban: txtPhongban },
-        success: function (res) {
+// function dropdownPhongBanList(txtPhongban) {
+//     $.ajax({
+//         type: 'GET',
+//         url: 'Staff/dropdownList',
+//         data: { txtPhongban: txtPhongban },
+//         success: function (res) {
 
-        },
-        error: function (err) {
-            console.log(err)
-        }
-    })
-}
+//         },
+//         error: function (err) {
+//             console.log(err)
+//         }
+//     })
+// }

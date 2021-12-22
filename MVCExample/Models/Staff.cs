@@ -13,7 +13,7 @@ namespace MVCExample.Models
         [Display(Name = "Họ tên")]
         public string ho_ten { set; get; }
         [DataType(DataType.Date)]
- 
+
         [Display(Name = "Ngày sinh")]
         public DateTime ngay_sinh { get; set; }
         [Display(Name = "Số điện thoại")]
@@ -63,6 +63,5 @@ namespace MVCExample.Models
             ma_nhanvien = ma_nhanvien + maCount.ToString();
             return ma_nhanvien;
         }
-
-    } 
     }
+}
