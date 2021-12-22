@@ -190,15 +190,16 @@ namespace MVCExample.Controllers
                 return Json(new { data = listAll2, status = "OK" });
             }
         }
-        public Stream DownloadExcel(Stream stream = null)
+        public void DownloadExcel()
         {
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 string sqlAll = "Select * from nhan_vien  Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
                 var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
-                var file = new FileInfo("staff.xlsx");
-                using (ExcelPackage Ep = new ExcelPackage(file))
+
+                
+                using (ExcelPackage Ep = new ExcelPackage(new FileInfo("nhanvien.xlsx")))
                 {
                     ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Staff");
                     Sheet.Cells["A1"].Value = "Mã nhân viên";
@@ -218,24 +219,49 @@ namespace MVCExample.Controllers
                         Sheet.Cells[string.Format("F{0}", row)].Value = item.chuc_vu;
                         row++;
                     }
+                    BindingFormatForExcel(Sheet);
                     // Sheet.Cells["A:AZ"].AutoFitColumns();
-                    Sheet.Cells[1, 1].LoadFromCollection(listAll, true);
+                    /*Sheet.Cells[1, 1].LoadFromCollection(listAll, true); // load list all vao excel */
                     Ep.Save();
-                    return Ep.Stream;
                 }
             }
         }
-        [HttpGet]
-        public IActionResult Export()
+        private void BindingFormatForExcel(ExcelWorksheet worksheet)
         {
-            var stream = DownloadExcel();
-            var buffer = stream as MemoryStream;
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.Headers.Add("Content-Disposition", "attachment; filename=staff.xlsx");
-            /*            Response.BinaryWrite(buffer.ToArray());
-                        Response.Flush();
-                        Response.End();*/
-            return RedirectToAction("Index");
+            // Set default width cho tất cả column
+            worksheet.DefaultColWidth = 15;
+            // Tự động xuống hàng khi text quá dài
+            worksheet.Cells.Style.WrapText = true;
+        }
+
+        [HttpGet]
+        public IActionResult ExportExcel()
+        {
+            DownloadExcel();
+            /*            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";*/
+            return Json(new
+            {
+                status= "OK"
+            });
+        }
+
+        public IActionResult dropdownList(string txtPhongban)
+        {
+            List<Staff> list = new List<Staff>();
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            string sql = "SELECT * FROM nhan_vien Order By ma_nhanvien ASC";
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            {
+                list = myCon.Query<Staff>(sql).ToList();
+                var posts = list;
+                //search
+                    ViewBag.txtSearch = txtPhongban;
+                    string sqlSearch = @"Select * from nhan_vien 
+                    where LOWER(phongban_id) like LOWER('%" + txtPhongban + "%') Order By ma_nhanvien ASC";
+                    list = myCon.Query<Staff>(sqlSearch).ToList();
+                    posts = list.ToList();
+                    return Json(new { posts = posts });
+            }
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 

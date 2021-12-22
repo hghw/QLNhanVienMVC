@@ -88,6 +88,18 @@ $(document).on("click", "#subSearch", function () {
         LoadData(null, 1);
     }
 });
+//dropdown-test
+$(document).on("click", ".dropdown-item", function () {
+    $("#tableViewAll").html("")
+    $("#pagination").html("")
+    var txtSearch = $("#dropdownValue").val();
+    if (txtSearch != "") {
+        LoadData(txtSearch, 1)
+    }
+    else {
+        LoadData(null, 1);
+    }
+})
 
 
 // popup
@@ -224,4 +236,31 @@ function Delete(id){
     }
 }
     
-    
+function donwloadExcel() {
+    $.ajax({
+        type: "GET",
+        url: "Staff/ExportExcel",
+        success: function (res) {
+            if (res.status == "OK") {
+                $.notify('Download file Excel thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
+            }
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    })
+}
+
+function dropdownPhongBanList(txtPhongban) {
+    $.ajax({
+        type: 'GET',
+        url: 'Staff/dropdownList',
+        data: { txtPhongban: txtPhongban },
+        success: function (res) {
+
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    })
+}

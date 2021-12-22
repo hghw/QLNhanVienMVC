@@ -6,16 +6,30 @@
 }
 
 
-
 <h1>Index</h1>
 <div class="add-search">
-    <a onclick="showPopUp('@Url.Action("Create","Staff")','Thêm mới')" class="btn btn-success" style="color: #fff;"><i
-            class="fas fa-user-plus"></i> Thêm mới</a>
+    <a onclick="showPopUp('@Url.Action("Create","Staff")','Thêm mới')" class="btn btn-success" style="color: #fff;">
+        <i class="fas fa-user-plus"></i> Thêm mới
+    </a>
+    
+    <div class="input-group rounded" style="width: 450px;">
 
-    <div class="input-group rounded" style="width: 250px;">
+        @*dropdown*@
+        <div class="dropdown" style="margin-right: 10px;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                --Tất cả--
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <input type="button" id="dropdownValue" class="dropdown-item" value="Phòng IT"/>
+                <input type="button" id="dropdownValue" class="dropdown-item" value="Phòng Designer" />
+                <input type="button" id="dropdownValue" class="dropdown-item" value="Phòng Khác" />
+            </div>
+        </div>
+        @*//dropdown*@
+
         @* @Html.TextBox("keyword") *@
         <input type="search" id="txtSearch" name="txtSearch" class="txtSearch form-control rounded"
-            placeholder="Nhập từ khóa..." aria-label="Search" aria-describedby="search-addon" />
+               placeholder="Nhập từ khóa..." aria-label="Search" aria-describedby="search-addon" />
         <button type="button" class="input-group-text border-0" id="subSearch">Search</button>
 
     </div>
@@ -43,7 +57,7 @@
 
 </ul>
 <div>
-    <a href="@Url.Action("Export","Staff")">Download Excel</a>
+    <a onclick="return donwloadExcel()" class="btn btn-primary">Download Excel</a>
 </div>
 @* form *@
 <div class="modal" id="form-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
