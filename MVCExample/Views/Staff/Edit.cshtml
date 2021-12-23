@@ -33,7 +33,16 @@
                     <input asp-for="chuc_vu" id="chuc_vu" class="form-control" />
                     <span asp-validation-for="chuc_vu" class="text-danger"></span>
                 </div>
-
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <select id="phongban_id" class="form-control">
+                        <option value="0">Phòng ban</option>
+                        <option value="1">Phòng IT</option>
+                        <option value="2">Phòng Designer</option>
+                        <option value="3">Phòng Khác</option>
+                    </select>
+                </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-12" style="float: right;">

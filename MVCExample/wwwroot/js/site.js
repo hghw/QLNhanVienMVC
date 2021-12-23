@@ -24,6 +24,13 @@ $.ajax({
             }
             var date = (d + '/' + m + '/' + y);
             //
+            if (listPage[i].phongban_id == 1) {
+                listPage[i].phongban_id = "Phòng IT";
+            } else if (listPage[i].phongban_id == 2) {
+                listPage[i].phongban_id = "Phòng Designer";
+            } else {
+                listPage[i].phongban_id = "Phòng khác";
+            }
             var Data = "<tr class='row_" + listPage[i].ma_nhanvien + "'>" +
                 "<td>" + listPage[i].ma_nhanvien + "</td>" +
                 "<td>" + listPage[i].ho_ten + "</td>" +
@@ -31,6 +38,7 @@ $.ajax({
                 "<td>" + listPage[i].sdt + "</td>" +
                 "<td>" + listPage[i].dia_chi + "</td>" +
                 "<td>" + listPage[i].chuc_vu + "</td>" +
+                "<td>" + listPage[i].phongban_id + "</td>" +
                 "<td class='d-flex' style='justify-content: space-around;'>"
                 + '<a onclick=showPopUp("Staff/Edit/' + listPage[i].ma_nhanvien + '","Edit")  class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >'
                 + '<a onclick=Delete("'+ listPage[i].ma_nhanvien +'") class="btn btn-danger"><i class="fa fa-trash"></i></a >'
@@ -60,49 +68,6 @@ $.ajax({
 })
 
 }
-$(document).on("click", ".page-item .page-link", function () {
-    var page = $(this).attr('data-page');
-    $("#tableViewAll").html("")
-    $("#pagination").html("")
-    LoadData(null, null, page)
-})
-$(document).on("change", "#txtSearch", function(){
-    $("#tableViewAll").html("")
-    $("#pagination").html("")
-    var txtSearch = $("#txtSearch").val();
-    if (txtSearch != "") {
-        LoadData(null, txtSearch, 1)
-    }
-    else {
-        LoadData(null, null, 1);
-    }
-})
-$(document).on("click", "#subSearch", function () {
-    $("#tableViewAll").html("")
-    $("#pagination").html("")
-    var txtSearch = $("#txtSearch").val();
-    if (txtSearch != "") {
-        LoadData(null, txtSearch, 1)
-    }
-    else {
-        LoadData(null, null, 1);
-    }
-});
-//dropdown-test
-$(document).on("click", "#dropdownValue", function () {
-    var txtPhongban = $("#dropdownValue").val();
-    if(txtPhongban == 0 ){
-        return false;
-    }
-    $("#tableViewAll").html("")
-    $("#pagination").html("")
-    if (txtPhongban > 0) {
-        LoadData(txtPhongban, null, 1)
-    }
-    else {
-        LoadData(null, null, 1);
-    }
-})
 
 
 
@@ -137,13 +102,15 @@ function addStaff() {
         sdt: $("#sdt").val(),
         dia_chi: $("#dia_chi").val(),
         chuc_vu: $("#chuc_vu").val(),
+        phongban_id: $("#phongban_id").val(),
     }
     var ho_ten = $("#ho_ten").val()
     var ngay_sinh = $("#ngay_sinh").val()
     var sdt = $("#sdt").val()
     var dia_chi = $("#dia_chi").val()
     var chuc_vu = $("#chuc_vu").val()
-    if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "") {
+    var phongban_id = $("#phongban_id").val()
+    if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "" || phongban_id == "Phòng ban") {
         $.notify("Chưa nhập đầy đủ thông tin", { position: "top right",  autoHideDelay: 2000 })
     }
     else {
@@ -179,13 +146,15 @@ function updateStaff() {
         sdt: $("#sdt").val(),
         dia_chi: $("#dia_chi").val(),
         chuc_vu: $("#chuc_vu").val(),
+        phongban_id: $("#phongban_id").val(),
     }
         var ho_ten = $("#ho_ten").val()
         var ngay_sinh = $("#ngay_sinh").val()
         var sdt = $("#sdt").val()
         var dia_chi = $("#dia_chi").val()
         var chuc_vu = $("#chuc_vu").val()
-        if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "") {
+    var phongban_id = $("#phongban_id").val()
+    if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "" || phongban_id == "Phòng ban") {
             $.notify("Chưa nhập đầy đủ thông tin", { position: "top right",  autoHideDelay: 2000 })
         }else
         if(sdt.length > 10 || sdt.length < 1){
@@ -255,16 +224,56 @@ function donwloadExcel() {
     })
 }
 
-// function dropdownPhongBanList(txtPhongban) {
-//     $.ajax({
-//         type: 'GET',
-//         url: 'Staff/dropdownList',
-//         data: { txtPhongban: txtPhongban },
-//         success: function (res) {
-
-//         },
-//         error: function (err) {
-//             console.log(err)
-//         }
-//     })
-// }
+//page
+$(document).on("click", ".page-item .page-link", function () {
+    var page = $(this).attr('data-page');
+    $("#tableViewAll").html("")
+    $("#pagination").html("")
+    LoadData(null, null, page)
+})
+//nhan enter de search
+$(document).on("change", "#txtSearch", function () {
+    $("#tableViewAll").html("")
+    $("#pagination").html("")
+    var txtPhongban = $("#dropdownValue").val();
+    var txtSearch = $("#txtSearch").val();
+    if (txtSearch != "" && txtPhongban > 0) {
+        LoadData(txtPhongban, txtSearch, 1)
+    } else if (txtPhongban == 0) {
+        LoadData(null, txtSearch, 1)
+    } else if (txtSearch == "" && txtPhongban > 0) {
+        LoadData(txtPhongban, null, 1)
+    }
+    else {
+        LoadData(null, null, 1);
+    }
+})
+//nhan button de search
+$(document).on("click", "#subSearch", function () {
+    $("#tableViewAll").html("")
+    $("#pagination").html("")
+    var txtPhongban = $("#dropdownValue").val();
+    var txtSearch = $("#txtSearch").val();
+    if (txtSearch != "" && txtPhongban > 0) {
+        LoadData(txtPhongban, txtSearch, 1)
+    } else if (txtPhongban == 0) {
+        LoadData(null, txtSearch, 1)
+    } else if (txtSearch == "" && txtPhongban > 0) {
+        LoadData(txtPhongban, null, 1)
+    }
+    else {
+        LoadData(null, null, 1);
+    }
+});
+//dropdown phong ban
+function funcdropdown() {
+    var txtPhongban = $("#dropdownValue").val();
+    $("#tableViewAll").html("")
+    $("#pagination").html("")
+    if (txtPhongban > 0) {
+        LoadData(txtPhongban, null, 1)
+    }
+    else {
+        LoadData(null, null, 1);
+    }
+}

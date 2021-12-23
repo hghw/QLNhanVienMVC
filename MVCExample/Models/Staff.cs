@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,7 +23,8 @@ namespace MVCExample.Models
         public string dia_chi { set; get; }
         [Display(Name = "Chức vụ")]
         public string chuc_vu { set; get; }
-        public string keyword { set; get; }
+        [Display(Name = "ID Phòng ban")]
+        public string phongban_id { set; get; }
 
 
         public string getma_nhanvien(List<Staff> listNhanVien)
@@ -62,6 +64,11 @@ namespace MVCExample.Models
             }
             ma_nhanvien = ma_nhanvien + maCount.ToString();
             return ma_nhanvien;
+        }
+        public enum Gender
+        {
+            Male,
+            Female
         }
     }
 }
