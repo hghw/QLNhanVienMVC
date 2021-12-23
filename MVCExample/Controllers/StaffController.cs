@@ -65,9 +65,9 @@ namespace MVCExample.Controllers
                     list = myCon.Query<Staff>(sqlSearch).ToList();
                     posts = list.ToList();
                     return Json(new { posts = posts });
-                } 
+                }
                 //ket hop 2 dieu kien
-                if(!String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
+                if (!String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
                 {
                     string sqltotal = @"Select * from nhan_vien 
                     where (LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%')) and phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
@@ -244,18 +244,17 @@ namespace MVCExample.Controllers
                         Sheet.Cells[string.Format("G{0}", row)].Value = item.phongban_id;
                         row++;
                     }
-                    BindingFormatForExcel(Sheet);
-                    // Sheet.Cells["A:AZ"].AutoFitColumns();
-                    /*Sheet.Cells[1, 1].LoadFromCollection(listAll, true); // load list all vao excel */
+                    // BindingFormatForExcel(Sheet);
+
                     Ep.SaveAs(new FileInfo("nhanvien.xlsx"));
                 }
             }
         }
         private void BindingFormatForExcel(ExcelWorksheet worksheet)
         {
-            // Set default width cho tất cả column
+
             worksheet.DefaultColWidth = 15;
-            // Tự động xuống hàng khi text quá dài
+
             worksheet.Cells.Style.WrapText = true;
         }
 
