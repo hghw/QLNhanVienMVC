@@ -110,7 +110,7 @@ function addStaff() {
     var dia_chi = $("#dia_chi").val()
     var chuc_vu = $("#chuc_vu").val()
     var phongban_id = $("#phongban_id").val()
-    if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "" || phongban_id == "Phòng ban") {
+    if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "" || phongban_id == 0) {
         $.notify("Chưa nhập đầy đủ thông tin", { position: "top right",  autoHideDelay: 2000 })
     }
     else {
@@ -154,7 +154,7 @@ function updateStaff() {
         var dia_chi = $("#dia_chi").val()
         var chuc_vu = $("#chuc_vu").val()
     var phongban_id = $("#phongban_id").val()
-    if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "" || phongban_id == "Phòng ban") {
+    if (ho_ten == "" || ngay_sinh == "" || sdt == "" || dia_chi == "" || chuc_vu == "" || phongban_id == 0) {
             $.notify("Chưa nhập đầy đủ thông tin", { position: "top right",  autoHideDelay: 2000 })
         }else
         if(sdt.length > 10 || sdt.length < 1){

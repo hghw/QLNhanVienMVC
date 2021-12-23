@@ -65,10 +65,6 @@ namespace MVCExample.Models
             ma_nhanvien = ma_nhanvien + maCount.ToString();
             return ma_nhanvien;
         }
-        public enum Gender
-        {
-            Male,
-            Female
-        }
+        public IEnumerable<SelectListItem> SelectList { get; set; }
     }
 }
