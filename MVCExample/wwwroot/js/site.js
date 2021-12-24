@@ -217,6 +217,9 @@ function donwloadExcel() {
             if (res.status == "OK") {
                 $.notify('Download file Excel thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
             }
+            if (res.status == "LOI") {
+                $.notify('File đã tồn tại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
+            }
         },
         error: function (err) {
             console.log(err)

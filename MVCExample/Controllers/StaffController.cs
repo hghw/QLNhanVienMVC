@@ -11,6 +11,8 @@ using OfficeOpenXml;
 using System.Linq;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Drawing;
+using OfficeOpenXml.Style;
 
 namespace MVCExample.Controllers
 {
@@ -220,19 +222,17 @@ namespace MVCExample.Controllers
             {
                 string sqlAll = "Select * from nhan_vien  Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
                 var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
-
-
                 using (ExcelPackage Ep = new ExcelPackage())
                 {
                     ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Staff");
-                    Sheet.Cells["A1"].Value = "Mã nhân viên";
-                    Sheet.Cells["B1"].Value = "Họ tên";
-                    Sheet.Cells["C1"].Value = "Ngày sinh";
-                    Sheet.Cells["D1"].Value = "SĐT";
-                    Sheet.Cells["E1"].Value = "Địa chỉ";
-                    Sheet.Cells["F1"].Value = "Chức vụ";
-                    Sheet.Cells["G1"].Value = "Phòng ban";
-                    int row = 2;
+                    Sheet.Cells["A3"].Value = "Mã nhân viên";
+                    Sheet.Cells["B3"].Value = "Họ tên";
+                    Sheet.Cells["C3"].Value = "Ngày sinh";
+                    Sheet.Cells["D3"].Value = "SĐT";
+                    Sheet.Cells["E3"].Value = "Địa chỉ";
+                    Sheet.Cells["F3"].Value = "Chức vụ";
+                    Sheet.Cells["G3"].Value = "Phòng ban";
+                    int row = 4;
                     foreach (var item in listAll)
                     {
                         Sheet.Cells[string.Format("A{0}", row)].Value = item.ma_nhanvien;
@@ -242,27 +242,60 @@ namespace MVCExample.Controllers
                         Sheet.Cells[string.Format("E{0}", row)].Value = item.dia_chi;
                         Sheet.Cells[string.Format("F{0}", row)].Value = item.chuc_vu;
                         Sheet.Cells[string.Format("G{0}", row)].Value = item.phongban_id;
+                        Sheet.Cells[string.Format("C{0}", row)].Style.Numberformat.Format = "dd/mm/yyyy";
                         row++;
                     }
-                    // BindingFormatForExcel(Sheet);
-
+                    FormatExcel(Sheet, listAll);
                     Ep.SaveAs(new FileInfo("nhanvien.xlsx"));
                 }
             }
         }
-        private void BindingFormatForExcel(ExcelWorksheet worksheet)
+        private void FormatExcel(ExcelWorksheet worksheet, List<Staff> list)
         {
 
             worksheet.DefaultColWidth = 15;
+            worksheet.DefaultRowHeight = 20;
+            /*worksheet.Cells.Style.WrapText = true;*/
+            using (ExcelRange range = worksheet.Cells["A1:G2"])
+            {
+                range.Merge = true;
+                range.Value = "Quản lý nhân viên";
+                range.Style.Font.SetFromFont(new Font("Times New Roman", 14));
+                range.Style.Font.Bold = true;
+            }
+            using (ExcelRange range = worksheet.Cells["A3:G3"])
+            {
+                range.Style.Font.Bold = true;
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                range.Style.Font.SetFromFont(new Font("Times New Roman", 11));
+                range.Style.Border.Bottom.Style = ExcelBorderStyle.Thick;
+                range.Style.Border.Bottom.Color.SetColor(Color.Black);
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(Color.LightSeaGreen);
+            }
+            using (ExcelRange range = worksheet.Cells["A1:G" + (list.Count + 3) + ""])
+            {
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                range.Style.ShrinkToFit = true;
+                range.Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-            worksheet.Cells.Style.WrapText = true;
+            }
+
         }
 
         [HttpGet]
         public IActionResult ExportExcel()
         {
+            if (System.IO.File.Exists("nhanvien.xlsx"))
+            {
+                return Json(new
+                {
+                    status = "LOI"
+                });
+            }
             DownloadExcel();
-            /*            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";*/
             return Json(new
             {
                 status = "OK"
