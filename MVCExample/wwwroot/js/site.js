@@ -86,7 +86,6 @@ showPopUp = (url, title) => {
 //load body quay tron :v
 $(function () {
     $("#loaderbody").addClass('d-none');
-
     $(document).bind('ajaxStart', function () {
         $("#loaderbody").removeClass('d-none');
     }).bind('ajaxStop', function () {
@@ -269,7 +268,7 @@ $(document).on("click", "#subSearch", function () {
     }
 });
 //dropdown phong ban
-function funcdropdown() {
+$(document).on("change", "#dropdownValue", function(){
     var txtPhongban = $("#dropdownValue").val();
     $("#tableViewAll").html("")
     $("#pagination").html("")
@@ -279,4 +278,4 @@ function funcdropdown() {
     else {
         LoadData(null, null, 1);
     }
-}
+})

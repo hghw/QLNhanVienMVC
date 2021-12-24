@@ -78,58 +78,27 @@ body {
   justify-content: space-around;
   padding-bottom: 10px;
 }
-.add {
-  margin-bottom: 0;
-  line-height: 38px;
-}
-.add a {
-  background-color: burlywood;
-  padding: 8px;
-  border-radius: 8px;
-  color: #000;
-  text-decoration: none;
-}
-.search #spSearch {
-  position: absolute;
-  z-index: 2;
-  line-height: 38px;
-  padding: 0 10px;
-  border-radius: 5px 0 0 5px;
-  background-color: burlywood;
-  color: #000;
-}
-.search #inSearch input {
-  position: relative;
-  width: 300px;
-  outline: 0;
-  border-radius: 8px;
-  padding: 5px;
-  padding-left: 90px;
-  border: 2px solid burlywood;
-  font-style: italic;
-}
 
 /*//loader*/
 
-
 .loader {
-    border: 16px solid #f3f3f3;
-    border-top: 16px solid #3498db;
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    animation: spin 2s linear infinite;
-    position: fixed;
-    top: 45%;
-    left: 40%;
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+  position: fixed;
+  top: 45%;
+  left: 40%;
 }
 
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
 
-    100% {
-        transform: rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
+  }
 }
