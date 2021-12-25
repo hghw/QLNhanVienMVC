@@ -9,6 +9,7 @@ namespace MVCExample.Models
 {
     public class Staff
     {
+        [Key]
         [Display(Name = "Mã Nhân Viên")]
         public string ma_nhanvien { set; get; }
         [Display(Name = "Họ tên")]
@@ -24,8 +25,10 @@ namespace MVCExample.Models
         [Display(Name = "Chức vụ")]
         public string chuc_vu { set; get; }
         [Display(Name = "ID Phòng ban")]
-        public string phongban_id { set; get; }
-
+        public int phongban_id { set; get; }
+        
+        // Khai bao khoa ngoai
+        public virtual phong_ban phong_ban { set; get; }
 
         public string getma_nhanvien(List<Staff> listNhanVien)
         {

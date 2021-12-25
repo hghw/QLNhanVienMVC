@@ -41,12 +41,17 @@ namespace MVCExample.Controllers
 
         public IActionResult GetPaging(int txtPhongban, string txtSearch, int page)
         {
+            List<phong_ban> listPhongBan = new List<phong_ban>();
+            string sqlPhongBan = "SELECT * FROM phong_ban";
+
             List<Staff> list = new List<Staff>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             string sql = "SELECT * FROM nhan_vien Order By ma_nhanvien ASC";
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 list = myCon.Query<Staff>(sql).ToList();
+                listPhongBan = myCon.Query<phong_ban>(sqlPhongBan).ToList();
+
                 var posts = list;
                 //search
                 if (!String.IsNullOrEmpty(txtSearch) && (txtPhongban == 0))
@@ -101,6 +106,7 @@ namespace MVCExample.Controllers
 
                 return Json(new
                 {
+                    phongban = listPhongBan,
                     page = page,
                     countPages = countPages,
                     posts = posts
@@ -124,7 +130,6 @@ namespace MVCExample.Controllers
                 string sqlAll = "Select * from nhan_vien Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
                 var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
                 model.ma_nhanvien = staff.getma_nhanvien(listAll);
-                var phongbanid = Convert.ToInt32(model.phongban_id);
                 for (int i = 0; i < listAll.Count; i++)
                 {
                     if (model.ma_nhanvien == listAll[i].ma_nhanvien)
@@ -138,8 +143,7 @@ namespace MVCExample.Controllers
                 }
                 string sql = @"INSERT INTO nhan_vien (ma_nhanvien, ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu, phongban_id)
                 VALUES ('" + model.ma_nhanvien +
-                "', @ho_ten, @ngay_sinh, @sdt, @dia_chi, @chuc_vu, '" + phongbanid +
-                "');";
+                "', @ho_ten, @ngay_sinh, @sdt, @dia_chi, @chuc_vu, @phongban_id);";
                 var affectedRows = myCon.Execute(sql, model);
 
 
@@ -280,7 +284,6 @@ namespace MVCExample.Controllers
                 range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 range.Style.ShrinkToFit = true;
                 range.Style.Border.BorderAround(ExcelBorderStyle.Thin);
-
             }
 
         }
@@ -301,6 +304,10 @@ namespace MVCExample.Controllers
                 status = "OK"
             });
         }
+        // public IActionResult PhongBan(){
+
+        //     return ;
+        // }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 
