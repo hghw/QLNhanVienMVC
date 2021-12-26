@@ -10,7 +10,7 @@ $.ajax({
     success: function (res) {
         var SetData = $("#tableViewAll");
         var listPage = res.posts;
-        var listPhongBan = res.phongban;
+        var excutePB = res.excutePB;
         for (var i = 0; i < listPage.length; i++) {
             // format ngay thang nam
             var dateformat = new Date(listPage[i].ngay_sinh);
@@ -31,7 +31,7 @@ $.ajax({
                 "<td>" + listPage[i].sdt + "</td>" +
                 "<td>" + listPage[i].dia_chi + "</td>" +
                 "<td>" + listPage[i].chuc_vu + "</td>" +
-                "<td>" + listPhongBan[i].ten_phong_ban + "</td>" +
+                "<td>" + listPage[i].phong_ban.ten_phong_ban + "</td>" +
                 "<td class='d-flex' style='justify-content: space-around;'>"
                 + '<a onclick=showPopUp("Staff/Edit/' + listPage[i].ma_nhanvien + '","Edit")  class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >'
                 + '<a onclick=Delete("'+ listPage[i].ma_nhanvien +'") class="btn btn-danger"><i class="fa fa-trash"></i></a >'

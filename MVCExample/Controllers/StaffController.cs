@@ -41,26 +41,28 @@ namespace MVCExample.Controllers
 
         public IActionResult GetPaging(int txtPhongban, string txtSearch, int page)
         {
-            List<phong_ban> listPhongBan = new List<phong_ban>();
-            string sqlPhongBan = "SELECT * FROM phong_ban";
-
-            List<Staff> list = new List<Staff>();
+            List<Staff> list = new List<Staff>();//model staff
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            string sql = "SELECT * FROM nhan_vien Order By ma_nhanvien ASC";
+            string sql = "SELECT * FROM nhan_vien ORDER BY ma_nhanvien ASC";
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 list = myCon.Query<Staff>(sql).ToList();
-                listPhongBan = myCon.Query<phong_ban>(sqlPhongBan).ToList();
-
                 var posts = list;
                 //search
                 if (!String.IsNullOrEmpty(txtSearch) && (txtPhongban == 0))
                 {
+
                     ViewBag.txtSearch = txtSearch;
                     string sqlSearch = @"Select * from nhan_vien 
                     where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%') Order By ma_nhanvien ASC";
                     list = myCon.Query<Staff>(sqlSearch).ToList();
                     posts = list.ToList();
+                    foreach (var item in posts)
+                    {
+                        string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
+                        var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
+                        item.phong_ban = PBquery;
+                    }
                     return Json(new { posts = posts });
                 }
                 //phong ban search
@@ -71,6 +73,12 @@ namespace MVCExample.Controllers
                     where phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
                     list = myCon.Query<Staff>(sqlSearch).ToList();
                     posts = list.ToList();
+                    foreach (var item in posts)
+                    {
+                        string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
+                        var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
+                        item.phong_ban = PBquery;
+                    }
                     return Json(new { posts = posts });
                 }
                 //ket hop 2 dieu kien
@@ -80,6 +88,12 @@ namespace MVCExample.Controllers
                     where (LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%')) and phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
                     list = myCon.Query<Staff>(sqltotal).ToList();
                     posts = list.ToList();
+                    foreach (var item in posts)
+                    {
+                        string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
+                        var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
+                        item.phong_ban = PBquery;
+                    }
                     return Json(new { posts = posts });
                 }
 
@@ -100,13 +114,18 @@ namespace MVCExample.Controllers
                 }
                 int PageNumber = (page - 1) * ITEMS_PER_PAGE;
                 // tổng số trang
-                //sai
                 string sqlPage = @"SELECT * FROM nhan_vien ORDER BY ma_nhanvien OFFSET " + PageNumber + " ROWS FETCH NEXT " + (ITEMS_PER_PAGE) + " ROWS ONLY";
                 posts = myCon.Query<Staff>(sqlPage).ToList();//  
 
+                foreach (var item in posts)
+                {
+                    string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
+                    var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
+                    item.phong_ban = PBquery;
+                }
+
                 return Json(new
                 {
-                    phongban = listPhongBan,
                     page = page,
                     countPages = countPages,
                     posts = posts
@@ -226,6 +245,12 @@ namespace MVCExample.Controllers
             {
                 string sqlAll = "Select * from nhan_vien  Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
                 var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+                foreach (var item in listAll)
+                {
+                    string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
+                    var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
+                    item.phong_ban = PBquery;
+                }
                 using (ExcelPackage Ep = new ExcelPackage())
                 {
                     ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Staff");
@@ -245,7 +270,7 @@ namespace MVCExample.Controllers
                         Sheet.Cells[string.Format("D{0}", row)].Value = item.sdt;
                         Sheet.Cells[string.Format("E{0}", row)].Value = item.dia_chi;
                         Sheet.Cells[string.Format("F{0}", row)].Value = item.chuc_vu;
-                        Sheet.Cells[string.Format("G{0}", row)].Value = item.phongban_id;
+                        Sheet.Cells[string.Format("G{0}", row)].Value = item.phong_ban.ten_phong_ban;
                         Sheet.Cells[string.Format("C{0}", row)].Style.Numberformat.Format = "dd/mm/yyyy";
                         row++;
                     }
