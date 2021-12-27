@@ -8,6 +8,11 @@ $.ajax({
     url: 'Staff/GetPaging',
     data: {txtPhongban: txtPhongban, txtSearch: txtSearch, page: page },
     success: function (res) {
+        var tbLoi = res.status;
+        if (tbLoi == "LOI") {
+            $.notify("Không có nhân viên nào", { position: "top center", autoHideDelay: 5000 , className: "danger"})
+
+        }
         var SetData = $("#tableViewAll");
         var listPage = res.posts;
         var excutePB = res.excutePB;

@@ -37,7 +37,6 @@ namespace MVCSamples
             /*end them*/
 
             services.AddDistributedMemoryCache();
-
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);

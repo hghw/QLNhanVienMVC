@@ -10,7 +10,6 @@ using Dapper;
 using OfficeOpenXml;
 using System.Linq;
 using System.IO;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Drawing;
 using OfficeOpenXml.Style;
 
@@ -41,96 +40,107 @@ namespace MVCExample.Controllers
 
         public IActionResult GetPaging(int txtPhongban, string txtSearch, int page)
         {
-            List<Staff> list = new List<Staff>();//model staff
-            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
-            string sql = "SELECT * FROM nhan_vien ORDER BY ma_nhanvien ASC";
-            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            try
             {
-                list = myCon.Query<Staff>(sql).ToList();
-                var posts = list;
-                //search
-                if (!String.IsNullOrEmpty(txtSearch) && (txtPhongban == 0))
+                List<Staff> list = new List<Staff>();//model staff
+                string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+                string sql = "SELECT * FROM nhan_vien ORDER BY ma_nhanvien ASC";
+                using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
                 {
+                    list = myCon.Query<Staff>(sql).ToList();
+                    var posts = list;
+                    //search
+                    if (!String.IsNullOrEmpty(txtSearch) && (txtPhongban == 0))
+                    {
 
-                    ViewBag.txtSearch = txtSearch;
-                    string sqlSearch = @"Select * from nhan_vien 
+                        ViewBag.txtSearch = txtSearch;
+                        string sqlSearch = @"Select * from nhan_vien 
                     where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%') Order By ma_nhanvien ASC";
-                    list = myCon.Query<Staff>(sqlSearch).ToList();
-                    posts = list.ToList();
-                    foreach (var item in posts)
-                    {
-                        string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
-                        var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
-                        item.phong_ban = PBquery;
+                        list = myCon.Query<Staff>(sqlSearch).ToList();
+                        posts = list.ToList();
+                        foreach (var item in posts)
+                        {
+                            string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
+                            var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
+                            item.phong_ban = PBquery;
+                        }
+                        return Json(new { posts = posts });
                     }
-                    return Json(new { posts = posts });
-                }
-                //phong ban search
-                if (String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
-                {
-                    ViewBag.txtPhongban = txtPhongban;
-                    string sqlSearch = @"Select * from nhan_vien 
+                    //phong ban search
+                    if (String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
+                    {
+                        ViewBag.txtPhongban = txtPhongban;
+                        string sqlSearch = @"Select * from nhan_vien 
                     where phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
-                    list = myCon.Query<Staff>(sqlSearch).ToList();
-                    posts = list.ToList();
-                    foreach (var item in posts)
-                    {
-                        string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
-                        var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
-                        item.phong_ban = PBquery;
+                        list = myCon.Query<Staff>(sqlSearch).ToList();
+                        posts = list.ToList();
+                        foreach (var item in posts)
+                        {
+                            string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
+                            var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
+                            item.phong_ban = PBquery;
+                        }
+                        return Json(new { posts = posts });
                     }
-                    return Json(new { posts = posts });
-                }
-                //ket hop 2 dieu kien
-                if (!String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
-                {
-                    string sqltotal = @"Select * from nhan_vien 
+                    //ket hop 2 dieu kien
+                    if (!String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
+                    {
+                        string sqltotal = @"Select * from nhan_vien 
                     where (LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%')) and phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
-                    list = myCon.Query<Staff>(sqltotal).ToList();
-                    posts = list.ToList();
+                        list = myCon.Query<Staff>(sqltotal).ToList();
+                        posts = list.ToList();
+                        foreach (var item in posts)
+                        {
+                            string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
+                            var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
+                            item.phong_ban = PBquery;
+                        }
+                        return Json(new { posts = posts });
+                    }
+
+                    //page
+
+                    int ITEMS_PER_PAGE = 10;
+
+                    string sqlPageCount = @"SELECT COUNT(ma_nhanvien)FROM nhan_vien;";
+                    int totalRecord = myCon.Query<int>(sqlPageCount).FirstOrDefault();
+                    int countPages = (int)Math.Ceiling((double)totalRecord / ITEMS_PER_PAGE);
+                    if (page == 0)
+                    {
+                        page = 1;
+                    }
+                    if (page > countPages)
+                    {
+                        page = countPages;
+                    }
+                    int PageNumber = (page - 1) * ITEMS_PER_PAGE;
+                    // tổng số trang
+                    string sqlPage = @"SELECT * FROM nhan_vien ORDER BY ma_nhanvien OFFSET " + PageNumber + " ROWS FETCH NEXT " + (ITEMS_PER_PAGE) + " ROWS ONLY";
+                    posts = myCon.Query<Staff>(sqlPage).ToList();//  
+
                     foreach (var item in posts)
                     {
                         string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
                         var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
                         item.phong_ban = PBquery;
                     }
-                    return Json(new { posts = posts });
+
+                    return Json(new
+                    {
+                        page = page,
+                        countPages = countPages,
+                        posts = posts
+                    });
                 }
-
-                //page
-
-                int ITEMS_PER_PAGE = 10;
-
-                string sqlPageCount = @"SELECT COUNT(ma_nhanvien)FROM nhan_vien;";
-                int totalRecord = myCon.Query<int>(sqlPageCount).FirstOrDefault();
-                int countPages = (int)Math.Ceiling((double)totalRecord / ITEMS_PER_PAGE);
-                if (page == 0)
-                {
-                    page = 1;
-                }
-                if (page > countPages)
-                {
-                    page = countPages;
-                }
-                int PageNumber = (page - 1) * ITEMS_PER_PAGE;
-                // tổng số trang
-                string sqlPage = @"SELECT * FROM nhan_vien ORDER BY ma_nhanvien OFFSET " + PageNumber + " ROWS FETCH NEXT " + (ITEMS_PER_PAGE) + " ROWS ONLY";
-                posts = myCon.Query<Staff>(sqlPage).ToList();//  
-
-                foreach (var item in posts)
-                {
-                    string sqlPB = "SELECT * FROM phong_ban where phongban_id = " + item.phongban_id + "";
-                    var PBquery = myCon.Query<phong_ban>(sqlPB).FirstOrDefault();//  
-                    item.phong_ban = PBquery;
-                }
-
+            }
+            catch (Exception)
+            {
                 return Json(new
                 {
-                    page = page,
-                    countPages = countPages,
-                    posts = posts
+                    status = "LOI"// bug offset sql
                 });
             }
+            
         }
 
         [HttpGet]
@@ -192,8 +202,8 @@ namespace MVCExample.Controllers
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                string sqlAll = "Select * from nhan_vien where ma_nhanvien != '" + staff.ma_nhanvien + "'"; //truy van csdl de dem soluong csdl
-                var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+                string sqlAll = "Select * from nhan_vien where ma_nhanvien != '" + staff.ma_nhanvien + "'"; // loai tru nhan  vien nay de so sanh trung hay khong 
+                var listAll = myCon.Query<Staff>(sqlAll).ToList(); 
                 for (int i = 0; i < listAll.Count; i++)
                 {
                     if (staff.ho_ten == listAll[i].ho_ten && staff.ngay_sinh == listAll[i].ngay_sinh)
@@ -234,11 +244,11 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 string sqlAll = "Select * from nhan_vien  Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
-                var listAll = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+                var listAll = myCon.Query<Staff>(sqlAll).ToList(); 
                 string sql = @"delete from nhan_vien
                 where ma_nhanvien = '" + id + "'";
                 var affectedRows = myCon.Execute(sql);
-                var listAll2 = myCon.Query<Staff>(sqlAll).ToList(); //get ma nhan vien +1
+                var listAll2 = myCon.Query<Staff>(sqlAll).ToList(); 
 
                 return Json(new { data = listAll2, status = "OK" });
             }
