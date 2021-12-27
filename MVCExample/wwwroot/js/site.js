@@ -49,6 +49,14 @@ $.ajax({
         var pageCurrent = res.page;
         var numSize = res.countPages;
 
+        if (pageCurrent == (1)) {//page PREVIEWS disabled or enable
+            pagination_string += '<li class="page-item disabled"><a class="page-link" data-page='
+                + (pageCurrent - 1) + '>Trước</a></li>';
+        } else {
+            pagination_string += '<li class="page-item"><a class="page-link" data-page='
+                + (pageCurrent - 1) + '>Trước</a></li>';
+        }
+        
         for (i = 1; i <= numSize; i++) {
             if (i == pageCurrent) {
                 pagination_string += '<li class="page-item active"><a class="page-link" data-page='
@@ -57,6 +65,13 @@ $.ajax({
                 pagination_string += '<li class="page-item"><a  class="page-link" data-page='
                     + i + '>' + i + '</a></li>';
             }
+        }
+        if (pageCurrent == (numSize)) {//page AFTER disabled or enable
+            pagination_string += '<li class="page-item disabled"><a class="page-link" data-page='
+                + (pageCurrent + 1) + '>Sau</a></li>';
+        } else {
+            pagination_string += '<li class="page-item"><a class="page-link" data-page='
+                + (pageCurrent + 1) + '>Sau</a></li>';
         }
         $("#pagination").append(pagination_string);
     },
