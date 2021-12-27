@@ -166,7 +166,10 @@ namespace MVCExample.Controllers
                 var affectedRows = myCon.Execute(sql, model);
 
 
-                return Json(new { status = "OK" });
+                return Json(new { 
+                    data = listAll,
+                    status = "OK"
+                });
             }
 
         }
@@ -214,7 +217,9 @@ namespace MVCExample.Controllers
                 "' WHERE ma_nhanvien='" + staff.ma_nhanvien + "'";
 
                 var rowAffect = myCon.Execute(sqlQuery);
-                return Json(new { status = "OK" });
+                return Json(new {
+                    data = listAll,
+                    status = "OK" });
             }
         }
         [HttpGet]

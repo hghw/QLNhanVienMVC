@@ -108,10 +108,11 @@ function addStaff() {
             url: 'Staff/create',
             data: {model: staff},
             success: function (res) {
+                var countdata = res.data;
                 if (res.status == "OK") {
                     $("#form-modal").modal('hide');
                     $("#tableViewAll").children().remove()
-                    LoadData()
+                    LoadData(null, null, countdata.length)
                     $("#pagination").html("")
                     $.notify('Thêm thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                 }
@@ -155,11 +156,12 @@ function updateStaff() {
                 type: 'POST',
                 url: 'Staff/Update',
                 data: {staff: staff},
-                    success: function (res) {
+                success: function (res) {
+                    var countdata = res.data;
                         if (res.status == "OK") {
                             $("#form-modal").modal('hide');
                             $("#tableViewAll").children().remove()
-                            LoadData()
+                            LoadData(null, null, countdata.length)
                             $("#pagination").html("")
                             $.notify('Sửa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                         }
@@ -183,9 +185,10 @@ function Delete(id){
             url: "Staff/Delete",
             data: {id:id},
             success: function (res) {
+                var countdata = res.data;
                 if (res.status == 'OK') {
                     $.notify('Xóa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
-                    LoadData()
+                    LoadData(null, null, 1)
                     $("#form-modal").modal('hide');
                     $("#tableViewAll").children().remove()
                     $("#pagination").html("")
@@ -231,7 +234,7 @@ $(document).on("change", "#txtSearch", function () {
     var txtSearch = $("#txtSearch").val();
     if (txtSearch != "" && txtPhongban > 0) {
         LoadData(txtPhongban, txtSearch, 1)
-    } else if (txtPhongban == 0) {
+    } else if (txtPhongban == 0 && txtSearch != "") {
         LoadData(null, txtSearch, 1)
     } else if (txtSearch == "" && txtPhongban > 0) {
         LoadData(txtPhongban, null, 1)
@@ -248,7 +251,7 @@ $(document).on("click", "#subSearch", function () {
     var txtSearch = $("#txtSearch").val();
     if (txtSearch != "" && txtPhongban > 0) {
         LoadData(txtPhongban, txtSearch, 1)
-    } else if (txtPhongban == 0) {
+    } else if (txtPhongban == 0 && txtSearch != "") {
         LoadData(null, txtSearch, 1)
     } else if (txtSearch == "" && txtPhongban > 0) {
         LoadData(txtPhongban, null, 1)

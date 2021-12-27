@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -67,5 +68,13 @@ namespace MVCExample.Models
             ma_nhanvien = ma_nhanvien + maCount.ToString();
             return ma_nhanvien;
         }
+
+            public List<SelectListItem> myListDropdown = new List<SelectListItem>()
+            {
+            new SelectListItem{ Value="1",Text="Phòng IT"},
+            new SelectListItem{ Value="2",Text="Phòng Designer"},
+            new SelectListItem{ Value="3",Text="Phòng Khác"},
+            };
+
     }
 }
