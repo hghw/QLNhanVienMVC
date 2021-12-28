@@ -10,27 +10,14 @@
 
 <h2 class="text-center" style="padding: 15px; text-transform: Uppercase">Quản lý nhân viên</h2>
 <div class="add-search">
-    <a onclick="showPopUp('@Url.Action("Create","Staff")','Thêm mới')" class="btn btn-success" style="color: #fff;">
+    <a onclick="showPopUp('@Url.Action("Create","Staff")','Thêm mới')" class="btn btn-success" id="addclick" style="color: #fff;">
         <i class="fas fa-user-plus"></i> Thêm mới
     </a>
 
     <div class="input-group rounded" style="width: 450px;">
-        @* @{
-            List<SelectListItem> myList = new List<SelectListItem>();
-            var data = new[]{
-            new SelectListItem{ Value="1",Text="Phòng IT"},
-            new SelectListItem{ Value="2",Text="Phòng Designer"},
-            new SelectListItem{ Value="3",Text="Phòng Khác"},
-            };
-            myList = data.ToList();
-            @Html.DropDownList("dropdownValue", new SelectList(myList, "Value", "Text"), "--Tất cả--")
 
-            } *@
         <select class="form-control" id="dropdownValue" style="margin-right: 10px;">
             <option value="0">--Tất cả--</option>
-            <option value="1">Phòng IT</option>
-            <option value="2">Phòng Designer</option>
-            <option value="3">Phòng Khác</option>
         </select>
 
         <input type="search" id="txtSearch" name="txtSearch" class="form-control rounded" placeholder="Nhập từ khóa..."

@@ -40,24 +40,22 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-12" >
+                <div class="form-group col-md-12">
                     <select id="phongban_id" class="form-control">
                         <option value="0">Phòng ban</option>
-                        <option value="1">Phòng IT</option>
-                        <option value="2">Phòng Designer</option>
-                        <option value="3">Phòng Khác</option>
                     </select>
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-12" >
+                <div class="form-group col-md-12">
                     <label asp-for="dia_chi" class="control-label"></label>
                     <input asp-for="dia_chi" id="dia_chi" class="form-control" />
                     <span asp-validation-for="dia_chi" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group text-right">
-                <input type="button" onclick="return addStaff()" id="submitFormSuc" value="Lưu" class="btn btn-primary" />
+                <input type="button" onclick="return addStaff()" id="submitFormSuc" value="Lưu"
+                    class="btn btn-primary" />
                 <button class="btn btn-danger d-inline" data-dismiss="modal">Hủy bỏ</button>
             </div>
         </form>
@@ -69,5 +67,7 @@
 @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script>
-
+$(document).ready(function(){
+    DropDownCRUD();
+})
 </script>

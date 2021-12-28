@@ -12,6 +12,7 @@ using System.Linq;
 using System.IO;
 using System.Drawing;
 using OfficeOpenXml.Style;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVCExample.Controllers
 {
@@ -45,6 +46,7 @@ namespace MVCExample.Controllers
                 List<Staff> list = new List<Staff>();//model staff
                 string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
                 string sql = "SELECT * FROM nhan_vien ORDER BY ma_nhanvien ASC";
+
                 using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
                 {
                     list = myCon.Query<Staff>(sql).ToList();
@@ -52,10 +54,9 @@ namespace MVCExample.Controllers
                     //search
                     if (!String.IsNullOrEmpty(txtSearch) && (txtPhongban == 0))
                     {
-
                         ViewBag.txtSearch = txtSearch;
                         string sqlSearch = @"Select * from nhan_vien 
-                    where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%') Order By ma_nhanvien ASC";
+                        where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%') Order By ma_nhanvien ASC";
                         list = myCon.Query<Staff>(sqlSearch).ToList();
                         posts = list.ToList();
                         foreach (var item in posts)
@@ -140,7 +141,21 @@ namespace MVCExample.Controllers
                     status = "LOI"// bug offset sql
                 });
             }
-            
+
+        }
+        public IActionResult GetDropdown()
+        {   
+            var listPhongBan = new List<phong_ban>();
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            {
+                string sqlDropdown = "SELECT * FROM phong_ban";
+                listPhongBan = myCon.Query<phong_ban>(sqlDropdown).ToList();
+
+            return Json(new{
+                data = listPhongBan
+            });
+            }
         }
 
         [HttpGet]
@@ -167,19 +182,31 @@ namespace MVCExample.Controllers
                     }
                     if (model.ho_ten == listAll[i].ho_ten && model.ngay_sinh == listAll[i].ngay_sinh)
                     {
-                        return Json(new { status = "LOI" });
+                        return Json(new { status = "TRUNG" });
                     }
                 }
+
                 string sql = @"INSERT INTO nhan_vien (ma_nhanvien, ho_ten, ngay_sinh, sdt, dia_chi, chuc_vu, phongban_id)
                 VALUES ('" + model.ma_nhanvien +
                 "', @ho_ten, @ngay_sinh, @sdt, @dia_chi, @chuc_vu, @phongban_id);";
                 var affectedRows = myCon.Execute(sql, model);
+                if (affectedRows != 0)
+                {
+                    return Json(new
+                    {
+                        data = listAll,
+                        status = "OK"
+                    });
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        status = "LOI"
+                    });
+                }
 
 
-                return Json(new { 
-                    data = listAll,
-                    status = "OK"
-                });
             }
 
         }
@@ -203,12 +230,12 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 string sqlAll = "Select * from nhan_vien where ma_nhanvien != '" + staff.ma_nhanvien + "'"; // loai tru nhan  vien nay de so sanh trung hay khong 
-                var listAll = myCon.Query<Staff>(sqlAll).ToList(); 
+                var listAll = myCon.Query<Staff>(sqlAll).ToList();
                 for (int i = 0; i < listAll.Count; i++)
                 {
                     if (staff.ho_ten == listAll[i].ho_ten && staff.ngay_sinh == listAll[i].ngay_sinh)
                     {
-                        return Json(new { status = "LOI" });
+                        return Json(new { status = "TRUNG" });
                     }
                 }
                 //format ngay sinh no bugg
@@ -227,9 +254,22 @@ namespace MVCExample.Controllers
                 "' WHERE ma_nhanvien='" + staff.ma_nhanvien + "'";
 
                 var rowAffect = myCon.Execute(sqlQuery);
-                return Json(new {
-                    data = listAll,
-                    status = "OK" });
+                if (rowAffect != 0)
+                {
+                    return Json(new
+                    {
+                        data = listAll,
+                        status = "OK"
+                    });
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        status = "LOI"
+                    });
+                }
+
             }
         }
         [HttpGet]
@@ -244,13 +284,23 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 string sqlAll = "Select * from nhan_vien  Order By ma_nhanvien ASC"; //truy van csdl de dem soluong csdl
-                var listAll = myCon.Query<Staff>(sqlAll).ToList(); 
+                var listAll = myCon.Query<Staff>(sqlAll).ToList();
                 string sql = @"delete from nhan_vien
                 where ma_nhanvien = '" + id + "'";
                 var affectedRows = myCon.Execute(sql);
-                var listAll2 = myCon.Query<Staff>(sqlAll).ToList(); 
+                var listAll2 = myCon.Query<Staff>(sqlAll).ToList();
 
-                return Json(new { data = listAll2, status = "OK" });
+                if (affectedRows != 0)
+                {
+                    return Json(new { data = listAll2, status = "OK" });
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        status = "LOI"
+                    });
+                }
             }
         }
         public void DownloadExcel()

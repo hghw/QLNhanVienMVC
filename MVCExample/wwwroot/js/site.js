@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     LoadData(null, null, 1);
+    GetDropdown();
 })
 
 function LoadData(txtPhongban, txtSearch, page) {
@@ -11,7 +12,6 @@ $.ajax({
         var tbLoi = res.status;
         if (tbLoi == "LOI") {
             $.notify("Không có nhân viên nào", { position: "top center", autoHideDelay: 5000 , className: "danger"})
-
         }
         var SetData = $("#tableViewAll");
         var listPage = res.posts;
@@ -82,7 +82,7 @@ $.ajax({
 }
 
 // popup
-showPopUp = (url, title) => {
+showPopUp = (url, title) => {       
     $.ajax({
         type: 'GET',
         url: url,
@@ -136,8 +136,11 @@ function addStaff() {
                     $("#pagination").html("")
                     $.notify('Thêm thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                 }
-                if (res.status == "LOI") {
+                if (res.status == "TRUNG") {
                     $.notify('Nhân viên này đã tồn tại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
+                }
+                if (res.status == "LOI") {
+                    $.notify('Thêm nhân viên thất bại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
                 }
             },
             error: function (err) {
@@ -185,8 +188,11 @@ function updateStaff() {
                             $("#pagination").html("")
                             $.notify('Sửa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                         }
-                        if (res.status == "LOI") {
+                        if (res.status == "TRUNG") {
                             $.notify('Nhân viên này đã tồn tại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
+                        }
+                        if (res.status == "LOI") {
+                            $.notify('Sửa nhân viên thất bại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
                         }
                 },
                 error: function (err) {
@@ -212,6 +218,9 @@ function Delete(id){
                     $("#form-modal").modal('hide');
                     $("#tableViewAll").children().remove()
                     $("#pagination").html("")
+                }
+                if (res.status == "LOI") {
+                    $.notify('Xóa nhân viên thất bại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
                 }
             },
             error: function (err) {
@@ -247,17 +256,20 @@ $(document).on("click", ".page-item .page-link", function () {
     LoadData(null, null, page)
 })
 //nhan enter de search
-$(document).on("change", "#txtSearch", function () {
+$(document).on("keydown", "#txtSearch", function () {
     $("#tableViewAll").html("")
     $("#pagination").html("")
     var txtPhongban = $("#dropdownValue").val();
     var txtSearch = $("#txtSearch").val();
     if (txtSearch != "" && txtPhongban > 0) {
         LoadData(txtPhongban, txtSearch, 1)
+
     } else if (txtPhongban == 0 && txtSearch != "") {
+
         LoadData(null, txtSearch, 1)
     } else if (txtSearch == "" && txtPhongban > 0) {
         LoadData(txtPhongban, null, 1)
+
     }
     else {
         LoadData(null, null, 1);
@@ -271,10 +283,13 @@ $(document).on("click", "#subSearch", function () {
     var txtSearch = $("#txtSearch").val();
     if (txtSearch != "" && txtPhongban > 0) {
         LoadData(txtPhongban, txtSearch, 1)
-    } else if (txtPhongban == 0 && txtSearch != "") {
+
+    } else if (txtSearch != ""&& txtPhongban == 0) {
         LoadData(null, txtSearch, 1)
+
     } else if (txtSearch == "" && txtPhongban > 0) {
         LoadData(txtPhongban, null, 1)
+
     }
     else {
         LoadData(null, null, 1);
@@ -292,3 +307,41 @@ $(document).on("change", "#dropdownValue", function(){
         LoadData(null, null, 1);
     }
 })
+
+//dropdown get
+function GetDropdown(){
+    $.ajax({
+        type: 'GET',
+        url: "Staff/GetDropdown",
+        success: function (res) {
+            var SetData = $("#dropdownValue")
+            var data = res.data;
+            for (let i = 0; i < data.length; i++) {
+                var Data = 
+                "<option value='"+(i+1)+"'>" + data[i].ten_phong_ban + "</option>";
+                SetData.append(Data);
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    })   
+}
+function DropDownCRUD(){
+    var SetPhongB = $("#phongban_id")
+    $.ajax({
+        type: 'GET',
+        url: "Staff/GetDropdown",
+        success: function (res) {
+            var data = res.data;
+            for (let i = 0; i < data.length; i++) {
+                 Data = 
+                "<option value='"+(i+1)+"'>" + data[i].ten_phong_ban + "</option>";
+                SetPhongB.append(Data);
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    })   
+}
