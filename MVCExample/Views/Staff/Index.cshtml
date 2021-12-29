@@ -10,7 +10,8 @@
 
 <h2 class="text-center" style="padding: 15px; text-transform: Uppercase">Quản lý nhân viên</h2>
 <div class="add-search">
-    <a onclick="showPopUp('@Url.Action("Create","Staff")','Thêm mới')" class="btn btn-success" id="addclick" style="color: #fff;">
+    <a onclick="showPopUp('@Url.Action("Create","Staff")','Thêm mới')" class="btn btn-success" id="addclick"
+        style="color: #fff;">
         <i class="fas fa-user-plus"></i> Thêm mới
     </a>
 
@@ -65,5 +66,7 @@
     </div>
 </div>
 <script>
-
+    $(document).ready(function () {
+        GetDropdown();
+    })
 </script>

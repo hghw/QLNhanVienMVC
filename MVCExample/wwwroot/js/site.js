@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     LoadData(null, null, 1);
-    GetDropdown();
+    
 })
 
 function LoadData(txtPhongban, txtSearch, page) {
@@ -310,16 +310,21 @@ $(document).on("change", "#dropdownValue", function(){
 
 //dropdown get
 function GetDropdown(){
+    var SetData = $("#dropdownValue")
+    SetData.html("")
+    var Data2 = "<option value='0'>--Tất cả--</option>";
+    SetData.append(Data2);
     $.ajax({
         type: 'GET',
         url: "Staff/GetDropdown",
         success: function (res) {
-            var SetData = $("#dropdownValue")
+            var Setpb = $("#phongban_id");
             var data = res.data;
             for (let i = 0; i < data.length; i++) {
                 var Data = 
                 "<option value='"+(i+1)+"'>" + data[i].ten_phong_ban + "</option>";
                 SetData.append(Data);
+                Setpb.append(Data);
             }
         },
         error: function (err) {
@@ -327,21 +332,4 @@ function GetDropdown(){
         }
     })   
 }
-function DropDownCRUD(){
-    var SetPhongB = $("#phongban_id")
-    $.ajax({
-        type: 'GET',
-        url: "Staff/GetDropdown",
-        success: function (res) {
-            var data = res.data;
-            for (let i = 0; i < data.length; i++) {
-                 Data = 
-                "<option value='"+(i+1)+"'>" + data[i].ten_phong_ban + "</option>";
-                SetPhongB.append(Data);
-            }
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    })   
-}
+
