@@ -15,7 +15,7 @@ using OfficeOpenXml.Style;
 
 namespace MVCExample.Controllers
 {
-    enum ErrorCode{ OK = 1, LOI = 2, TRUNG = 3}
+    enum ErrorCode{ OK = 1, ERROR = 2, Duplicate = 3}
 
     public class StaffController : Controller
     {
@@ -133,7 +133,7 @@ namespace MVCExample.Controllers
             {
                 return Json(new
                 {
-                    status = ErrorCode.LOI.ToString()// bug offset sql
+                    status = ErrorCode.ERROR.ToString()// bug offset sql
                 });
             }
 
@@ -178,7 +178,7 @@ namespace MVCExample.Controllers
                     }
                     if (model.ho_ten == listAll[i].ho_ten && model.ngay_sinh == listAll[i].ngay_sinh)
                     {
-                        return Json(new { status = ErrorCode.TRUNG.ToString() });
+                        return Json(new { status = ErrorCode.Duplicate.ToString() });
                     }
                 }
 
@@ -198,7 +198,7 @@ namespace MVCExample.Controllers
                 {
                     return Json(new
                     {
-                        status = ErrorCode.LOI.ToString()
+                        status = ErrorCode.ERROR.ToString()
                     });
                 }
             }
@@ -223,13 +223,13 @@ namespace MVCExample.Controllers
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                string sqlAll = "Select * from nhan_vien where ma_nhanvien != '" + staff.ma_nhanvien + "'"; // loai tru nhan  vien nay de so sanh trung hay khong 
+                string sqlAll = "Select * from nhan_vien where ma_nhanvien != '" + staff.ma_nhanvien + "'"; // loai tru nhan  vien nay de so sanh Duplicate hay khong 
                 var listAll = myCon.Query<Staff>(sqlAll).ToList();
                 for (int i = 0; i < listAll.Count; i++)
                 {
                     if (staff.ho_ten == listAll[i].ho_ten && staff.ngay_sinh == listAll[i].ngay_sinh)
                     {
-                        return Json(new { status = ErrorCode.TRUNG.ToString() });
+                        return Json(new { status = ErrorCode.Duplicate.ToString() });
                     }
                 }
                 //format ngay sinh no bugg
@@ -260,7 +260,7 @@ namespace MVCExample.Controllers
                 {
                     return Json(new
                     {
-                        status = ErrorCode.LOI.ToString()
+                        status = ErrorCode.ERROR.ToString()
                     });
                 }
 
@@ -290,7 +290,7 @@ namespace MVCExample.Controllers
                 {
                     return Json(new
                     {
-                        status = ErrorCode.LOI.ToString()
+                        status = ErrorCode.ERROR.ToString()
                     });
                 }
             }
@@ -377,7 +377,7 @@ namespace MVCExample.Controllers
             {
                 return Json(new
                 {
-                    status = ErrorCode.LOI.ToString()
+                    status = ErrorCode.ERROR.ToString()
                 });
             }
             DownloadExcel();

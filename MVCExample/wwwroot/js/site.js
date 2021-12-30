@@ -10,7 +10,7 @@ $.ajax({
     data: {txtPhongban: txtPhongban, txtSearch: txtSearch, page: page },
     success: function (res) {
         var tbLoi = res.status;
-        if (tbLoi == "LOI") {
+        if (tbLoi == "ERROR") {
             $.notify("Không có nhân viên nào", { position: "top center", autoHideDelay: 5000 , className: "danger"})
         }
         var SetData = $("#tableViewAll");
@@ -136,10 +136,10 @@ function addStaff() {
                     $("#pagination").html("")
                     $.notify('Thêm thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                 }
-                if (res.status == "TRUNG") {
+                if (res.status == "Duplicate") {
                     $.notify('Nhân viên này đã tồn tại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
                 }
-                if (res.status == "LOI") {
+                if (res.status == "ERROR") {
                     $.notify('Thêm nhân viên thất bại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
                 }
             },
@@ -188,10 +188,10 @@ function updateStaff() {
                             $("#pagination").html("")
                             $.notify('Sửa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                         }
-                        if (res.status == "TRUNG") {
+                        if (res.status == "Duplicate") {
                             $.notify('Nhân viên này đã tồn tại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
                         }
-                        if (res.status == "LOI") {
+                        if (res.status == "ERROR") {
                             $.notify('Sửa nhân viên thất bại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
                         }
                 },
@@ -218,7 +218,7 @@ function Delete(id){
                     $("#tableViewAll").children().remove()
                     $("#pagination").html("")
                 }
-                if (res.status == "LOI") {
+                if (res.status == "ERROR") {
                     $.notify('Xóa nhân viên thất bại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
                 }
             },
@@ -237,7 +237,7 @@ function donwloadExcel() {
             if (res.status == "OK") {
                 $.notify('Download file Excel thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
             }
-            if (res.status == "LOI") {
+            if (res.status == "ERROR") {
                 $.notify('File đã tồn tại', { autoHideDelay: 3000, globalPosition: "top center", className: "danger" });
             }
         },
