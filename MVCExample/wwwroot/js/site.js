@@ -211,7 +211,6 @@ function Delete(id){
             url: "Staff/Delete",
             data: {id:id},
             success: function (res) {
-                var countdata = res.data;
                 if (res.status == 'OK') {
                     $.notify('Xóa thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
                     LoadData(null, null, 1)
@@ -284,7 +283,7 @@ $(document).on("click", "#subSearch", function () {
     if (txtSearch != "" && txtPhongban > 0) {
         LoadData(txtPhongban, txtSearch, 1)
 
-    } else if (txtSearch != ""&& txtPhongban == 0) {
+    } else if (txtSearch != "" && txtPhongban == 0) {
         LoadData(null, txtSearch, 1)
 
     } else if (txtSearch == "" && txtPhongban > 0) {

@@ -12,10 +12,11 @@ using System.Linq;
 using System.IO;
 using System.Drawing;
 using OfficeOpenXml.Style;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVCExample.Controllers
 {
+    enum ErrorCode{ OK = 1, LOI = 2, TRUNG = 3}
+
     public class StaffController : Controller
     {
 
@@ -30,10 +31,6 @@ namespace MVCExample.Controllers
         {
             _configuration = configuration;
         }
-        // [BindProperty(SupportsGet = true, Name = "p")]
-        public int currentPage { get; set; }
-        public int countPages { get; set; }
-
         public IActionResult Index()
         {
             return View();
@@ -54,7 +51,6 @@ namespace MVCExample.Controllers
                     //search
                     if (!String.IsNullOrEmpty(txtSearch) && (txtPhongban == 0))
                     {
-                        ViewBag.txtSearch = txtSearch;
                         string sqlSearch = @"Select * from nhan_vien 
                         where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%') Order By ma_nhanvien ASC";
                         list = myCon.Query<Staff>(sqlSearch).ToList();
@@ -70,9 +66,8 @@ namespace MVCExample.Controllers
                     //phong ban search
                     if (String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
                     {
-                        ViewBag.txtPhongban = txtPhongban;
                         string sqlSearch = @"Select * from nhan_vien 
-                    where phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
+                        where phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
                         list = myCon.Query<Staff>(sqlSearch).ToList();
                         posts = list.ToList();
                         foreach (var item in posts)
@@ -138,13 +133,13 @@ namespace MVCExample.Controllers
             {
                 return Json(new
                 {
-                    status = "LOI"// bug offset sql
+                    status = ErrorCode.LOI.ToString()// bug offset sql
                 });
             }
 
         }
         public IActionResult GetDropdown()
-        {   
+        {
             var listPhongBan = new List<phong_ban>();
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
@@ -152,9 +147,10 @@ namespace MVCExample.Controllers
                 string sqlDropdown = "SELECT * FROM phong_ban";
                 listPhongBan = myCon.Query<phong_ban>(sqlDropdown).ToList();
 
-            return Json(new{
-                data = listPhongBan
-            });
+                return Json(new
+                {
+                    data = listPhongBan
+                });
             }
         }
 
@@ -182,7 +178,7 @@ namespace MVCExample.Controllers
                     }
                     if (model.ho_ten == listAll[i].ho_ten && model.ngay_sinh == listAll[i].ngay_sinh)
                     {
-                        return Json(new { status = "TRUNG" });
+                        return Json(new { status = ErrorCode.TRUNG.ToString() });
                     }
                 }
 
@@ -195,18 +191,16 @@ namespace MVCExample.Controllers
                     return Json(new
                     {
                         data = listAll,
-                        status = "OK"
+                        status = ErrorCode.OK.ToString()
                     });
                 }
                 else
                 {
                     return Json(new
                     {
-                        status = "LOI"
+                        status = ErrorCode.LOI.ToString()
                     });
                 }
-
-
             }
 
         }
@@ -235,7 +229,7 @@ namespace MVCExample.Controllers
                 {
                     if (staff.ho_ten == listAll[i].ho_ten && staff.ngay_sinh == listAll[i].ngay_sinh)
                     {
-                        return Json(new { status = "TRUNG" });
+                        return Json(new { status = ErrorCode.TRUNG.ToString() });
                     }
                 }
                 //format ngay sinh no bugg
@@ -259,14 +253,14 @@ namespace MVCExample.Controllers
                     return Json(new
                     {
                         data = listAll,
-                        status = "OK"
+                        status = ErrorCode.OK.ToString()
                     });
                 }
                 else
                 {
                     return Json(new
                     {
-                        status = "LOI"
+                        status = ErrorCode.LOI.ToString()
                     });
                 }
 
@@ -288,17 +282,15 @@ namespace MVCExample.Controllers
                 string sql = @"delete from nhan_vien
                 where ma_nhanvien = '" + id + "'";
                 var affectedRows = myCon.Execute(sql);
-                var listAll2 = myCon.Query<Staff>(sqlAll).ToList();
-
                 if (affectedRows != 0)
                 {
-                    return Json(new { data = listAll2, status = "OK" });
+                    return Json(new { status = ErrorCode.OK.ToString() });
                 }
                 else
                 {
                     return Json(new
                     {
-                        status = "LOI"
+                        status = ErrorCode.LOI.ToString()
                     });
                 }
             }
@@ -385,13 +377,13 @@ namespace MVCExample.Controllers
             {
                 return Json(new
                 {
-                    status = "LOI"
+                    status = ErrorCode.LOI.ToString()
                 });
             }
             DownloadExcel();
             return Json(new
             {
-                status = "OK"
+                status = ErrorCode.OK.ToString()
             });
         }
         // public IActionResult PhongBan(){
