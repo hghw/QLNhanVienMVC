@@ -12,6 +12,7 @@ using System.Linq;
 using System.IO;
 using System.Drawing;
 using OfficeOpenXml.Style;
+using Dapper.FastCrud;
 
 namespace MVCExample.Controllers
 {
