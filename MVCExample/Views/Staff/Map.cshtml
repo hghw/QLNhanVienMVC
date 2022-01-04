@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MVCExample.Models.nhan_vien>
+
+@{
+
+    ViewData["Title"] = "Index";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2 class="text-center" style="padding: 15px; text-transform: Uppercase">Bản Đồ Nhân Viên</h2>
+<div id="bodyMap" class="d-flex">
+    <div id="left-bodyMap">
+        <div id="searchNV">
+            <input type="search" id="txtSearch" name="txtSearch" class="form-control rounded" placeholder="Nhập từ khóa..."
+                   aria-label="Search" aria-describedby="search-addon" />
+            <button type="button" class="input-group-text border-0" id="subSearch">Search</button>
+        </div>
+        <table class="table table-hover" id="table-map-search">
+            <thead class="thead-light">
+                <tr>
+                    <th>Họ Tên</th>
+                    <th>Chức Vụ</th>
+                </tr>
+            </thead>
+            <tbody id="DanhSachNV">
+            </tbody>
+
+        </table>
+        <ul id="paginationMap" class="pagination pagination-sm">
+        </ul>
+    </div>
+    <div id="right-bodyMap" class="w-70 bg-danger flex-grow-1">
+        <div id="map"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        GetMap();
+        danhsachNVMap(null, null, 1);
+    })
+</script>

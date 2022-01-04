@@ -15,7 +15,6 @@ using OfficeOpenXml.Style;
 using Dapper.FastCrud;
 
 
-
 namespace MVCExample.Controllers
 {
     enum ErrorCode { OK = 1, ERROR = 2, Duplicate = 3 }
@@ -136,6 +135,13 @@ namespace MVCExample.Controllers
             }
 
         }
+        public IActionResult GetMap()
+        {
+            var map = Map();
+            return Json(new { 
+            data = map
+            });
+        }
         public IActionResult GetDropdown()
         {
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
@@ -174,12 +180,15 @@ namespace MVCExample.Controllers
                         return Json(new { status = ErrorCode.Duplicate.ToString() });
                     }
                 }
+
                 myCon.Insert<nhan_vien>(model);//fast CRUD
-                return Json(new
-                {
-                    data = listAll,
-                    status = ErrorCode.OK.ToString()
-                });
+
+                    return Json(new
+                    {
+                        data = listAll,
+                        status = ErrorCode.OK.ToString()
+                    });
+
             }
 
         }
@@ -330,10 +339,10 @@ namespace MVCExample.Controllers
                 status = ErrorCode.OK.ToString()
             });
         }
-        // public IActionResult PhongBan(){
+         public IActionResult Map(){
 
-        //     return ;
-        // }
+            return View();
+         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 

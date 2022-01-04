@@ -47,7 +47,8 @@ namespace MVCExample.Models
         [ForeignKey("nhan_vien_fk")]
         public virtual phong_ban phong_ban { set; get; }
 
-
+/*        public long x { set; get; }
+        public long y { set; get; }*/
 
         public string getma_nhanvien(List<nhan_vien> listNhanVien)
         {

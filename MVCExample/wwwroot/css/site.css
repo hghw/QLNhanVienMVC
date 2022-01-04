@@ -92,9 +92,39 @@ body {
   top: 45%;
   left: 40%;
 }
+/*map*/
+
+#bodyMap{
+    height: 700px;
+
+}
+    #bodyMap #left-bodyMap {
+        width: 30%;
+        padding: 20px;
+        background-color: #95ed71;
+        position: relative;
+    }
+    #bodyMap #right-bodyMap {
+        width: 70%;
+    }
+#searchNV{
+    display: flex;
+}
+#table-map-search {
+    margin-top: 10px;
+}
+#left-bodyMap #paginationMap {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+#map {
+    height: 700px;
+}
 
 @keyframes spin {
-  0% {
+    0% {
     transform: rotate(0deg);
   }
 

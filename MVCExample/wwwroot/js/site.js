@@ -1,12 +1,7 @@
-﻿$(document).ready(function () {
-    LoadData(null, null, 1);
-    
-})
-
-function LoadData(txtPhongban, txtSearch, page) {
+﻿function LoadData(txtPhongban, txtSearch, page) {
 $.ajax({
     type: 'GET',
-    url: 'Staff/GetPaging',
+    url: '/Staff/GetPaging',
     data: {txtPhongban: txtPhongban, txtSearch: txtSearch, page: page },
     success: function (res) {
         var tbLoi = res.status;
@@ -38,7 +33,7 @@ $.ajax({
                 "<td>" + listPage[i].chuc_vu + "</td>" +
                 "<td>" + listPage[i].phong_ban.ten_phong_ban + "</td>" +
                 "<td class='d-flex' style='justify-content: space-around;'>"
-                + '<a onclick=showPopUp("Staff/Edit/' + listPage[i].ma_nhanvien + '","Edit")  class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >'
+                + '<a onclick=showPopUp("/Staff/Edit/' + listPage[i].ma_nhanvien + '","Edit")  class="btn btn-warning"> <i class="far fa-edit"></i>Sửa</a >'
                 + '<a onclick=Delete("'+ listPage[i].ma_nhanvien +'") class="btn btn-danger"><i class="fa fa-trash"></i></a >'
                 + "</td>" +
                 "</tr>";
@@ -125,7 +120,7 @@ function addStaff() {
     else {
         $.ajax({
             type: 'POST',
-            url: 'Staff/create',
+            url: '/Staff/create',
             data: {model: staff},
             success: function (res) {
                 var countdata = res.data;
@@ -177,7 +172,7 @@ function updateStaff() {
         {
             $.ajax({
                 type: 'POST',
-                url: 'Staff/Update',
+                url: '/Staff/Update',
                 data: {staff: staff},
                 success: function (res) {
                     var countdata = res.data;
@@ -208,7 +203,7 @@ function Delete(id){
     if(conf){
         $.ajax({
             type: 'POST',
-            url: "Staff/Delete",
+            url: "/Staff/Delete",
             data: {id:id},
             success: function (res) {
                 if (res.status == 'OK') {
@@ -232,7 +227,7 @@ function Delete(id){
 function donwloadExcel() {
     $.ajax({
         type: "GET",
-        url: "Staff/ExportExcel",
+        url: "/Staff/ExportExcel",
         success: function (res) {
             if (res.status == "OK") {
                 $.notify('Download file Excel thành công', { autoHideDelay: 3000, globalPosition: "top center", className: "success" });
@@ -253,6 +248,13 @@ $(document).on("click", ".page-item .page-link", function () {
     $("#tableViewAll").html("")
     $("#pagination").html("")
     LoadData(null, null, page)
+})
+//pageMap
+$(document).on("click", ".page-item .page-link", function () {
+    var page = $(this).attr('data-page');
+    $("#DanhSachNV").html("")
+    $("#paginationMap").html("")
+    danhsachNVMap(null, null, page);
 })
 //nhan enter de search
 $(document).on("change", "#txtSearch", function () {
@@ -291,6 +293,36 @@ $(document).on("click", "#subSearch", function () {
     else {
         LoadData(null, null, 1);
     }
+});//nhan enter de search MAP
+$(document).on("change", "#txtSearch", function () {
+    $("#DanhSachNV").html("")
+    $("#paginationMap").html("")
+    var txtSearch = $("#txtSearch").val();
+    if (txtSearch != "") {
+        danhsachNVMap(null, txtSearch, 1)
+
+    } else if (txtSearch != "") {
+        danhsachNVMap(null, txtSearch, 1)
+
+    }
+    else {
+        danhsachNVMap(null, null, 1);
+    }
+})
+//nhan button de search MAP
+$(document).on("click", "#subSearch", function () {
+    $("#DanhSachNV").html("")
+    $("#paginationMap").html("")
+    var txtSearch = $("#txtSearch").val();
+    if (txtSearch != "") {
+        danhsachNVMap(null, txtSearch, 1)
+
+    } else if (txtSearch != "") {
+        danhsachNVMap(null, txtSearch, 1)
+    }
+    else {
+        danhsachNVMap(null, null, 1);
+    }
 });
 //dropdown phong ban
 $(document).on("change", "#dropdownValue", function(){
@@ -313,7 +345,7 @@ function GetDropdown(){
     SetData.append(Data2);
     $.ajax({
         type: 'GET',
-        url: "Staff/GetDropdown",
+        url: "/Staff/GetDropdown",
         success: function (res) {
             var Setpb = $("#phongban_id");
             var data = res.data;
@@ -328,5 +360,90 @@ function GetDropdown(){
             console.log(err);
         }
     })   
+}
+
+function danhsachNVMap(txtPhongban, txtSearch, page) {
+    $.ajax({
+        type: 'GET',
+        url: '/Staff/GetPaging',
+        data: { txtPhongban: txtPhongban, txtSearch: txtSearch, page: page },
+        success: function (res) {
+            var tbLoi = res.status;
+            if (tbLoi == "ERROR") {
+                $.notify("Không có nhân viên nào", { position: "top center", autoHideDelay: 5000, className: "danger" })
+            }
+            var data = res.posts;
+            var SetData = $("#DanhSachNV");
+            for (var i = 0; i < data.length; i++) {
+                var Data = "<tr>" +
+                    "<td>" + data[i].ho_ten + "</td>" +
+                    "<td>" + data[i].chuc_vu + "</td>" +
+                    "</tr>";
+                SetData.append(Data);
+            }
+            //create pagination
+            var pagination_string = "";
+            var pageCurrent = res.page;
+            var numSize = res.countPages;
+
+            if (pageCurrent == (1)) {//page PREVIEWS disabled or enable
+                pagination_string += '<li class="page-item disabled"><a class="page-link" data-page='
+                    + (pageCurrent - 1) + '>Trước</a></li>';
+            } else {
+                pagination_string += '<li class="page-item"><a class="page-link" data-page='
+                    + (pageCurrent - 1) + '>Trước</a></li>';
+            }
+
+            for (i = 1; i <= numSize; i++) {
+                if (i == pageCurrent) {
+                    pagination_string += '<li class="page-item active"><a class="page-link" data-page='
+                        + i + '>' + pageCurrent + '</a></li>';
+                } else {
+                    pagination_string += '<li class="page-item"><a  class="page-link" data-page='
+                        + i + '>' + i + '</a></li>';
+                }
+            }
+            if (pageCurrent == (numSize)) {//page AFTER disabled or enable
+                pagination_string += '<li class="page-item disabled"><a class="page-link" data-page='
+                    + (pageCurrent + 1) + '>Sau</a></li>';
+            } else {
+                pagination_string += '<li class="page-item"><a class="page-link" data-page='
+                    + (pageCurrent + 1) + '>Sau</a></li>';
+            }
+            $("#paginationMap").append(pagination_string);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    })
+}
+
+function GetMap() {
+    var map = L.map('map').setView([51.5, -0.09], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var LeafIcon = L.Icon.extend({
+        options: {
+            shadowUrl: 'leaf-shadow.png',
+            iconSize: [38, 95],
+            shadowSize: [50, 64],
+            iconAnchor: [22, 94],
+            shadowAnchor: [4, 62],
+            popupAnchor: [-3, -76]
+        }
+    });
+    $.ajax({
+        type: 'GET',
+        url: '/Staff/GetMap',
+        success: function (res) {
+            var data = res.data;
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    })
 }
 

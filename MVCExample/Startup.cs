@@ -81,7 +81,7 @@ namespace MVCSamples
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Staff}/{action=Index}/{id?}");
+                    pattern: "{controller=Staff}/{action=Map}/{id?}");
             });
         }
     }
