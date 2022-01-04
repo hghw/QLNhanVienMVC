@@ -255,7 +255,7 @@ $(document).on("click", ".page-item .page-link", function () {
     LoadData(null, null, page)
 })
 //nhan enter de search
-$(document).on("keydown", "#txtSearch", function () {
+$(document).on("change", "#txtSearch", function () {
     $("#tableViewAll").html("")
     $("#pagination").html("")
     var txtPhongban = $("#dropdownValue").val();
@@ -263,12 +263,11 @@ $(document).on("keydown", "#txtSearch", function () {
     if (txtSearch != "" && txtPhongban > 0) {
         LoadData(txtPhongban, txtSearch, 1)
 
-    } else if (txtPhongban == 0 && txtSearch != "") {
-
+    } else if (txtSearch != "" && txtPhongban == 0) {
         LoadData(null, txtSearch, 1)
+
     } else if (txtSearch == "" && txtPhongban > 0) {
         LoadData(txtPhongban, null, 1)
-
     }
     else {
         LoadData(null, null, 1);
@@ -288,7 +287,6 @@ $(document).on("click", "#subSearch", function () {
 
     } else if (txtSearch == "" && txtPhongban > 0) {
         LoadData(txtPhongban, null, 1)
-
     }
     else {
         LoadData(null, null, 1);

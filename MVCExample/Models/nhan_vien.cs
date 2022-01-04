@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+    
 namespace MVCExample.Models
 {
     [Table("nhan_vien")]
@@ -42,9 +42,13 @@ namespace MVCExample.Models
         [Display(Name = "ID Phòng ban")]
         [Column(TypeName = "int")]
         public virtual int phongban_id { set; get; }
+
         // Khai bao khoa ngoai
         [ForeignKey("nhan_vien_fk")]
         public virtual phong_ban phong_ban { set; get; }
+
+
+
         public string getma_nhanvien(List<nhan_vien> listNhanVien)
         {
             int maCount = listNhanVien.Count + 1;

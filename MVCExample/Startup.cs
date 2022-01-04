@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper.FastCrud;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,10 +13,12 @@ using Newtonsoft.Json.Serialization;
 
 namespace MVCSamples
 {
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
+            OrmConfiguration.DefaultDialect = SqlDialect.PostgreSql;
             Configuration = configuration;
         }
 
