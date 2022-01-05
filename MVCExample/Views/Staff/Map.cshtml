@@ -21,6 +21,7 @@
                 <tr>
                     <th>Họ Tên</th>
                     <th>Chức Vụ</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="DanhSachNV">
@@ -37,7 +38,79 @@
 
 <script>
     $(document).ready(function () {
-        GetMap();
+        GetMap(null);
         danhsachNVMap(null, null, 1);
     })
+
+    function GetMap(mnv) {
+        $.ajax({
+            type: 'GET',
+            url: '/Staff/GetMap',
+            data: { mnv: mnv },
+            success: function (res) {
+                var data = res.data;
+                var map = L.map('map').setView([21.0281326552094, 105.8361773499927], 10);
+
+                if (res.x > 0 && res.y > 0) {
+                    var x = res.x;
+                    var y = res.y;
+                    map.setView([x, y], 12);
+                } else {
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+
+                    // click show position
+                    @*var popup = L.popup();
+                    function onMapClick(e) {
+                        popup
+                            .setLatLng(e.latlng)
+                            .setContent("You clicked the map at " + e.latlng.toString())
+                            .openOn(map);
+                    }
+                    map.on('click', onMapClick);*@
+                
+
+                //vi tri cua all nhan vien
+                for (var i = 0; i < data.length; i++) {
+                    var marker = L.marker([data[i].x, data[i].y]).addTo(map);
+                }
+
+                //click
+                $(document).on("click", "#iconMap", function () { //click
+
+                    var redirect = $("#valuedataNV").attr('data-page');
+                    GetMap(redirect);
+                })
+
+                //circle
+                var circle = L.circle([21.019638, 105.818253], {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.25,
+                    radius: 20000
+                }).addTo(map);
+
+                
+
+
+                //click marker
+                var popup = L.popup();
+                function onMapClick2(e) {
+                    popup
+                        .setLatLng(e.latlng)
+                        .setContent("Thông tin nhân viên A B C")
+                        .openOn(map);
+                    }
+                }
+                //marker click
+                marker.on('click', onMapClick2);//chua click dc
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+    }
+
+
 </script>

@@ -41,14 +41,14 @@ namespace MVCExample.Models
         public string chuc_vu { set; get; }
         [Display(Name = "ID Phòng ban")]
         [Column(TypeName = "int")]
+        public double x { set; get; }
+        public double y { set; get; }
         public virtual int phongban_id { set; get; }
 
         // Khai bao khoa ngoai
         [ForeignKey("nhan_vien_fk")]
         public virtual phong_ban phong_ban { set; get; }
 
-/*        public long x { set; get; }
-        public long y { set; get; }*/
 
         public string getma_nhanvien(List<nhan_vien> listNhanVien)
         {
@@ -88,6 +88,18 @@ namespace MVCExample.Models
             ma_nhanvien = ma_nhanvien + maCount.ToString();
             return ma_nhanvien;
         }
+        public double getX(List<nhan_vien> listNhanVien)
+        {
+            double x = 21.702253;
+       
+            return x;
+        }
+        public double getY(List<nhan_vien> listNhanVien)
+        {
+            double y = 105.924683;
 
+    
+            return y;
+        }
     }
 }

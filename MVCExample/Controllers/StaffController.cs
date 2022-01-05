@@ -135,12 +135,41 @@ namespace MVCExample.Controllers
             }
 
         }
-        public IActionResult GetMap()
+        public IActionResult GetMap(string mnv)
         {
-            var map = Map();
-            return Json(new { 
-            data = map
-            });
+            string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
+            var staff = new nhan_vien();
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            {
+                List<nhan_vien> list = myCon.Find<nhan_vien>().ToList();//GET DATA
+ /*               for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].x = staff.getX(list);
+                    list[i].y = staff.getY(list);
+                }*/
+                if (mnv != "")
+                {
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        if (mnv == list[i].ma_nhanvien)
+                        {
+                            var x = list[i].x;
+                            var y = list[i].y;
+                            return Json(new
+                            {
+                                x = x,
+                                y = y
+                            });
+                        }
+                    }
+                }
+                
+
+                return Json(new
+                {
+                    data = list
+                });
+            }
         }
         public IActionResult GetDropdown()
         {

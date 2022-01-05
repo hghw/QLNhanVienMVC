@@ -122,7 +122,11 @@ body {
 #map {
     height: 700px;
 }
-
+#iconMap {
+    color: #2d7e7e;
+    font-size: 20px;
+    cursor: pointer;
+}
 @keyframes spin {
     0% {
     transform: rotate(0deg);

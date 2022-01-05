@@ -1,4 +1,8 @@
-﻿function LoadData(txtPhongban, txtSearch, page) {
+﻿$(document).ready(function () {
+
+})
+
+function LoadData(txtPhongban, txtSearch, page) {
 $.ajax({
     type: 'GET',
     url: '/Staff/GetPaging',
@@ -378,6 +382,7 @@ function danhsachNVMap(txtPhongban, txtSearch, page) {
                 var Data = "<tr>" +
                     "<td>" + data[i].ho_ten + "</td>" +
                     "<td>" + data[i].chuc_vu + "</td>" +
+                    "<td>" + "<a id='valuedataNV' data-page="+ data[i].ma_nhanvien +"> </a><i id='iconMap' class='fas fa-share'></i>" + "</td>" +
                     "</tr>";
                 SetData.append(Data);
             }
@@ -418,32 +423,10 @@ function danhsachNVMap(txtPhongban, txtSearch, page) {
     })
 }
 
-function GetMap() {
-    var map = L.map('map').setView([51.5, -0.09], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
 
-    var LeafIcon = L.Icon.extend({
-        options: {
-            shadowUrl: 'leaf-shadow.png',
-            iconSize: [38, 95],
-            shadowSize: [50, 64],
-            iconAnchor: [22, 94],
-            shadowAnchor: [4, 62],
-            popupAnchor: [-3, -76]
-        }
-    });
-    $.ajax({
-        type: 'GET',
-        url: '/Staff/GetMap',
-        success: function (res) {
-            var data = res.data;
-        },
-        error: function (err) {
-            console.log(err)
-        }
-    })
-}
+
+
+
+
 
