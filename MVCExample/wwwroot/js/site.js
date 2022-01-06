@@ -382,7 +382,7 @@ function danhsachNVMap(txtPhongban, txtSearch, page) {
                 var Data = "<tr>" +
                     "<td>" + data[i].ho_ten + "</td>" +
                     "<td>" + data[i].chuc_vu + "</td>" +
-                    "<td>" + "<a id='valuedataNV' data-page="+ data[i].ma_nhanvien +"> </a><i id='iconMap' class='fas fa-share'></i>" + "</td>" +
+                    "<td>" + "<a id='valuedataNV' data-map="+ data[i].ma_nhanvien +"> </a><i id='iconMap' class='fas fa-share'></i>" + "</td>" +
                     "</tr>";
                 SetData.append(Data);
             }

@@ -142,12 +142,17 @@ namespace MVCExample.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 List<nhan_vien> list = myCon.Find<nhan_vien>().ToList();//GET DATA
- /*               for (int i = 0; i < list.Count; i++)
+                /*               for (int i = 0; i < list.Count; i++)
+                               {
+                                   list[i].x = staff.getX(list);
+                                   list[i].y = staff.getY(list);
+                               }*/
+                foreach (var item in list) //phong ban...
                 {
-                    list[i].x = staff.getX(list);
-                    list[i].y = staff.getY(list);
-                }*/
-                if (mnv != "")
+                    var PBquery = myCon.Get<phong_ban>(new phong_ban { phongban_id = item.phongban_id });
+                    item.phong_ban = PBquery;
+                }
+/*                if (mnv != "")
                 {
                     for (int i = 0; i < list.Count; i++)
                     {
@@ -162,7 +167,7 @@ namespace MVCExample.Controllers
                             });
                         }
                     }
-                }
+                }*/
                 
 
                 return Json(new
