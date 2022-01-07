@@ -382,7 +382,7 @@ function danhsachNVMap(txtPhongban, txtSearch, page) {
                 var Data = "<tr>" +
                     "<td>" + data[i].ho_ten + "</td>" +
                     "<td>" + data[i].chuc_vu + "</td>" +
-                    "<td>" + "<a id='valuedataNV' data-map="+ data[i].ma_nhanvien +"> </a><i id='iconMap' class='fas fa-share'></i>" + "</td>" +
+                    "<td>" + "<button type='button' id='valueshowinfo' value='"+ data[i].ma_nhanvien +"'><i id='icon-share' class='fas fa-share'></button>" + "</td>" +
                     "</tr>";
                 SetData.append(Data);
             }
@@ -423,7 +423,65 @@ function danhsachNVMap(txtPhongban, txtSearch, page) {
     })
 }
 
+function GetMap() {
+    $.ajax({
+        type: 'GET',
+        url: '/Staff/GetMap',
+        success: function (res) {
+            var data = res.data;
+            var map = L.map('map').setView([21.0281326552094, 105.8361773499927], 10);//set map
 
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);//set map
+
+            // click show position
+            var popup = L.popup();
+            function onMapClick(e) {
+                popup
+                    .setLatLng(e.latlng)
+                    .setContent("Vị trí trên map: " + e.latlng.toString())
+                    .openOn(map);
+            }
+            map.on('click', onMapClick);
+
+
+            //market all nhan vien
+            for (var i = 0; i < data.length; i++) {
+                var DSNV = [];
+                var marker = [];
+                marker[i] = L.marker([data[i].x, data[i].y]).addTo(map);
+                DSNV[i] = "Họ tên: " + data[i].ho_ten + "," + " SĐT: " + data[i].sdt + "," + " Chức vụ: " + data[i].chuc_vu + ","
+                    + " Địa chỉ: " + data[i].dia_chi + "," + " Phòng ban: " + data[i].phong_ban.ten_phong_ban;
+                marker[i].bindPopup(DSNV[i]); // show thong tin nv
+                //
+            }
+            //circle map
+            var circle = L.circle([21.019638, 105.818253], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.25,
+                radius: 20000
+            }).addTo(map);
+
+            //click
+            $(document).on("click", "#valueshowinfo", function () { //click
+
+                var redirect = $(this).val();
+                for (var i = 0; i < data.length; i++) {
+
+                    if (redirect == data[i].ma_nhanvien) {
+                        map.setView([data[i].x, data[i].y], 12);
+                    }
+                }
+            });
+
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    })
+}
 
 
 

@@ -135,7 +135,7 @@ namespace MVCExample.Controllers
             }
 
         }
-        public IActionResult GetMap(string mnv)
+        public IActionResult GetMap()
         {
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             var staff = new nhan_vien();
@@ -152,24 +152,6 @@ namespace MVCExample.Controllers
                     var PBquery = myCon.Get<phong_ban>(new phong_ban { phongban_id = item.phongban_id });
                     item.phong_ban = PBquery;
                 }
-/*                if (mnv != "")
-                {
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        if (mnv == list[i].ma_nhanvien)
-                        {
-                            var x = list[i].x;
-                            var y = list[i].y;
-                            return Json(new
-                            {
-                                x = x,
-                                y = y
-                            });
-                        }
-                    }
-                }*/
-                
-
                 return Json(new
                 {
                     data = list
