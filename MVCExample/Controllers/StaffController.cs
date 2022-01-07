@@ -45,85 +45,85 @@ namespace MVCExample.Controllers
                 string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
                 using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
                 {
-                        List<nhan_vien> list = myCon.Find<nhan_vien>(nv => nv.OrderBy($"{nameof(nhan_vien.ma_nhanvien):C} ASC")).ToList();//GET DATA FAST CRUD
-                        var posts = list;
-                        //search
-                        if (!String.IsNullOrEmpty(txtSearch) && (txtPhongban == 0))
-                        {
-                            string sqlSearch = @"Select * from nhan_vien 
+                    List<nhan_vien> list = myCon.Find<nhan_vien>(nv => nv.OrderBy($"{nameof(nhan_vien.ma_nhanvien):C} ASC")).ToList();//GET DATA FAST CRUD
+                    var posts = list;
+                    //search
+                    if (!String.IsNullOrEmpty(txtSearch) && (txtPhongban == 0))
+                    {
+                        string sqlSearch = @"Select * from nhan_vien 
                             where LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%') Order By ma_nhanvien ASC";
-                            list = myCon.Query<nhan_vien>(sqlSearch).ToList();
-                            posts = list.ToList();
-                            foreach (var item in posts)
-                            {
+                        list = myCon.Query<nhan_vien>(sqlSearch).ToList();
+                        posts = list.ToList();
+                        foreach (var item in posts)
+                        {
                             var PBquery = myCon.Get<phong_ban>(new phong_ban { phongban_id = item.phongban_id });
                             item.phong_ban = PBquery;
-                            }
-                            return Json(new { posts = posts });
                         }
-                        //phong ban search
-                        if (String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
-                        {
-                            string sqlSearch = @"Select * from nhan_vien 
+                        return Json(new { posts = posts });
+                    }
+                    //phong ban search
+                    if (String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
+                    {
+                        string sqlSearch = @"Select * from nhan_vien 
                         where phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
-                            list = myCon.Query<nhan_vien>(sqlSearch).ToList();
-                            posts = list.ToList();
-                            foreach (var item in posts)
-                            {
-                            var PBquery = myCon.Get<phong_ban>(new phong_ban { phongban_id = item.phongban_id });
-                            item.phong_ban = PBquery;
-                            }
-                            return Json(new { posts = posts });
-                        }
-                        //ket hop 2 dieu kien
-                        if (!String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
+                        list = myCon.Query<nhan_vien>(sqlSearch).ToList();
+                        posts = list.ToList();
+                        foreach (var item in posts)
                         {
-                            string sqltotal = @"Select * from nhan_vien 
-                            where (LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%')) and phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
-                            list = myCon.Query<nhan_vien>(sqltotal).ToList();
-                            posts = list.ToList();
-                            foreach (var item in posts)
-                            {
                             var PBquery = myCon.Get<phong_ban>(new phong_ban { phongban_id = item.phongban_id });
                             item.phong_ban = PBquery;
-                            }
-                            return Json(new { posts = posts });
                         }
+                        return Json(new { posts = posts });
+                    }
+                    //ket hop 2 dieu kien
+                    if (!String.IsNullOrEmpty(txtSearch) && txtPhongban > 0)
+                    {
+                        string sqltotal = @"Select * from nhan_vien 
+                            where (LOWER(ho_ten) like LOWER('%" + txtSearch + "%') Or UPPER(ho_ten) like UPPER('%" + txtSearch + "%') Or LOWER(dia_chi) like LOWER('%" + txtSearch + "%') Or UPPER(dia_chi) like UPPER('%" + txtSearch + "%')) and phongban_id = " + txtPhongban + " Order By ma_nhanvien ASC";
+                        list = myCon.Query<nhan_vien>(sqltotal).ToList();
+                        posts = list.ToList();
+                        foreach (var item in posts)
+                        {
+                            var PBquery = myCon.Get<phong_ban>(new phong_ban { phongban_id = item.phongban_id });
+                            item.phong_ban = PBquery;
+                        }
+                        return Json(new { posts = posts });
+                    }
 
-                        //page
+                    //page
 
-                        int ITEMS_PER_PAGE = 10;
+                    int ITEMS_PER_PAGE = 10;
 
                     string sqlPageCount = @"SELECT COUNT(ma_nhanvien)FROM nhan_vien;";
                     int totalRecord = myCon.Query<int>(sqlPageCount).FirstOrDefault();
                     /*int totalRecord =  myCon.Count<nhan_vien>(nv => nv.Where($"{nameof(nhan_vien.ma_nhanvien):C}=?"));//?*/
 
                     int countPages = (int)Math.Ceiling((double)totalRecord / ITEMS_PER_PAGE);
-                        if (page == 0)
-                        {
-                            page = 1;
-                        }
-                        if (page > countPages)
-                        {
-                            page = countPages;
-                        }
-                        int PageNumber = (page - 1) * ITEMS_PER_PAGE;
-                        // tổng số trang
-                        string sqlPage = @"SELECT * FROM nhan_vien ORDER BY ma_nhanvien OFFSET " + PageNumber + " ROWS FETCH NEXT " + (ITEMS_PER_PAGE) + " ROWS ONLY";
-                        posts = myCon.Query<nhan_vien>(sqlPage).ToList();//  
+                    if (page == 0)
+                    {
+                        page = 1;
+                    }
+                    if (page > countPages)
+                    {
+                        page = countPages;
+                    }
+                    int PageNumber = (page - 1) * ITEMS_PER_PAGE;
+                    // tổng số trang
+                    string sqlPage = @"SELECT * FROM nhan_vien ORDER BY ma_nhanvien OFFSET " + PageNumber + " ROWS FETCH NEXT " + (ITEMS_PER_PAGE) + " ROWS ONLY";
+                    posts = myCon.Query<nhan_vien>(sqlPage).ToList();//  
 
-                        foreach (var item in posts)
-                        {
+                    foreach (var item in posts)
+                    {
                         var PBquery = myCon.Get<phong_ban>(new phong_ban { phongban_id = item.phongban_id });
                         item.phong_ban = PBquery;
-                        }
+                    }
 
-                        return Json(new
-                        {
-                            page = page,
-                            countPages = countPages,
-                            posts = posts
-                        });
+                    return Json(new
+                    {
+                        page = page,
+                        countPages = countPages,
+                        posts = posts
+                    });
                 }
             }
             catch (Exception)
@@ -198,12 +198,25 @@ namespace MVCExample.Controllers
                 }
 
                 myCon.Insert<nhan_vien>(model);//fast CRUD
+                var get_Mnv = myCon.Get<nhan_vien>(new nhan_vien { ma_nhanvien = model.ma_nhanvien });
 
+                if (model.ma_nhanvien == get_Mnv.ma_nhanvien)
+                {
                     return Json(new
                     {
                         data = listAll,
                         status = ErrorCode.OK.ToString()
                     });
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        data = listAll,
+                        status = ErrorCode.ERROR.ToString()
+                    });
+                }
+
 
             }
 
@@ -242,12 +255,23 @@ namespace MVCExample.Controllers
                 var m = dateformat.Month;
                 var y = dateformat.Year;
                 var datetie = (d + "/" + m + "/" + y);
-                myCon.Update<nhan_vien>(staff);//fastCRUD
-                return Json(new
+                var updateNV = myCon.Update<nhan_vien>(staff);//fastCRUD
+                if (updateNV == true)
                 {
-                    data = listAll,
-                    status = ErrorCode.OK.ToString()
-                });
+                    return Json(new
+                    {
+                        data = listAll,
+                        status = ErrorCode.OK.ToString()
+                    });
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        status = ErrorCode.ERROR.ToString()
+                    });
+                }
+
 
             }
         }
@@ -274,7 +298,7 @@ namespace MVCExample.Controllers
                 List<nhan_vien> listAll = myCon.Find<nhan_vien>(nv => nv.OrderBy($"{nameof(nhan_vien.ma_nhanvien):C} ASC")).ToList();//GET DATA
                 foreach (var item in listAll)
                 {
-                    var PBquery =  myCon.Get<phong_ban>(new phong_ban { phongban_id = item.phongban_id });
+                    var PBquery = myCon.Get<phong_ban>(new phong_ban { phongban_id = item.phongban_id });
                     item.phong_ban = PBquery;
                 }
                 using (ExcelPackage Ep = new ExcelPackage())
@@ -355,10 +379,11 @@ namespace MVCExample.Controllers
                 status = ErrorCode.OK.ToString()
             });
         }
-         public IActionResult Map(){
+        public IActionResult Map()
+        {
 
             return View();
-         }
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 
