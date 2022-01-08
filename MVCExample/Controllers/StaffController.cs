@@ -141,7 +141,7 @@ namespace MVCExample.Controllers
             var staff = new nhan_vien();
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                List<nhan_vien> list = myCon.Find<nhan_vien>().ToList();//GET DATA
+                List<nhan_vien> list = myCon.Find<nhan_vien>(nv => nv.OrderBy($"{nameof(nhan_vien.ma_nhanvien):C} ASC")).ToList();//GET DATA FAST CRUD
                 /*               for (int i = 0; i < list.Count; i++)
                                {
                                    list[i].x = staff.getX(list);
@@ -256,7 +256,7 @@ namespace MVCExample.Controllers
                 var y = dateformat.Year;
                 var datetie = (d + "/" + m + "/" + y);
                 var updateNV = myCon.Update<nhan_vien>(staff);//fastCRUD
-                if (updateNV == true)
+                if (updateNV)
                 {
                     return Json(new
                     {
@@ -286,8 +286,16 @@ namespace MVCExample.Controllers
             string sqlDataSource = _configuration.GetConnectionString("StaffConnect");
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
-                myCon.Delete<nhan_vien>(new nhan_vien { ma_nhanvien = id });
+                var deleteConf = myCon.Delete<nhan_vien>(new nhan_vien { ma_nhanvien = id });
+                if (deleteConf)
+                {
                 return Json(new { status = ErrorCode.OK.ToString() });
+                }
+                else
+                {
+                    return Json(new { status = ErrorCode.ERROR.ToString() });
+
+                }
             }
         }
         public void DownloadExcel()

@@ -445,36 +445,48 @@ function GetMap() {
             }
             map.on('click', onMapClick);
 
-
+           
             //market all nhan vien
             for (var i = 0; i < data.length; i++) {
                 var DSNV = [];
                 var marker = [];
                 marker[i] = L.marker([data[i].x, data[i].y]).addTo(map);
-                DSNV[i] = "Họ tên: " + data[i].ho_ten + "," + " SĐT: " + data[i].sdt + "," + " Chức vụ: " + data[i].chuc_vu + ","
+                DSNV[i] = "MNV: " + data[i].ma_nhanvien + "," + " Họ tên: " + data[i].ho_ten + "," + " SĐT: " + data[i].sdt + "," + " Chức vụ: " + data[i].chuc_vu + ","
                     + " Địa chỉ: " + data[i].dia_chi + "," + " Phòng ban: " + data[i].phong_ban.ten_phong_ban;
-                marker[i].bindPopup(DSNV[i]); // show thong tin nv
-                //
+
+                        marker[i].bindPopup(DSNV[i]).on('click', function () {
+                        alert(i)
+                        var i = myid;
+                        $("#valueshowinfo").css({ "background-color": "yellow" });
+
+                    
+                }); // show thong tin nv
+
+                /*$(".tr-" + data[i].ma_nhanvien + "").css({ "background-color": "yellow" });*/
+
+
+
+
+                $(document).on("click", ".td-mnv", function () {
+                    for (var i = 0; i < data.length; i++) {
+                        $(this).parent().parent().css({ "background-color": "yellow" });
+                    }
+                })
             }
-            //circle map
-            var circle = L.circle([21.019638, 105.818253], {
-                color: 'red',
-                fillColor: '#f03',
-                fillOpacity: 0.25,
-                radius: 20000
-            }).addTo(map);
+
 
             //click
-            $(document).on("click", "#valueshowinfo", function () { //click
-
+            $(document).on("click", "#valueshowinfo", click_showInfomation);
+            function click_showInfomation() {
                 var redirect = $(this).val();
                 for (var i = 0; i < data.length; i++) {
-
                     if (redirect == data[i].ma_nhanvien) {
                         map.setView([data[i].x, data[i].y], 12);
+                        marker[i].openPopup();
                     }
                 }
-            });
+            }
+
 
         },
         error: function (err) {
