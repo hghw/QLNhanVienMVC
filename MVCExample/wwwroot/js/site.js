@@ -382,7 +382,7 @@ function danhsachNVMap(txtPhongban, txtSearch, page) {
                 var Data = "<tr>" +
                     "<td>" + data[i].ho_ten + "</td>" +
                     "<td>" + data[i].chuc_vu + "</td>" +
-                    "<td>" + "<button type='button' id='valueshowinfo' value='"+ data[i].ma_nhanvien +"'><i id='icon-share' class='fas fa-share'></button>" + "</td>" +
+                    "<td id='info_td_click' class='"+ data[i].ma_nhanvien +"'>" + "<button type='button' id='valueshowinfo' value='"+ data[i].ma_nhanvien +"'><i id='icon-share' class='fas fa-share'></button>" + "</td>" +
                     "</tr>";
                 SetData.append(Data);
             }
@@ -435,6 +435,8 @@ function GetMap() {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);//set map
 
+
+
             // click show position
             var popup = L.popup();
             function onMapClick(e) {
@@ -445,33 +447,57 @@ function GetMap() {
             }
             map.on('click', onMapClick);
 
+            var markersLayer = L.featureGroup().addTo(map)//feature de up properties
            
+            var marker = [];//khai bao marker
+
             //market all nhan vien
             for (var i = 0; i < data.length; i++) {
-                var DSNV = [];
-                var marker = [];
-                marker[i] = L.marker([data[i].x, data[i].y]).addTo(map);
-                DSNV[i] = "MNV: " + data[i].ma_nhanvien + "," + " Họ tên: " + data[i].ho_ten + "," + " SĐT: " + data[i].sdt + "," + " Chức vụ: " + data[i].chuc_vu + ","
-                    + " Địa chỉ: " + data[i].dia_chi + "," + " Phòng ban: " + data[i].phong_ban.ten_phong_ban;
+                marker[i] = L.marker([data[i].x, data[i].y],{title: 'Thông tin nhân viên'}).addTo(map);//set vi tri marker
 
-                        marker[i].bindPopup(DSNV[i]).on('click', function () {
-                        alert(i)
-                        var i = myid;
-                        $("#valueshowinfo").css({ "background-color": "yellow" });
+                marker[i].feature = {//feature properties
+                    type: 'Feature', 
+                    properties: { ma_nhanvien: data[i].ma_nhanvien
+                                , ho_ten: data[i].ho_ten 
+                                , ngay_sinh: data[i].ngay_sinh 
+                                , sdt: data[i].sdt 
+                                , dia_chi: data[i].dia_chi 
+                                , chuc_vu: data[i].chuc_vu 
+                                , phong_ban: data[i].phong_ban
+                                }, 
+                    geometry: undefined 
+                }
+                var marker_Feature = marker[i].feature.properties;
 
+                var DSNV = []
+                DSNV[i] = "MNV: " + marker_Feature.ma_nhanvien + "," + " Họ tên: " + marker_Feature.ho_ten + "," + " SĐT: " + marker_Feature.sdt + "," + " Chức vụ: " + marker_Feature.chuc_vu + ","
+                    + " Địa chỉ: " + marker_Feature.dia_chi + "," + " Phòng ban: " + marker_Feature.phong_ban.ten_phong_ban;
+                marker[i].addTo(markersLayer)
+                marker[i].bindPopup(DSNV[i]); // show thong tin nv
+
+                
+            }//end for
+
+            
+
+            markersLayer.on("click", markerOnClick);//click tuong tac 2 chieu
+
+            function markerOnClick(e) {
+              var attributes = e.layer.feature.properties;//call layer 
+              
+              var elems = document.querySelectorAll("#info_td_click");//all id
+
+              for (let i = 0; i < elems.length; i++) {
+                  var class_button_nv = elems[i].className;
+                  
+                  if (attributes.ma_nhanvien == class_button_nv) {
+                        $("."+elems[i].className+"").parent().css("background-color", "#8bb94f");
                     
-                }); // show thong tin nv
-
-                /*$(".tr-" + data[i].ma_nhanvien + "").css({ "background-color": "yellow" });*/
-
-
-
-
-                $(document).on("click", ".td-mnv", function () {
-                    for (var i = 0; i < data.length; i++) {
-                        $(this).parent().parent().css({ "background-color": "yellow" });
-                    }
-                })
+                  }else{
+                    $("."+elems[i].className+"").parent().css("background-color", "#95ed71");
+                  }
+              }
+              
             }
 
 
