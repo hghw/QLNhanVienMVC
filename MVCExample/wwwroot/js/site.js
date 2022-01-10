@@ -379,7 +379,7 @@ function danhsachNVMap(txtPhongban, txtSearch, page) {
             var data = res.posts;
             var SetData = $("#DanhSachNV");
             for (var i = 0; i < data.length; i++) {
-                var Data = "<tr>" +
+                var Data = "<tr class='tr_dataNV'>" +
                     "<td>" + data[i].ho_ten + "</td>" +
                     "<td>" + data[i].chuc_vu + "</td>" +
                     "<td id='info_td_click' class='"+ data[i].ma_nhanvien +"'>" + "<button type='button' id='valueshowinfo' value='"+ data[i].ma_nhanvien +"'><i id='icon-share' class='fas fa-share'></button>" + "</td>" +
@@ -472,6 +472,7 @@ function GetMap() {
                 var DSNV = []
                 DSNV[i] = "MNV: " + marker_Feature.ma_nhanvien + "," + " Họ tên: " + marker_Feature.ho_ten + "," + " SĐT: " + marker_Feature.sdt + "," + " Chức vụ: " + marker_Feature.chuc_vu + ","
                     + " Địa chỉ: " + marker_Feature.dia_chi + "," + " Phòng ban: " + marker_Feature.phong_ban.ten_phong_ban;
+
                 marker[i].addTo(markersLayer)
                 marker[i].bindPopup(DSNV[i]); // show thong tin nv
 
@@ -491,7 +492,7 @@ function GetMap() {
                   var class_button_nv = elems[i].className;
                   
                   if (attributes.ma_nhanvien == class_button_nv) {
-                        $("."+elems[i].className+"").parent().css("background-color", "#8bb94f");
+                      $("." + elems[i].className + "").parent().css("background-color", "#a5df5a");
                     
                   }else{
                     $("."+elems[i].className+"").parent().css("background-color", "#95ed71");
@@ -504,11 +505,15 @@ function GetMap() {
             //click
             $(document).on("click", "#valueshowinfo", click_showInfomation);
             function click_showInfomation() {
-                var redirect = $(this).val();
-                for (var i = 0; i < data.length; i++) {
-                    if (redirect == data[i].ma_nhanvien) {
-                        map.setView([data[i].x, data[i].y], 12);
+                var elems = document.querySelectorAll("#info_td_click");//all id
+                var val_elems = $(this).val()
+                for (let i = 0; i < data.length; i++) {
+                    if (val_elems == data[i].ma_nhanvien) {
+                        map.setView([data[i].x, data[i].y], 15);
                         marker[i].openPopup();
+                        $(".tr_dataNV ." + data[i].ma_nhanvien + "").parent().css("background-color", "#a5df5a");
+                    } else {
+                        $(".tr_dataNV ." + data[i].ma_nhanvien + "").parent().css("background-color", "#95ed71");
                     }
                 }
             }
